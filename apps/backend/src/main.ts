@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { apiReference } from '@scalar/nestjs-api-reference';
 import cookieParser from 'cookie-parser';
@@ -11,23 +12,28 @@ import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
 
-  // 1. Cookie Parser
+  // 1. Strict Environment Variables without Fallbacks
+  const appUrl = configService.getOrThrow<string>('appUrl');
+  const globalPrefix = configService.getOrThrow<string>('apiPrefix');
+  const port = configService.getOrThrow<number>('port');
+
+  // 2. Cookie Parser
   app.use(cookieParser());
 
-  // 2. CORS Configuration
+  // 3. CORS Configuration
   app.enableCors({
-    origin: process.env.APP_URL || 'http://localhost:3000',
+    origin: appUrl,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   });
 
-  // 3. API Global Prefix
-  const globalPrefix = process.env.API_PREFIX || 'api/v1';
+  // 4. API Global Prefix
   app.setGlobalPrefix(globalPrefix);
 
-  // 4. Global Validation Pipe
+  // 5. Global Validation Pipe
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -39,14 +45,14 @@ async function bootstrap() {
     }),
   );
 
-  // 5. Global Interceptors & Exception Filters
+  // 6. Global Interceptors & Exception Filters
   app.useGlobalInterceptors(
     new LoggingInterceptor(),
     new TransformResponseInterceptor(),
   );
   app.useGlobalFilters(new AllExceptionsFilter());
 
-  // 6. Swagger & Scalar API Documentation
+  // 7. Swagger & Scalar API Documentation
   const config = new DocumentBuilder()
     .setTitle('UTC2 Thesis Management API')
     .setDescription('Tài liệu API Hệ thống Web Quản lý Đồ án Tốt nghiệp UTC2')
@@ -76,8 +82,7 @@ async function bootstrap() {
     },
   });
 
-  // 7. Start Server
-  const port = process.env.PORT || 8000;
+  // 8. Start Server
   await app.listen(port);
   logger.log(`🚀 Backend API is running on: http://localhost:${port}/${globalPrefix}`);
   logger.log(`📚 Scalar API Docs: http://localhost:${port}/api/reference`);

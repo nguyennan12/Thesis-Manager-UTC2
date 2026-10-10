@@ -6,11 +6,13 @@ import * as path from 'path';
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
+if (!process.env.DATABASE_URL) {
+  throw new Error('DATABASE_URL environment variable is not defined in .env');
+}
+
 export default defineConfig({
   schema: 'prisma/schema',
   datasource: {
-    url:
-      process.env.DATABASE_URL ||
-      'postgresql://postgres:postgres@localhost:5432/utc2_thesis_db?schema=public',
+    url: process.env.DATABASE_URL,
   },
 });
