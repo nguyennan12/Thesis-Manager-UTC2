@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { TransformResponseInterceptor } from './common/interceptors/transform-response.interceptor';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
@@ -37,8 +38,11 @@ async function bootstrap() {
     }),
   );
 
-  // 5. Global Interceptor & Filter
-  app.useGlobalInterceptors(new TransformResponseInterceptor());
+  // 5. Global Interceptors & Exception Filters
+  app.useGlobalInterceptors(
+    new LoggingInterceptor(),
+    new TransformResponseInterceptor(),
+  );
   app.useGlobalFilters(new AllExceptionsFilter());
 
   // 6. Swagger / OpenAPI Documentation
