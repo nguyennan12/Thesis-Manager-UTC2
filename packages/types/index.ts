@@ -21,3 +21,4 @@ export {
 
 export * from '../../apps/backend/src/common/interfaces/api-response.interface';
 export * from '../../apps/backend/src/common/interfaces/jwt-payload.interface';
+export * from '../../apps/backend/src/common/constants';

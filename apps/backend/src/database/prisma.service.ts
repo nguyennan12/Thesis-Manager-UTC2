@@ -1,8 +1,12 @@
+// ==============================================================================
+// PRISMA SERVICE: SINGLETON DATABASE SERVICE FOR NESTJS
+// ==============================================================================
+
 import { Injectable, OnModuleInit, OnModuleDestroy, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaClient } from '@prisma/client';
-import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
+import { getPrismaClientConfig } from './prisma-client.factory';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
@@ -11,23 +15,11 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
 
   constructor(private readonly configService: ConfigService) {
     const connectionString = configService.getOrThrow<string>('database.url');
-    const nodeEnv = configService.getOrThrow<string>('nodeEnv');
+    const isDev = configService.getOrThrow<string>('nodeEnv') === 'development';
 
-    const pool = new Pool({ connectionString });
-    const adapter = new PrismaPg(pool);
-
-    super({
-      adapter,
-      log:
-        nodeEnv === 'development'
-          ? [
-              { emit: 'event', level: 'query' },
-              { emit: 'stdout', level: 'info' },
-              { emit: 'stdout', level: 'warn' },
-              { emit: 'stdout', level: 'error' },
-            ]
-          : ['error'],
-    });
+    // Sử dụng cấu hình tập trung từ factory
+    const { pool, prismaOptions } = getPrismaClientConfig(connectionString, isDev);
+    super(prismaOptions);
 
     this.pool = pool;
   }
@@ -35,9 +27,9 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   async onModuleInit() {
     try {
       await this.$connect();
-      this.logger.log('✅ Successfully connected to PostgreSQL database (utc2_thesis_db)');
+      this.logger.log('Successfully connected to PostgreSQL database (utc2_thesis_db)');
     } catch (error) {
-      this.logger.error('❌ Failed to connect to PostgreSQL database', error);
+      this.logger.error('Failed to connect to PostgreSQL database', error);
       throw error;
     }
   }
@@ -45,6 +37,6 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   async onModuleDestroy() {
     await this.$disconnect();
     await this.pool.end();
-    this.logger.log('🔌 Disconnected from PostgreSQL database');
+    this.logger.log('Disconnected from PostgreSQL database');
   }
 }

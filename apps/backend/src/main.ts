@@ -84,9 +84,9 @@ async function bootstrap() {
 
   // 8. Start Server
   await app.listen(port);
-  logger.log(`🚀 Backend API is running on: http://localhost:${port}/${globalPrefix}`);
-  logger.log(`📚 Scalar API Docs: http://localhost:${port}/api/reference`);
-  logger.log(`📚 Swagger UI Docs: http://localhost:${port}/api/docs`);
+  logger.log(`Backend API is running on: http://localhost:${port}/${globalPrefix}`);
+  logger.log(`Scalar API Docs: http://localhost:${port}/api/reference`);
+  logger.log(`Swagger UI Docs: http://localhost:${port}/api/docs`);
 }
 
 bootstrap();
