@@ -1,8 +1,13 @@
+// ==============================================================================
+// TRANSFORM RESPONSE INTERCEPTOR
+// ==============================================================================
+
 import {
   Injectable,
   NestInterceptor,
   ExecutionContext,
   CallHandler,
+  StreamableFile,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -10,17 +15,28 @@ import { ApiResponse } from '../interfaces/api-response.interface';
 
 @Injectable()
 export class TransformResponseInterceptor<T>
-  implements NestInterceptor<T, ApiResponse<T>>
+  implements NestInterceptor<T, ApiResponse<T> | T>
 {
   intercept(
     context: ExecutionContext,
     next: CallHandler,
-  ): Observable<ApiResponse<T>> {
+  ): Observable<ApiResponse<T> | T> {
     const response = context.switchToHttp().getResponse();
     const statusCode = response.statusCode || 200;
 
     return next.handle().pipe(
       map((resData) => {
+        // Bypass JSON transformation for Binary Files, Streams, or Buffers
+        if (
+          resData instanceof StreamableFile ||
+          Buffer.isBuffer(resData) ||
+          response.getHeader('content-type')?.toString().includes('octet-stream') ||
+          response.getHeader('content-type')?.toString().includes('pdf') ||
+          response.getHeader('content-type')?.toString().includes('spreadsheetml')
+        ) {
+          return resData;
+        }
+
         // If response is already formatted with message/data/meta
         if (
           resData &&

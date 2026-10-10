@@ -1,3 +1,7 @@
+// ==============================================================================
+// DYNAMIC RBAC & POSITION/PERMISSION GUARD
+// ==============================================================================
+
 import {
   Injectable,
   CanActivate,
@@ -61,8 +65,10 @@ export class RolesGuard implements CanActivate {
     // 2. Check Positions / Scoped Roles
     if (requiredPositions && requiredPositions.length > 0) {
       const hasPosition =
+        user.positions?.some((p) => requiredPositions.includes(p)) ||
         user.userRoleScopes?.some((s) => requiredPositions.includes(s.roleCode)) ||
         user.roles?.some((r) => requiredPositions.includes(r));
+
       if (!hasPosition) {
         throw new ForbiddenException(
           'Chức năng này yêu cầu chức vụ quản lý chuyên biệt (ví dụ: Trưởng bộ môn, Ban chủ nhiệm Khoa).',
@@ -75,6 +81,7 @@ export class RolesGuard implements CanActivate {
       const hasPermission =
         user.permissions &&
         requiredPermissions.every((p) => user.permissions?.includes(p));
+
       if (!hasPermission) {
         throw new ForbiddenException(
           'Bạn không có quyền hạn (Permission) cụ thể để thực hiện thao tác này.',

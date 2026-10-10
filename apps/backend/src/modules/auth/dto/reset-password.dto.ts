@@ -1,0 +1,16 @@
+// ==============================================================================
+// RESET PASSWORD DTO
+// ==============================================================================
+
+import { IsNotEmpty, IsString, MinLength } from 'class-validator';
+
+export class ResetPasswordDto {
+  @IsNotEmpty({ message: 'Mã xác thực không được để trống' })
+  @IsString({ message: 'Mã xác thực phải là chuỗi ký tự' })
+  token: string;
+
+  @IsNotEmpty({ message: 'Mật khẩu mới không được để trống' })
+  @IsString({ message: 'Mật khẩu mới phải là chuỗi ký tự' })
+  @MinLength(6, { message: 'Mật khẩu mới phải có tối thiểu 6 ký tự' })
+  newPassword: string;
+}

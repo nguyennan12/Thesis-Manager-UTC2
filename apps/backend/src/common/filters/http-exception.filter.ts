@@ -1,3 +1,7 @@
+// ==============================================================================
+// GLOBAL HTTP EXCEPTION FILTER
+// ==============================================================================
+
 import {
   ExceptionFilter,
   Catch,
@@ -46,11 +50,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
       }
     }
 
-    this.logger.error(
-      `[${request.method}] ${request.url} - Status: ${status} - Error: ${JSON.stringify(
-        message,
-      )}`,
-    );
+    if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
+      this.logger.error(
+        `[${request.method}] ${request.url} - Status: ${status} - Error: ${JSON.stringify(message)}`,
+        exception instanceof Error ? exception.stack : undefined,
+      );
+    } else {
+      this.logger.warn(
+        `[${request.method}] ${request.url} - Status: ${status} - Error: ${JSON.stringify(message)}`,
+      );
+    }
 
     response.status(status).json({
       success: false,

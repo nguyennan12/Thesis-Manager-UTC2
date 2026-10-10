@@ -1,29 +1,30 @@
 # QUY TẮC PHÁT TRIỂN PHẦN MỀM & TIÊU CHUẨN KIẾN TRÚC CODE (CODING GUIDELINES)
 ## HỆ THỐNG WEB QUẢN LÝ ĐỒ ÁN TỐT NGHIỆP UTC2 (UTC2-DAMS)
 
-> **Tài liệu này là bộ quy tắc bắt buộc (Mandatory Rules)** áp dụng cho toàn bộ quá trình phát triển mã nguồn Frontend, Backend, Database và Tích hợp hệ thống. Mọi Pull Request / Commit đều phải tuân thủ nghiêm ngặt các nguyên tắc dưới đây.
+> **Tài liệu này là bộ quy tắc kiến trúc bắt buộc (Mandatory Architecture Rules)** áp dụng cho toàn bộ quá trình phát triển mã nguồn Frontend, Backend, Database và Tích hợp hệ thống. Mọi Pull Request / Commit đều phải tuân thủ nghiêm ngặt các nguyên tắc dưới đây.
 
 ---
 
-## 🏛️ PHẦN 1: NGUYÊN TẮC CỐT LÕI (CORE ENGINEERING PRINCIPLES)
+## 🏛️ PHẦN 1: NGUYÊN TẮC KỸ THUẬT CỐT LÕI (CORE ENGINEERING PRINCIPLES)
 
 1. **Single Responsibility Principle (SRP) – Không bao giờ viết "God Service":**
    * Mỗi class/service chỉ đảm nhận **DUY NHẤT MỘT TRÁCH NHIỆM**.
-   * Độ dài một file Service **không vượt quá 200 - 250 dòng**. Nếu dài hơn hoặc có nhiều logic tính toán/xử lý file/kiểm tra chéo $\rightarrow$ **BẮT BUỘC** tách thành Service con chuyên biệt (ví dụ: `GradeCalculatorService`, `ScheduleConflictValidator`, `TextExtractorService`, `TopicExportService`).
-2. **Đọc kỹ và tuân thủ 100% tài liệu SRS:**
-   * Mọi logic nghiệp vụ phải ánh xạ chính xác với đặc tả trong [`docs/SRS_Quan_ly_do_an_UTC2.md`](docs/SRS_Quan_ly_do_an_UTC2.md), đặc biệt là **13 Business Rules (BR-01 $\rightarrow$ BR-13)** và ma trận phân quyền 8 Roles.
-   * Tuyệt đối không tự ý bịa thêm trạng thái hoặc bỏ qua các bước kiểm tra điều kiện tiên quyết.
-3. **Type-Safety Toàn diện (100% Strict TypeScript):**
+   * Độ dài một file Service **không vượt quá 200 - 250 dòng**. Nếu dài hơn hoặc có nhiều logic tính toán/xử lý file/kiểm tra chéo $\rightarrow$ **BẮT BUỘC** tách thành Service con chuyên biệt hoặc đưa vào thư mục `helpers/` (ví dụ: `TokenHelper`, `AuthProfileHelper`, `GradeCalculatorService`, `ScheduleConflictValidator`).
+2. **Result Pattern & Explicit Error Handling (Không lạm dụng `throw Exception`):**
+   * Tầng Service và Repository **tuyệt đối không `throw new HttpException`** bừa bãi gây ẩn luồng điều khiển (hidden control flow).
+   * Mọi hàm Service phải trả về kiểu **`Promise<Result<T, AppError>>`**.
+   * Tầng Controller tiếp nhận `result` và mở gói qua **`result.unwrap()`** (tự động ánh xạ `AppError` thành mã HTTP chuẩn `400`, `401`, `403`, `404`, `409`, `500`).
+3. **Tách biệt Data Access Layer (Repository Pattern):**
+   * Service **không gọi trực tiếp `PrismaService`**. Mọi câu lệnh truy vấn PostgreSQL phải được đóng gói tại thư mục `repositories/`.
+   * Giúp mã nguồn dễ viết Unit Test, dễ Mock và tách bạch hoàn toàn tầng nghiệp vụ với tầng dữ liệu.
+4. **100% Strict TypeScript (Type-Safety Toàn diện):**
    * Tuyệt đối không dùng kiểu `any`. Định nghĩa rõ ràng kiểu dữ liệu, DTO và Interface.
-   * Tận dụng Prisma Client types (`@prisma/client`) và package dùng chung (`packages/types`).
-4. **Tối ưu hóa, Tái sử dụng & Clean Code (DRY - Don't Repeat Yourself):**
-   * Các hàm tiện ích dùng chung (format ngày giờ, tính toán, decorator, guard, filter) phải đưa vào `src/common/`.
-   * Các hàm query tái sử dụng giữa nhiều service phải đưa vào tầng `repositories/`.
-5. **Defense in Depth (Bảo vệ đa lớp):**
+   * Tận dụng Prisma Payload Types (`Prisma.AccountGetPayload<{ include: ... }>`) và package dùng chung (`packages/types`).
+5. **Secure by Default & Defense in Depth (Bảo vệ đa lớp):**
    * **Tầng 1 (Frontend):** Route Guard & Form Validation (Zod).
-   * **Tầng 2 (Gateway/Controller):** `@UseGuards(JwtAuthGuard, RolesGuard)` + Decorators `@Roles()`, `@Permissions()`, `@RequirePosition()`.
-   * **Tầng 3 (Service):** Data Scoping & Permission Check theo dữ liệu thực tế (chỉ xem/sửa đề tài thuộc Khoa/Bộ môn mình).
-   * **Tầng 4 (Database):** Ràng buộc toàn vẹn CSDL (Unique, Check, Foreign Key).
+   * **Tầng 2 (Global Guards):** `JwtAuthGuard` & `RolesGuard` đăng ký toàn cục qua `APP_GUARD`. Mọi API mặc định đều được bảo vệ, chỉ mở tự do khi có `@Public()`.
+   * **Tầng 3 (Data Scoping & Positions):** Kiểm tra phạm vi dữ liệu thực tế (`userRoleScopes`: chỉ xem/sửa đề tài thuộc Khoa/Bộ môn mình).
+   * **Tầng 4 (Database):** Ràng buộc toàn vẹn CSDL (Unique, Check, Foreign Key, Date ranges).
 
 ---
 
@@ -38,78 +39,107 @@ src/modules/<tên-module>/
 │   ├── <module>.lecturer.controller.ts   # Endpoint dành cho Giảng viên
 │   └── <module>.admin.controller.ts      # Endpoint dành cho Quản trị / Giáo vụ / TBM
 │
-├── dto/                  # Data Transfer Objects (Request, Response, Query có class-validator + Swagger)
+├── dto/                  # Data Transfer Objects (class-validator + class-transformer thuần túy)
 │   ├── create-<entity>.dto.ts
 │   ├── update-<entity>.dto.ts
 │   ├── query-<entity>.dto.ts
 │   └── <entity>-response.dto.ts
 │
-├── services/             # Tách nhỏ Service theo nguyên lý SRP
+├── helpers/              # Tầng Helper chuyên biệt (Transform dữ liệu, trích xuất Scope, Utility)
+│   ├── <feature>.helper.ts
+│   └── index.ts
+│
+├── repositories/         # Tầng Data Access (Prisma queries độc lập, Transaction)
+│   ├── <entity>.repository.ts
+│   └── index.ts
+│
+├── services/             # Tầng Business Logic tinh gọn (< 250 dòng, trả về Result Pattern)
 │   ├── <module>.service.ts               # CRUD & Điều phối nghiệp vụ chính
 │   ├── <feature>-calculator.service.ts   # Thuật toán tính toán độc lập
-│   ├── <feature>-validator.service.ts    # Logic kiểm tra nghiệp vụ phức tạp
-│   └── <feature>-export.service.ts       # Xử lý xuất file PDF/Excel/Word
+│   └── <feature>-validator.service.ts    # Logic kiểm tra nghiệp vụ phức tạp
 │
-├── repositories/         # Tầng truy vấn dữ liệu phức tạp (Custom SQL / Complex Joins)
-│   └── <entity>.repository.ts
-│
-└── <module>.module.ts    # Khai báo NestJS Module (Gắn controllers, providers, exports)
+└── <module>.module.ts    # Khai báo NestJS Module (Gắn controllers, repositories, helpers, services)
 ```
 
 ---
 
-## 🛡️ PHẦN 3: CHIẾN LƯỢC VALIDATION 3 TẦNG (THREE-LAYER VALIDATION)
+## ⚡ PHẦN 3: KIẾN TRÚC CACHING VÀ GHI VẾT TOÀN CỤC (GLOBAL INFRASTRUCTURE)
 
-Mọi dữ liệu đầu vào từ người dùng phải được kiểm duyệt qua 3 tầng nghiêm ngặt:
+### 1. Global Redis Module (`src/database/redis/`)
+* **Single Connection Pool**: Kết nối tập trung tại `@Global() RedisModule`, không kết nối riêng lẻ trong từng service.
+* **Non-blocking Operations**: Tuyệt đối không dùng lệnh chặn `KEYS *`. Quản lý danh sách keys qua Redis Set (`SADD`, `SMEMBERS`, `SISMEMBER`) với thời gian truy xuất $O(1)$.
+* **Self-Healing (Cache-Aside)**: Khi xảy ra Cache Miss hoặc Redis khởi động lại, tầng Cache Service phải tự động nạp lại dữ liệu từ Repository vào Redis.
+* **Cache Invalidation**: Bắt buộc kích hoạt xóa/làm mới cache ngay lập tức khi phát sinh sự kiện CUD (Tạo/Sửa Role, Gán quyền, Đổi mật khẩu, Logout).
 
+### 2. Global Audit Trail Module (BR-13) (`src/modules/audit-logs/`)
+* Ghi nhận toàn bộ thao tác nhạy cảm: Đăng nhập (`AUTH_LOGIN`), Đăng xuất (`AUTH_LOGOUT`), Đổi mật khẩu (`AUTH_CHANGE_PASSWORD`), Gán quyền (`ROLES_ASSIGN_PERMISSIONS`), Duyệt đề tài, Khóa/Mở điểm.
+* **Non-blocking Fire-and-Forget**: Ghi vết bất đồng bộ, không làm nghẽn hoặc ảnh hưởng đến thời gian phản hồi của API chính.
+* Lưu vết đầy đủ: `accountId`, `action`, `endpoint`, `httpMethod`, `ipAddress`, `userAgent`, `payload`, `responseStatus`, `createdAt`.
+
+---
+
+## 🛡️ PHẦN 4: CHIẾN LƯỢC XỬ LÝ LỖI & RESULT PATTERN
+
+### 1. Cấu trúc Lớp `AppError` (`src/common/utils/app-error.ts`)
+```typescript
+export class AppError {
+  constructor(
+    public readonly message: string,
+    public readonly statusCode: number = HttpStatus.BAD_REQUEST,
+    public readonly code?: string,
+    public readonly details?: any,
+  ) {}
+
+  static badRequest(message: string, code?: string, details?: any): AppError { ... }
+  static unauthorized(message: string, code?: string): AppError { ... }
+  static forbidden(message: string, code?: string): AppError { ... }
+  static notFound(message: string, code?: string): AppError { ... }
+  static conflict(message: string, code?: string): AppError { ... }
+}
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│                   CHIẾN LƯỢC VALIDATION 3 TẦNG                        │
-├────────────────────────────────────────────────────────────────────────┤
-│ 1. DTO Validation (class-validator + class-transformer)               │
-│    -> Kiểm tra kiểu dữ liệu, định dạng, độ dài, regex, required       │
-│                                                                        │
-│ 2. Domain & Business Rule Validation (Custom Service Validators)       │
-│    -> Kiểm tra logic: Điểm tích lũy >= 2.0, Không trùng lịch HĐ,      │
-│       Tổng trọng số rubric = 100%, Chưa khóa phiếu điểm               │
-│                                                                        │
-│ 3. Database Constraints (PostgreSQL & Prisma)                          │
-│    -> UNIQUE(student_id, semester_id), CHECK(score >= 0 AND score <= 10)│
-└────────────────────────────────────────────────────────────────────────┘
+
+### 2. Cấu trúc Lớp `Result<T, E>` (`src/common/utils/result.ts`)
+```typescript
+export class Result<T, E = AppError> {
+  public static ok<T, E>(value?: T): Result<T, E> { ... }
+  public static fail<T, E>(error: E): Result<T, E> { ... }
+
+  public get isSuccess(): boolean { ... }
+  public get isFailure(): boolean { ... }
+  public get value(): T { ... }
+  public get error(): E { ... }
+
+  public unwrap(): T {
+    if (this.isFailure) {
+      if (this._error instanceof AppError) throw this._error.toHttpException();
+      throw new Error(String(this._error));
+    }
+    return this._value as T;
+  }
+}
 ```
 
-### 1. Quy tắc viết DTO:
-* Bắt buộc có Swagger Decorators (`@ApiProperty()`, `@ApiPropertyOptional()`).
-* Bắt buộc có decorator validation (`@IsNotEmpty()`, `@IsString()`, `@IsInt()`, `@Min()`, `@Max()`, `@IsEnum()`, `@IsUUID()`).
-* Luôn có thông báo lỗi tiếng Việt rõ ràng qua thuộc tính `message`.
+### 3. Quy chuẩn viết DTO (Validation Layer)
+* Sử dụng thuần `class-validator` và `class-transformer` (`@IsNotEmpty()`, `@IsString()`, `@IsUUID()`, `@Min()`, `@Max()`).
+* **Không dùng decorators Swagger (`@Api*`)** để giữ mã nguồn DTO sạch sẽ, tối giản và chuẩn hóa.
+* Luôn có thông báo lỗi tiếng Việt rõ ràng thông qua thuộc tính `message`.
 
 ```typescript
-// Ví dụ chuẩn DTO:
-export class CreateTopicDto {
-  @ApiProperty({ example: 'Xây dựng ứng dụng quản lý đồ án tốt nghiệp', description: 'Tên đề tài tiếng Việt' })
-  @IsNotEmpty({ message: 'Tên đề tài tiếng Việt không được để trống' })
-  @IsString({ message: 'Tên đề tài phải là chuỗi ký tự' })
-  @MinLength(5, { message: 'Tên đề tài phải có tối thiểu 5 ký tự' })
-  @MaxLength(300, { message: 'Tên đề tài không được vượt quá 300 ký tự' })
-  titleVi: string;
+export class ChangePasswordDto {
+  @IsNotEmpty({ message: 'Mật khẩu hiện tại không được để trống' })
+  @IsString({ message: 'Mật khẩu hiện tại phải là chuỗi ký tự' })
+  oldPassword: string;
 
-  @ApiProperty({ enum: TopicType, example: TopicType.MAJOR, description: 'Loại đồ án' })
-  @IsEnum(TopicType, { message: 'Loại đồ án không hợp lệ' })
-  topicType: TopicType;
-
-  @ApiProperty({ example: 1, minimum: 1, maximum: 2, description: 'Số lượng sinh viên tối đa' })
-  @IsInt({ message: 'Số lượng sinh viên phải là số nguyên' })
-  @Min(1, { message: 'Số lượng sinh viên tối thiểu là 1' })
-  @Max(2, { message: 'Số lượng sinh viên tối đa là 2' })
-  maxStudents: number;
+  @IsNotEmpty({ message: 'Mật khẩu mới không được để trống' })
+  @IsString({ message: 'Mật khẩu mới phải là chuỗi ký tự' })
+  @MinLength(6, { message: 'Mật khẩu mới phải có tối thiểu 6 ký tự' })
+  newPassword: string;
 }
 ```
 
 ---
 
-## 📋 PHẦN 4: CHECKLIST QUY TẮC NGHIỆP VỤ BẮT BUỘC (SRS BR-01 $\rightarrow$ BR-13)
-
-Khi phát triển các module tương ứng, **BẮT BUỘC** tích hợp các quy tắc sau:
+## 📋 PHẦN 5: CHECKLIST QUY TẮC NGHIỆP VỤ BẮT BUỘC (SRS BR-01 $\rightarrow$ BR-13)
 
 | Mã BR | Quy Tắc Nghiệp Vụ | Module Phụ Trách | Logic Cần Xử Lý |
 | :---: | :--- | :--- | :--- |
@@ -129,65 +159,58 @@ Khi phát triển các module tương ứng, **BẮT BUỘC** tích hợp các q
 
 ---
 
-## 🔄 PHẦN 5: PIPELINE 6 BƯỚC KHI XÂY DỰNG MỘT TÍNH NĂNG MỚI (DEVELOPMENT WORKFLOW)
-
-Khi được giao xây dựng một Module hoặc Endpoint mới, Developer phải thực hiện tuần tự theo 6 bước:
+## 🔄 PHẦN 6: QUY TRÌNH 6 BƯỚC PHÁT TRIỂN TÍNH NĂNG MỚI (DEVELOPMENT WORKFLOW)
 
 ```
-[1. Đọc SRS] ➔ [2. Tạo DTO & Schema] ➔ [3. Viết Service Logic] ➔ [4. Viết Controller & Guard] ➔ [5. Kiểm thử Unit/API] ➔ [6. Kết nối Frontend]
+[1. Đọc SRS & BR] ➔ [2. Tạo DTOs & Validation] ➔ [3. Viết Repository & Helper] ➔ [4. Viết Service (Result Pattern)] ➔ [5. Viết Controller & Guards] ➔ [6. Test API & Audit Log]
 ```
 
 ### Chi tiết các bước:
-1. **Bước 1 – Đọc SRS & Phân tích nghiệp vụ:**
-   * Mở [`docs/SRS_Quan_ly_do_an_UTC2.md`](docs/SRS_Quan_ly_do_an_UTC2.md), tìm use case và quy tắc nghiệp vụ liên quan.
+1. **Bước 1 – Đọc SRS & Ma trận phân quyền:**
+   * Mở [`docs/SRS_Quan_ly_do_an_UTC2.md`](docs/SRS_Quan_ly_do_an_UTC2.md) và [`docs/RBAC_PERMISSION_MATRIX.md`](docs/RBAC_PERMISSION_MATRIX.md).
    * Xác định dữ liệu cần đọc/ghi trên 28 bảng CSDL.
-2. **Bước 2 – Khai báo DTOs & Validation:**
-   * Tạo các file trong `dto/` kèm theo class-validator decorators và Swagger/Scalar annotations (`@ApiProperty()`, `@IsNotEmpty()`, `@Min()`, `@Max()`...).
-   * Khai báo thông báo lỗi tiếng Việt rõ ràng cho từng trường.
-3. **Bước 3 – Cài đặt Service Layer:**
-   * Inject `PrismaService` hoặc `CustomRepository`.
-   * Kiểm tra điều kiện nghiệp vụ (Business Rule Check).
-   * Thực thi Transaction nếu có nhiều thao tác ghi dữ liệu liên quan (`this.prisma.$transaction`).
-   * Ghi nhận Status History hoặc Audit Log nếu là hành động thay đổi trạng thái quan trọng.
-4. **Bước 4 – Cài đặt Controller Layer & Bảo mật:**
-   * Định nghĩa RESTful Route chuẩn (`GET /topics`, `POST /topics`, `PATCH /topics/:id/approve`).
-   * Gắn `@UseGuards(JwtAuthGuard, RolesGuard)`.
-   * Khai báo `@Roles('...')`, `@Permissions('...')`, `@RequirePosition('...')`.
-   * Gắn `@ApiOperation()`, `@ApiResponse()` cho Swagger UI & Scalar.
-5. **Bước 5 – Kiểm thử API & Type-check:**
+2. **Bước 2 – Khai báo DTOs:**
+   * Tạo các file trong `dto/` kèm theo class-validator decorators và thông báo lỗi tiếng Việt.
+3. **Bước 3 – Xây dựng Repository & Helper Layer:**
+   * Viết các hàm truy vấn trong `repositories/<entity>.repository.ts`.
+   * Tách logic biến đổi/trích xuất dữ liệu phức tạp sang `helpers/<feature>.helper.ts`.
+4. **Bước 4 – Cài đặt Service Layer:**
+   * Inject Repository, Helper, RedisService và AuditLogsService.
+   * Kiểm tra điều kiện nghiệp vụ (Business Rules). Trả về `Result.ok()` hoặc `Result.fail(AppError)`.
+5. **Bước 5 – Cài đặt Controller Layer:**
+   * Định nghĩa RESTful Route chuẩn.
+   * Gắn `@Roles()`, `@RequirePermissions()`, `@RequirePosition()`.
+   * Tiếp nhận request, gọi service và mở gói dữ liệu bằng `result.unwrap()`.
+6. **Bước 6 – Kiểm thử API & Type-check:**
    * Chạy `pnpm --filter backend exec tsc --noEmit` đảm bảo không có lỗi biên dịch.
-   * Mở Scalar UI (`http://localhost:8000/api/reference`) để test trực tiếp các kịch bản thành công và ngoại lệ.
-6. **Bước 6 – Kết nối Frontend Next.js:**
-   * Viết API Client Function trong `apps/frontend/src/features/<module>/`.
-   * Sử dụng TanStack Query (`useQuery`, `useMutation`).
-   * Render giao diện theo đúng Role Space (`/student`, `/lecturer`, `/admin`...).
+   * Chạy `pnpm --filter backend run build`.
 
 ---
 
-## 🏷️ PHẦN 6: QUY CHUẨN ĐẶT TÊN (NAMING CONVENTIONS)
+## 🏷️ PHẦN 7: QUY CHUẨN ĐẶT TÊN (NAMING CONVENTIONS)
 
 | Thành phần | Quy ước | Ví dụ |
 | :--- | :--- | :--- |
-| **Thư mục (Folders)** | `kebab-case` | `thesis-reports`, `system-settings`, `detailed-scores` |
-| **Tên File (Files)** | `kebab-case.suffix.ts` | `create-topic.dto.ts`, `schedule-conflict.validator.ts` |
-| **Tên Class / Interface** | `PascalCase` | `TopicsService`, `CreateTopicDto`, `JwtPayload` |
+| **Thư mục (Folders)** | `kebab-case` | `thesis-reports`, `system-settings`, `audit-logs` |
+| **Tên File (Files)** | `kebab-case.suffix.ts` | `create-topic.dto.ts`, `accounts.repository.ts` |
+| **Tên Class / Interface** | `PascalCase` | `TopicsService`, `AccountsRepository`, `AppError` |
 | **Tên Method / Biến** | `camelCase` | `findAllTopics()`, `scoreProcess`, `advisorLecturerId` |
-| **Tên Enum / Constant** | `UPPER_SNAKE_CASE` | `TopicStatus.APPROVED`, `AccountRole.STUDENT` |
-| **Database Tables** | `plural_snake_case` | `faculties`, `lecturers`, `detailed_scores` |
-| **Database Columns** | `snake_case` | `full_name`, `is_qualified_for_defense`, `score_final` |
-| **RESTful API URL** | `kebab-case` (Số nhiều) | `GET /api/v1/thesis-reports`, `POST /api/v1/grade-appeals` |
+| **Tên Enum / Constant** | `UPPER_SNAKE_CASE` | `TopicStatus.APPROVED`, `ROLES.ADMIN` |
+| **Database Tables** | `plural_snake_case` | `faculties`, `lecturers`, `audit_logs` |
+| **Database Columns** | `snake_case` | `full_name`, `is_qualified_for_defense`, `valid_to` |
+| **RESTful API URL** | `kebab-case` (Số nhiều) | `GET /api/v1/thesis-reports`, `POST /api/v1/roles` |
 
 ---
 
-## 📦 PHẦN 7: QUY CHUẨN GIT COMMIT (CONVENTIONAL COMMITS)
+## 📦 PHẦN 8: QUY CHUẨN GIT COMMIT (CONVENTIONAL COMMITS)
 
 Mọi commit phải tuân thủ định dạng: `<type>(<scope>): <description>`
 
-* `feat`: Thêm tính năng mới (`feat(topics): implement topic proposal and approval workflow`).
-* `fix`: Sửa lỗi (`fix(grading): fix weight calculation in rubric criteria`).
-* `refactor`: Tái cấu trúc mã nguồn không thay đổi chức năng (`refactor(auth): split jwt strategy into separate guards`).
-* `docs`: Cập nhật tài liệu (`docs(srs): add full SRS specification`).
-* `chore`: Cập nhật cấu hình, dependencies (`chore: update prisma driver adapter dependencies`).
+* `feat`: Thêm tính năng mới (`feat(auth): implement token rotation with pure redis cache`).
+* `fix`: Sửa lỗi (`fix(auth): prevent expired role assignment via validTo filter`).
+* `refactor`: Tái cấu trúc mã nguồn (`refactor(auth): migrate error handling to Result Pattern`).
+* `docs`: Cập nhật tài liệu (`docs(guidelines): update architecture rules with Result Pattern`).
+* `chore`: Cập nhật cấu hình, dependencies (`chore: install ioredis and setup global redis module`).
 
 ---
-*Tài liệu Tiêu chuẩn Kiến trúc Code UTC2-DAMS – Ban hành Tháng 10/2026.*
+*Tài liệu Tiêu chuẩn Kiến trúc Code UTC2-DAMS – Cập nhật Tháng 10/2026.*
