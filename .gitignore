@@ -1,0 +1,72 @@
+# ==============================================================================
+# GITIGNORE: UTC2 THESIS MANAGEMENT SYSTEM (MONOREPO)
+# ==============================================================================
+
+# Environment Variables (Bảo mật thông tin đăng nhập và secrets)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.production
+!.env.example
+
+# Docker Local Overrides (Cấu hình riêng cho từng máy cá nhân)
+docker-compose.override.yml
+docker-compose.override.yaml
+docker-compose.*.override.yml
+
+# Dependencies
+node_modules/
+.pnpm-store/
+.npm/
+.yarn/
+
+# Build & Output Files
+dist/
+build/
+out/
+.next/
+*.tsbuildinfo
+
+# Monorepo Sub-projects build outputs
+apps/*/dist/
+apps/*/build/
+apps/*/.next/
+apps/*/out/
+packages/*/dist/
+
+# Test & Coverage
+coverage/
+.nyc_output/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS & System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE & Editor Configurations
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary & Dump files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.dump

@@ -1,0 +1,110 @@
+// ==============================================================================
+// PRISMA BASE SCHEMA: DATASOURCE, GENERATOR & SHARED ENUMS
+// ==============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ==============================================================================
+// 1. SHARED DOMAIN ENUMS
+// ==============================================================================
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum StudentStatus {
+  STUDYING
+  RESERVED
+  DROPPED
+  GRADUATED
+}
+
+enum TopicType {
+  FOUNDATION
+  MAJOR
+}
+
+enum TopicStatus {
+  DRAFT
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+  ASSIGNED
+}
+
+enum RegistrationStatus {
+  REGISTERED
+  LOCKED
+  IN_PROGRESS
+  SUBMITTED
+  QUALIFIED_DEFENSE
+  DISQUALIFIED
+  DEFENDED
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum ProgressStatus {
+  PENDING
+  REVIEWED
+  OVERDUE
+}
+
+enum CouncilStatus {
+  PREPARING
+  IN_PROGRESS
+  COMPLETED
+  LOCKED
+}
+
+enum CouncilRole {
+  CHAIRMAN
+  SECRETARY
+  MEMBER
+  REVIEWER
+}
+
+enum ChangeRequestType {
+  CHANGE_TOPIC
+  CHANGE_ADVISOR
+  EXTENSION
+}
+
+enum ChangeRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum AppealStatus {
+  PENDING
+  PROCESSING
+  RESOLVED
+  REJECTED
+}
+
+enum NotificationType {
+  SYSTEM
+  TOPIC
+  REGISTRATION
+  PROGRESS
+  DEFENSE
+  GRADE
+}
+
+enum SettingDataType {
+  STRING
+  NUMBER
+  BOOLEAN
+  JSON
+}

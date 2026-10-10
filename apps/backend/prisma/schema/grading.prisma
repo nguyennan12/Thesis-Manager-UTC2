@@ -1,0 +1,80 @@
+// ==============================================================================
+// RUBRIC, GRADING & APPEALS MODELS
+// ==============================================================================
+
+model RubricSet {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code         String    @unique @db.VarChar(30)
+  name         String    @db.VarChar(200)
+  topicType    TopicType @map("topic_type")
+  academicYear String    @map("academic_year") @db.VarChar(20)
+  totalWeight  Decimal   @default(100.00) @map("total_weight") @db.Decimal(5, 2)
+  isActive     Boolean   @default(false) @map("is_active")
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  criteria EvaluationCriterion[]
+
+  @@map("rubric_sets")
+}
+
+model EvaluationCriterion {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  rubricSetId String    @map("rubric_set_id") @db.Uuid
+  code        String    @db.VarChar(20)
+  name        String    @db.VarChar(200)
+  description String?   @db.Text
+  weight      Decimal   @db.Decimal(5, 2)
+  topicType   TopicType @map("topic_type")
+  orderIndex  Int       @default(1) @map("order_index") @db.SmallInt
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  rubricSet      RubricSet       @relation(fields: [rubricSetId], references: [id], onDelete: Cascade)
+  detailedScores DetailedScore[]
+
+  @@unique([rubricSetId, code])
+  @@map("evaluation_criteria")
+}
+
+model DetailedScore {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  registrationId String    @map("registration_id") @db.Uuid
+  criterionId    String    @map("criterion_id") @db.Uuid
+  lecturerId     String    @map("lecturer_id") @db.Uuid
+  score          Decimal   @db.Decimal(4, 2)
+  notes          String?   @db.Text
+  isLocked       Boolean   @default(false) @map("is_locked")
+  scoredAt       DateTime  @default(now()) @map("scored_at") @db.Timestamptz()
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt      DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  registration Registration        @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  criterion    EvaluationCriterion @relation(fields: [criterionId], references: [id], onDelete: Restrict)
+  lecturer     Lecturer            @relation(fields: [lecturerId], references: [id], onDelete: Restrict)
+
+  @@unique([registrationId, criterionId, lecturerId])
+  @@index([registrationId])
+  @@index([lecturerId])
+  @@map("detailed_scores")
+}
+
+model GradeAppeal {
+  id              String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  registrationId  String       @map("registration_id") @db.Uuid
+  reason          String       @db.Text
+  status          AppealStatus @default(PENDING)
+  oldScore        Decimal      @map("old_score") @db.Decimal(4, 2)
+  newScore        Decimal?     @map("new_score") @db.Decimal(4, 2)
+  resolutionNotes String?      @map("resolution_notes") @db.Text
+  resolvedById    String?      @map("resolved_by_id") @db.Uuid
+  resolvedAt      DateTime?    @map("resolved_at") @db.Timestamptz()
+  createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt       DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  resolvedBy   Account?     @relation("ResolvedAppeals", fields: [resolvedById], references: [id], onDelete: SetNull)
+
+  @@index([registrationId])
+  @@map("grade_appeals")
+}

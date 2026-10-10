@@ -1,0 +1,67 @@
+import { NestFactory } from '@nestjs/core';
+import { ValidationPipe, Logger } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import cookieParser from 'cookie-parser';
+import { AppModule } from './app.module';
+import { TransformResponseInterceptor } from './common/interceptors/transform-response.interceptor';
+import { AllExceptionsFilter } from './common/filters/http-exception.filter';
+
+async function bootstrap() {
+  const logger = new Logger('Bootstrap');
+  const app = await NestFactory.create(AppModule);
+
+  // 1. Cookie Parser
+  app.use(cookieParser());
+
+  // 2. CORS Configuration
+  app.enableCors({
+    origin: process.env.APP_URL || 'http://localhost:3000',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  });
+
+  // 3. API Global Prefix
+  const globalPrefix = process.env.API_PREFIX || 'api/v1';
+  app.setGlobalPrefix(globalPrefix);
+
+  // 4. Global Validation Pipe
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
+
+  // 5. Global Interceptor & Filter
+  app.useGlobalInterceptors(new TransformResponseInterceptor());
+  app.useGlobalFilters(new AllExceptionsFilter());
+
+  // 6. Swagger / OpenAPI Documentation
+  const config = new DocumentBuilder()
+    .setTitle('UTC2 Thesis Management API')
+    .setDescription('Tài liệu API Hệ thống Web Quản lý Đồ án Tốt nghiệp UTC2')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .addCookieAuth('access_token')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/docs', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
+
+  // 7. Start Server
+  const port = process.env.PORT || 8000;
+  await app.listen(port);
+  logger.log(`🚀 Backend API is running on: http://localhost:${port}/${globalPrefix}`);
+  logger.log(`📚 Swagger API Docs available at: http://localhost:${port}/api/docs`);
+}
+
+bootstrap();

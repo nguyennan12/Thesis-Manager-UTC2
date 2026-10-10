@@ -1,0 +1,143 @@
+// ==============================================================================
+// ACADEMIC & INSTITUTIONAL MODELS
+// ==============================================================================
+
+model Faculty {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code        String   @unique @db.VarChar(20)
+  name        String   @db.VarChar(150)
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  majors         Major[]
+  departments    Department[]
+  systemSettings SystemSetting[]
+
+  @@map("faculties")
+}
+
+model Major {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code      String   @unique @db.VarChar(20)
+  name      String   @db.VarChar(150)
+  facultyId String   @map("faculty_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  faculty Faculty @relation(fields: [facultyId], references: [id], onDelete: Restrict)
+  classes Class[]
+  topics  Topic[]
+
+  @@map("majors")
+}
+
+model Department {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code           String   @unique @db.VarChar(20)
+  name           String   @db.VarChar(150)
+  facultyId      String   @map("faculty_id") @db.Uuid
+  headLecturerId String?  @map("head_lecturer_id") @db.Uuid
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  faculty      Faculty    @relation(fields: [facultyId], references: [id], onDelete: Restrict)
+  headLecturer Lecturer?  @relation("DepartmentHead", fields: [headLecturerId], references: [id], onDelete: SetNull)
+  lecturers    Lecturer[] @relation("DepartmentLecturers")
+  topics       Topic[]
+  councils     Council[]
+
+  @@map("departments")
+}
+
+model Lecturer {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code             String   @unique @db.VarChar(20)
+  fullName         String   @map("full_name") @db.VarChar(250)
+  email            String   @unique @db.VarChar(150)
+  phone            String?  @db.VarChar(20)
+  degree           String?  @db.VarChar(50)
+  departmentId     String   @map("department_id") @db.Uuid
+  maxAdvisingQuota Int      @default(5) @map("max_advising_quota")
+  isActive         Boolean  @default(true) @map("is_active")
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt        DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  department          Department        @relation("DepartmentLecturers", fields: [departmentId], references: [id], onDelete: Restrict)
+  headOfDepartments   Department[]      @relation("DepartmentHead")
+  homeroomClasses     Class[]
+  proposedTopics      Topic[]           @relation("ProposedTopics")
+  reviewedTopics      Topic[]           @relation("ReviewedTopics")
+  advisedRegistrations Registration[]   @relation("AdvisedRegistrations")
+  councilMemberships  CouncilMember[]
+  progressReviews     ProgressReport[]
+  detailedScores      DetailedScore[]
+  account             Account?
+
+  @@index([departmentId])
+  @@map("lecturers")
+}
+
+model Class {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code              String   @unique @db.VarChar(20)
+  name              String   @db.VarChar(150)
+  majorId           String   @map("major_id") @db.Uuid
+  academicYear      String   @map("academic_year") @db.VarChar(20)
+  homeroomAdvisorId String?  @map("homeroom_advisor_id") @db.Uuid
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt         DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  major           Major     @relation(fields: [majorId], references: [id], onDelete: Restrict)
+  homeroomAdvisor Lecturer? @relation(fields: [homeroomAdvisorId], references: [id], onDelete: SetNull)
+  students        Student[]
+
+  @@map("classes")
+}
+
+model Student {
+  id                 String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code               String        @unique @db.VarChar(20)
+  fullName           String        @map("full_name") @db.VarChar(250)
+  gender             Gender        @default(OTHER)
+  dob                DateTime?     @db.Date
+  email              String        @unique @db.VarChar(150)
+  phone              String?       @db.VarChar(20)
+  classId            String        @map("class_id") @db.Uuid
+  gpaCumulative      Decimal       @default(0.00) @map("gpa_cumulative") @db.Decimal(3, 2)
+  creditsAccumulated Int           @default(0) @map("credits_accumulated")
+  status             StudentStatus @default(STUDYING)
+  createdAt          DateTime      @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt          DateTime      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  class         Class          @relation(fields: [classId], references: [id], onDelete: Restrict)
+  registrations Registration[]
+  account       Account?
+
+  @@index([classId])
+  @@index([status])
+  @@map("students")
+}
+
+model Semester {
+  id                     String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code                   String    @unique @db.VarChar(20)
+  name                   String    @db.VarChar(100)
+  academicYear           String    @map("academic_year") @db.VarChar(20)
+  startDate              DateTime  @map("start_date") @db.Date
+  endDate                DateTime  @map("end_date") @db.Date
+  topicRegistrationStart DateTime? @map("topic_registration_start") @db.Timestamptz()
+  topicRegistrationEnd   DateTime? @map("topic_registration_end") @db.Timestamptz()
+  thesisSubmissionEnd    DateTime? @map("thesis_submission_end") @db.Timestamptz()
+  defenseStart           DateTime? @map("defense_start") @db.Timestamptz()
+  defenseEnd             DateTime? @map("defense_end") @db.Timestamptz()
+  isCurrent              Boolean   @default(false) @map("is_current")
+  createdAt              DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt              DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  topics        Topic[]
+  registrations Registration[]
+  councils      Council[]
+
+  @@map("semesters")
+}

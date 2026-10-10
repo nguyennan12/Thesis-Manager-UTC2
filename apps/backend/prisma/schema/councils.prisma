@@ -1,0 +1,46 @@
+// ==============================================================================
+// COUNCILS & DEFENSE SCHEDULE MODELS
+// ==============================================================================
+
+model Council {
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code           String        @unique @db.VarChar(30)
+  name           String        @db.VarChar(200)
+  departmentId   String        @map("department_id") @db.Uuid
+  semesterId     String        @map("semester_id") @db.Uuid
+  defenseDate    DateTime      @map("defense_date") @db.Date
+  defenseRoom    String        @map("defense_room") @db.VarChar(50)
+  startTime      String        @map("start_time") @db.VarChar(10)
+  endTime        String        @map("end_time") @db.VarChar(10)
+  status         CouncilStatus @default(PREPARING)
+  decisionNumber String?       @map("decision_number") @db.VarChar(50)
+  decisionDate   DateTime?     @map("decision_date") @db.Date
+  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt      DateTime      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  department    Department      @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  semester      Semester        @relation(fields: [semesterId], references: [id], onDelete: Restrict)
+  members       CouncilMember[]
+  registrations Registration[]
+
+  @@index([departmentId])
+  @@index([semesterId])
+  @@index([defenseDate, defenseRoom])
+  @@map("councils")
+}
+
+model CouncilMember {
+  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  councilId  String      @map("council_id") @db.Uuid
+  lecturerId String      @map("lecturer_id") @db.Uuid
+  role       CouncilRole @default(MEMBER)
+  createdAt  DateTime    @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt  DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  council  Council  @relation(fields: [councilId], references: [id], onDelete: Cascade)
+  lecturer Lecturer @relation(fields: [lecturerId], references: [id], onDelete: Restrict)
+
+  @@unique([councilId, lecturerId])
+  @@index([lecturerId])
+  @@map("council_members")
+}

@@ -1,0 +1,109 @@
+// ==============================================================================
+// SYSTEM EXTENSION MODELS: NOTIFICATIONS, ATTACHMENTS, AUDIT & SETTINGS
+// ==============================================================================
+
+model Attachment {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  originalName  String   @map("original_name") @db.VarChar(255)
+  storagePath   String   @map("storage_path") @db.Text
+  mimeType      String   @map("mime_type") @db.VarChar(100)
+  fileSizeBytes BigInt   @map("file_size_bytes")
+  md5Checksum   String?  @map("md5_checksum") @db.VarChar(64)
+  uploadedById  String   @map("uploaded_by_id") @db.Uuid
+  entityType    String   @map("entity_type") @db.VarChar(50)
+  entityId      String   @map("entity_id") @db.VarChar(50)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  uploadedBy Account @relation(fields: [uploadedById], references: [id], onDelete: Restrict)
+
+  @@index([entityType, entityId])
+  @@map("attachments")
+}
+
+model StatusHistory {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  entityType     String   @map("entity_type") @db.VarChar(50)
+  entityId       String   @map("entity_id") @db.VarChar(50)
+  fromStatus     String   @map("from_status") @db.VarChar(50)
+  toStatus       String   @map("to_status") @db.VarChar(50)
+  actorAccountId String?  @map("actor_account_id") @db.Uuid
+  reason         String?  @db.Text
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  actorAccount Account? @relation(fields: [actorAccountId], references: [id], onDelete: SetNull)
+
+  @@index([entityType, entityId])
+  @@map("status_histories")
+}
+
+model ChangeRequest {
+  id              String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  registrationId  String              @map("registration_id") @db.Uuid
+  requestType     ChangeRequestType   @map("request_type")
+  reason          String              @db.Text
+  requestedData   Json?               @map("requested_data")
+  status          ChangeRequestStatus @default(PENDING)
+  approvedById    String?             @map("approved_by_id") @db.Uuid
+  rejectionReason String?             @map("rejection_reason") @db.Text
+  createdAt       DateTime            @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt       DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  approvedBy   Account?     @relation("ApprovedChanges", fields: [approvedById], references: [id], onDelete: SetNull)
+
+  @@index([registrationId])
+  @@map("change_requests")
+}
+
+model Notification {
+  id                 String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  recipientAccountId String           @map("recipient_account_id") @db.Uuid
+  title              String           @db.VarChar(255)
+  content            String           @db.Text
+  type               NotificationType @default(SYSTEM)
+  linkUrl            String?          @map("link_url") @db.Text
+  isRead             Boolean          @default(false) @map("is_read")
+  isEmailSent        Boolean          @default(false) @map("is_email_sent")
+  readAt             DateTime?        @map("read_at") @db.Timestamptz()
+  createdAt          DateTime         @default(now()) @map("created_at") @db.Timestamptz()
+
+  recipientAccount Account @relation(fields: [recipientAccountId], references: [id], onDelete: Cascade)
+
+  @@index([recipientAccountId, isRead])
+  @@map("notifications")
+}
+
+model AuditLog {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  accountId      String?  @map("account_id") @db.Uuid
+  action         String   @db.VarChar(100)
+  endpoint       String   @db.VarChar(255)
+  httpMethod     String   @map("http_method") @db.VarChar(10)
+  ipAddress      String?  @map("ip_address") @db.VarChar(50)
+  userAgent      String?  @map("user_agent") @db.Text
+  payload        Json?
+  responseStatus Int?     @map("response_status") @db.SmallInt
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  account Account? @relation(fields: [accountId], references: [id], onDelete: SetNull)
+
+  @@index([accountId])
+  @@index([action])
+  @@map("audit_logs")
+}
+
+model SystemSetting {
+  id          String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  key         String          @unique @db.VarChar(100)
+  value       String          @db.Text
+  dataType    SettingDataType @default(STRING) @map("data_type")
+  facultyId   String?         @map("faculty_id") @db.Uuid
+  description String?         @db.Text
+  isPublic    Boolean         @default(false) @map("is_public")
+  createdAt   DateTime        @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  faculty Faculty? @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+
+  @@map("system_settings")
+}

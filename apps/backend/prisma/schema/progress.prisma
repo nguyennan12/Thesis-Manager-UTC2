@@ -1,0 +1,44 @@
+// ==============================================================================
+// PROGRESS REPORTS & PLAGIARISM CHECK MODELS
+// ==============================================================================
+
+model ProgressReport {
+  id                 String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  registrationId     String         @map("registration_id") @db.Uuid
+  weekNumber         Int            @map("week_number") @db.SmallInt
+  reportDate         DateTime       @default(now()) @map("report_date") @db.Timestamptz()
+  tasksCompleted     String?        @map("tasks_completed") @db.Text
+  nextWeekPlan       String?        @map("next_week_plan") @db.Text
+  attachmentUrl      String?        @map("attachment_url") @db.Text
+  reviewerLecturerId String         @map("reviewer_lecturer_id") @db.Uuid
+  advisorFeedback    String?        @map("advisor_feedback") @db.Text
+  completionLevel    String?        @map("completion_level") @db.VarChar(50)
+  reviewedAt         DateTime?      @map("reviewed_at") @db.Timestamptz()
+  status             ProgressStatus @default(PENDING)
+  createdAt          DateTime       @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt          DateTime       @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  registration     Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  reviewerLecturer Lecturer     @relation(fields: [reviewerLecturerId], references: [id], onDelete: Restrict)
+
+  @@unique([registrationId, weekNumber])
+  @@index([registrationId])
+  @@index([status])
+  @@map("progress_reports")
+}
+
+model PlagiarismResult {
+  id                   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  registrationId       String   @map("registration_id") @db.Uuid
+  sourceRegistrationId String?  @map("source_registration_id") @db.Uuid
+  similarityPercentage Decimal  @map("similarity_percentage") @db.Decimal(5, 2)
+  matchingDetails      Json?    @map("matching_details")
+  analyzedAt           DateTime @default(now()) @map("analyzed_at") @db.Timestamptz()
+  createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  targetRegistration Registration  @relation("TargetPlagiarism", fields: [registrationId], references: [id], onDelete: Cascade)
+  sourceRegistration Registration? @relation("SourcePlagiarism", fields: [sourceRegistrationId], references: [id], onDelete: SetNull)
+
+  @@index([registrationId])
+  @@map("plagiarism_results")
+}

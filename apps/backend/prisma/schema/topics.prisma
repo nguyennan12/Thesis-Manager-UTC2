@@ -1,0 +1,78 @@
+// ==============================================================================
+// TOPICS & REGISTRATIONS DOMAIN MODELS
+// ==============================================================================
+
+model Topic {
+  id                  String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code                String      @unique @db.VarChar(30)
+  titleVi             String      @map("title_vi") @db.VarChar(300)
+  titleEn             String?     @map("title_en") @db.VarChar(300)
+  description         String?     @db.Text
+  objectives          String?     @db.Text
+  requirements        String?     @db.Text
+  topicType           TopicType   @default(MAJOR) @map("topic_type")
+  maxStudents         Int         @default(1) @map("max_students")
+  departmentId        String      @map("department_id") @db.Uuid
+  majorId             String      @map("major_id") @db.Uuid
+  semesterId          String      @map("semester_id") @db.Uuid
+  proposerLecturerId  String      @map("proposer_lecturer_id") @db.Uuid
+  reviewerLecturerId  String?     @map("reviewer_lecturer_id") @db.Uuid
+  status              TopicStatus @default(DRAFT)
+  rejectionReason     String?     @map("rejection_reason") @db.Text
+  createdAt           DateTime    @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt           DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  department       Department     @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  major            Major          @relation(fields: [majorId], references: [id], onDelete: Restrict)
+  semester         Semester       @relation(fields: [semesterId], references: [id], onDelete: Restrict)
+  proposerLecturer Lecturer       @relation("ProposedTopics", fields: [proposerLecturerId], references: [id], onDelete: Restrict)
+  reviewerLecturer Lecturer?      @relation("ReviewedTopics", fields: [reviewerLecturerId], references: [id], onDelete: SetNull)
+  registrations    Registration[]
+
+  @@index([departmentId])
+  @@index([semesterId])
+  @@index([status])
+  @@map("topics")
+}
+
+model Registration {
+  id                   String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code                 String             @unique @db.VarChar(30)
+  topicId              String             @map("topic_id") @db.Uuid
+  studentId            String             @map("student_id") @db.Uuid
+  semesterId           String             @map("semester_id") @db.Uuid
+  advisorLecturerId    String             @map("advisor_lecturer_id") @db.Uuid
+  councilId            String?            @map("council_id") @db.Uuid
+  status               RegistrationStatus @default(REGISTERED)
+  advisorFeedback      String?            @map("advisor_feedback") @db.Text
+  isQualifiedForDefense Boolean           @default(false) @map("is_qualified_for_defense")
+  reportSubmissionUrl  String?            @map("report_submission_url") @db.Text
+  submittedAt          DateTime?          @map("submitted_at") @db.Timestamptz()
+  scoreProcess         Decimal?           @map("score_process") @db.Decimal(4, 2)
+  scoreReviewer        Decimal?           @map("score_reviewer") @db.Decimal(4, 2)
+  scoreCouncilAvg      Decimal?           @map("score_council_avg") @db.Decimal(4, 2)
+  scoreFinal           Decimal?           @map("score_final") @db.Decimal(4, 2)
+  gradeScale4          Decimal?           @map("grade_scale_4") @db.Decimal(3, 2)
+  gradeLetter          String?            @map("grade_letter") @db.VarChar(5)
+  createdAt            DateTime           @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt            DateTime           @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  topic             Topic              @relation(fields: [topicId], references: [id], onDelete: Restrict)
+  student           Student            @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  semester          Semester           @relation(fields: [semesterId], references: [id], onDelete: Restrict)
+  advisorLecturer   Lecturer           @relation("AdvisedRegistrations", fields: [advisorLecturerId], references: [id], onDelete: Restrict)
+  council           Council?           @relation(fields: [councilId], references: [id], onDelete: SetNull)
+  progressReports   ProgressReport[]
+  detailedScores    DetailedScore[]
+  targetPlagiarisms PlagiarismResult[] @relation("TargetPlagiarism")
+  sourcePlagiarisms PlagiarismResult[] @relation("SourcePlagiarism")
+  changeRequests    ChangeRequest[]
+  gradeAppeals      GradeAppeal[]
+
+  @@unique([studentId, semesterId])
+  @@index([topicId])
+  @@index([advisorLecturerId])
+  @@index([councilId])
+  @@index([status])
+  @@map("registrations")
+}

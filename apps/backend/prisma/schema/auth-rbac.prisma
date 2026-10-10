@@ -1,0 +1,92 @@
+// ==============================================================================
+// AUTHENTICATION & DYNAMIC RBAC MODELS
+// ==============================================================================
+
+model Account {
+  id               String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  username         String      @unique @db.VarChar(50)
+  passwordHash     String      @map("password_hash") @db.VarChar(255)
+  email            String      @unique @db.VarChar(150)
+  studentId        String?     @unique @map("student_id") @db.Uuid
+  lecturerId       String?     @unique @map("lecturer_id") @db.Uuid
+  isActive         Boolean     @default(true) @map("is_active")
+  lastLoginAt      DateTime?   @map("last_login_at") @db.Timestamptz()
+  refreshTokenHash String?     @map("refresh_token_hash") @db.VarChar(255)
+  createdAt        DateTime    @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt        DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  student          Student?        @relation(fields: [studentId], references: [id], onDelete: SetNull)
+  lecturer         Lecturer?       @relation(fields: [lecturerId], references: [id], onDelete: SetNull)
+  accountRoles     AccountRole[]
+  uploadedFiles    Attachment[]
+  statusHistories  StatusHistory[]
+  approvedChanges  ChangeRequest[] @relation("ApprovedChanges")
+  resolvedAppeals  GradeAppeal[]   @relation("ResolvedAppeals")
+  notifications    Notification[]
+  auditLogs        AuditLog[]
+
+  @@index([username])
+  @@map("accounts")
+}
+
+model Role {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code        String   @unique @db.VarChar(50)
+  name        String   @db.VarChar(100)
+  description String?  @db.Text
+  isSystem    Boolean  @default(false) @map("is_system")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  accountRoles    AccountRole[]
+  rolePermissions RolePermission[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code        String   @unique @db.VarChar(100)
+  name        String   @db.VarChar(150)
+  module      String   @db.VarChar(50)
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  rolePermissions RolePermission[]
+
+  @@map("permissions")
+}
+
+model RolePermission {
+  roleId       String   @map("role_id") @db.Uuid
+  permissionId String   @map("permission_id") @db.Uuid
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+model AccountRole {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  accountId String    @map("account_id") @db.Uuid
+  roleId    String    @map("role_id") @db.Uuid
+  scopeType String?   @map("scope_type") @db.VarChar(30)
+  scopeId   String?   @map("scope_id") @db.VarChar(50)
+  validFrom DateTime? @map("valid_from") @db.Date
+  validTo   DateTime? @map("valid_to") @db.Date
+  isActive  Boolean   @default(true) @map("is_active")
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  role    Role    @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@index([accountId])
+  @@index([roleId])
+  @@map("account_roles")
+}
