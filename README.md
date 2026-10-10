@@ -145,10 +145,15 @@ pnpm --filter frontend dev   # http://localhost:3000
 
 ## 📚 5. Tài liệu tham khảo chi tiết
 
-Mọi thông tin chi tiết về quy tắc nghiệp vụ, ma trận phân quyền và thiết kế bảng đều được lưu tại thư mục `docs/`:
-* [Tóm tắt đặc tả yêu cầu SRS (13 Business Rules)](docs/SRS_Summary_UTC2.md)
-* [Kiến trúc hệ thống & Mô hình phân quyền 3 tầng](docs/SYSTEM_ARCHITECTURE_AND_RBAC.md)
-* [Đặc tả 28 bảng CSDL & Sơ đồ ERD](docs/DATABASE_DESIGN_SPEC.md)
+Mọi thông tin chi tiết về quy tắc nghiệp vụ, ma trận phân quyền, thiết kế bảng và tiêu chuẩn code đều được lưu tại thư mục `docs/`:
+* [🗺️ Lộ trình Triển khai Dự án Chi tiết (Project Roadmap - 10 Sprints)](docs/PROJECT_ROADMAP.md)
+* [📘 Toàn văn Đặc tả Yêu cầu Phần mềm (Full SRS 9 Chương)](docs/SRS_Quan_ly_do_an_UTC2.md)
+* [🔐 Ma trận Phân quyền & Danh mục mã Permission (RBAC Matrix)](docs/RBAC_PERMISSION_MATRIX.md)
+* [🌐 Đặc tả Danh mục Endpoints RESTful API (87 Endpoints)](docs/API_ENDPOINTS_SPECIFICATION.md)
+* [📜 Quy tắc phát triển & Tiêu chuẩn kiến trúc Code (Coding Guidelines)](docs/CODING_GUIDELINES_AND_ARCHITECTURE_RULES.md)
+* [📋 Tóm tắt đặc tả yêu cầu SRS (13 Business Rules BR-01 $\rightarrow$ BR-13)](docs/SRS_Summary_UTC2.md)
+* [🏛️ Kiến trúc hệ thống & Mô hình phân quyền 3 tầng](docs/SYSTEM_ARCHITECTURE_AND_RBAC.md)
+* [🗺️ Đặc tả 28 bảng CSDL & Sơ đồ ERD](docs/DATABASE_DESIGN_SPEC.md)
 
 ---
 
