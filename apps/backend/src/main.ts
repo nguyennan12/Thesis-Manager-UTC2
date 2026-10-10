@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { apiReference } from '@scalar/nestjs-api-reference';
 import cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { TransformResponseInterceptor } from './common/interceptors/transform-response.interceptor';
@@ -45,7 +46,7 @@ async function bootstrap() {
   );
   app.useGlobalFilters(new AllExceptionsFilter());
 
-  // 6. Swagger / OpenAPI Documentation
+  // 6. Swagger & Scalar API Documentation
   const config = new DocumentBuilder()
     .setTitle('UTC2 Thesis Management API')
     .setDescription('Tài liệu API Hệ thống Web Quản lý Đồ án Tốt nghiệp UTC2')
@@ -55,6 +56,20 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
+
+  // Scalar Modern API Documentation UI
+  app.use(
+    '/api/reference',
+    apiReference({
+      spec: {
+        content: document,
+      },
+      theme: 'purple',
+      darkMode: true,
+    }),
+  );
+
+  // Swagger UI (Classic)
   SwaggerModule.setup('api/docs', app, document, {
     swaggerOptions: {
       persistAuthorization: true,
@@ -65,7 +80,8 @@ async function bootstrap() {
   const port = process.env.PORT || 8000;
   await app.listen(port);
   logger.log(`🚀 Backend API is running on: http://localhost:${port}/${globalPrefix}`);
-  logger.log(`📚 Swagger API Docs available at: http://localhost:${port}/api/docs`);
+  logger.log(`📚 Scalar API Docs: http://localhost:${port}/api/reference`);
+  logger.log(`📚 Swagger UI Docs: http://localhost:${port}/api/docs`);
 }
 
 bootstrap();
