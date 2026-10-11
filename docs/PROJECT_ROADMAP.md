@@ -8,6 +8,7 @@
 ---
 
 ## 📑 MỤC LỤC
+
 1. [Tổng quan Chiến lược & Các Cột mốc (Milestones)](#1-tổng-quan-chiến-lược--các-cột-mốc-milestones)
 2. [Sơ đồ Phụ thuộc Module & Luồng dữ liệu Backend](#2-sơ-đồ-phụ-thuộc-module--luồng-dữ-liệu-backend)
 3. [Chi tiết Kế hoạch Triển khai (Giai đoạn Backend-First $\rightarrow$ Frontend $\rightarrow$ E2E)](#3-chi-tiết-kế-hoạch-triển-khai)
@@ -52,17 +53,17 @@ timeline
       Sprint 10 : E2E Testing : Docker Production Deploy
 ```
 
-| Cột mốc (Milestone) | Phạm vi Sprint | Mục tiêu đầu ra chính | Trạng thái |
-| :--- | :---: | :--- | :---: |
-| **M1: Backend Foundation & Auth** | Sprint 1 | Seed 4 Roles, 45 Perms; Token Rotation (15m/7d); 3 Guards bảo vệ | ⏳ Sắp bắt đầu |
-| **M2: Master Data & Terms** | Sprint 2 | API CRUD Khoa/Bộ môn/Lớp/SV/GV; Quản lý Học kỳ & Đợt đồ án; Mẫu Rubrics | 📋 Kế hoạch |
-| **M3: Matching & Topics Engine** | Sprint 3 | Quota GVHD (BR-03); Đăng ký nguyện vọng (BR-02); Đề tài & Thẩm định 2 cấp (BR-05) | 📋 Kế hoạch |
-| **M4: Tracking & Pre-defense** | Sprint 4 | Nộp báo cáo tuần; MinIO đính kèm; Báo cáo toàn văn; Check đạo văn $\le 25\%$ (BR-06) | 📋 Kế hoạch |
-| **M5: Defense & Final Scoring** | Sprint 5 | Phân công GVPB (BR-07); Hội đồng $\ge 3$ thành viên (BR-09, 10); Chấm điểm 30-20-50 (BR-08) | 📋 Kế hoạch |
-| **M6: Closure & Analytics** | Sprint 6 | Phúc khảo (BR-12); Khóa điểm HK (BR-13); Lưu trữ đồ án; Thống kê & Xuất Excel/PDF | 📋 Kế hoạch |
-| **M7: Backend Hardening** | Sprint 7 | Unit & Integration Test Coverage $\ge 80\%$; Load Testing; Rà soát OWASP | 📋 Kế hoạch |
-| **M8: Frontend Portals** | Sprint 8 - 9 | Next.js 15 UI/UX cho toàn bộ 4 Role kỹ thuật & 6 phân hệ người dùng | 📋 Kế hoạch |
-| **M9: Production Release** | Sprint 10 | E2E Playwright/Cypress; Docker Compose Multi-stage; Nginx Reverse Proxy; Bàn giao | 📋 Kế hoạch |
+| Cột mốc (Milestone)               | Phạm vi Sprint | Mục tiêu đầu ra chính                                                                       | Trạng thái  |
+| :-------------------------------- | :------------: | :------------------------------------------------------------------------------------------ | :---------: |
+| **M1: Backend Foundation & Auth** |    Sprint 1    | Seed 4 Roles, 45 Perms; Token Rotation (15m/7d); 3 Guards bảo vệ                            | Hoàn Thành  |
+| **M2: Master Data & Terms**       |    Sprint 2    | API CRUD Khoa/Bộ môn/Lớp/SV/GV; Quản lý Học kỳ & Đợt đồ án; Mẫu Rubrics                     | 📋 Kế hoạch |
+| **M3: Matching & Topics Engine**  |    Sprint 3    | Quota GVHD (BR-03); Đăng ký nguyện vọng (BR-02); Đề tài & Thẩm định 2 cấp (BR-05)           | 📋 Kế hoạch |
+| **M4: Tracking & Pre-defense**    |    Sprint 4    | Nộp báo cáo tuần; MinIO đính kèm; Báo cáo toàn văn; Check đạo văn $\le 25\%$ (BR-06)        | 📋 Kế hoạch |
+| **M5: Defense & Final Scoring**   |    Sprint 5    | Phân công GVPB (BR-07); Hội đồng $\ge 3$ thành viên (BR-09, 10); Chấm điểm 30-20-50 (BR-08) | 📋 Kế hoạch |
+| **M6: Closure & Analytics**       |    Sprint 6    | Phúc khảo (BR-12); Khóa điểm HK (BR-13); Lưu trữ đồ án; Thống kê & Xuất Excel/PDF           | 📋 Kế hoạch |
+| **M7: Backend Hardening**         |    Sprint 7    | Unit & Integration Test Coverage $\ge 80\%$; Load Testing; Rà soát OWASP                    | 📋 Kế hoạch |
+| **M8: Frontend Portals**          |  Sprint 8 - 9  | Next.js 15 UI/UX cho toàn bộ 4 Role kỹ thuật & 6 phân hệ người dùng                         | 📋 Kế hoạch |
+| **M9: Production Release**        |   Sprint 10    | E2E Playwright/Cypress; Docker Compose Multi-stage; Nginx Reverse Proxy; Bàn giao           | 📋 Kế hoạch |
 
 ---
 
@@ -116,6 +117,7 @@ flowchart TD
 ### PHẦN 1: TOÀN DIỆN BACKEND (Sprint 1 $\rightarrow$ Sprint 7)
 
 #### Sprint 1: Database Seeding & Module 1 (Auth & Dynamic RBAC)
+
 - **Mục tiêu:** Hoàn thiện hạ tầng bảo mật dữ liệu, seed đầy đủ danh mục phân quyền và kiểm thử authentication.
 - **Chi tiết Tasks Backend:**
   - [ ] **Database Seeding (`apps/backend/prisma/seed.ts`):**
@@ -139,6 +141,7 @@ flowchart TD
 ---
 
 #### Sprint 2: Module 2 (Master Data) & Module 3 (Semesters, Defense Terms & Rubrics)
+
 - **Mục tiêu:** Cung cấp toàn bộ API danh mục tổ chức trường/khoa/ngành/lớp, mở học kỳ, cấu hình đợt đồ án và ma trận tiêu chí chấm điểm.
 - **Chi tiết Tasks Backend:**
   - [ ] **Xây dựng Module 2 (Master Data & Academic Structures - 10 endpoints):**
@@ -153,6 +156,7 @@ flowchart TD
 ---
 
 #### Sprint 3: Module 4 (Advisor Allocation) & Module 5 (Topic Management)
+
 - **Mục tiêu:** Xây dựng quy trình ghép cặp hướng dẫn và ngân hàng đề tài qua 2 cấp thẩm định.
 - **Chi tiết Tasks Backend:**
   - [ ] **Xây dựng Module 4 (Advisor Registration & Allocation - 6 endpoints):**
@@ -171,6 +175,7 @@ flowchart TD
 ---
 
 #### Sprint 4: Module 6 (Progress & Weekly Reports) & Module 7 (Final Submission & Plagiarism)
+
 - **Mục tiêu:** Theo dõi tiến độ định kỳ hàng tuần, quản lý nộp báo cáo toàn văn và thẩm định tỷ lệ đạo văn.
 - **Chi tiết Tasks Backend:**
   - [ ] **Xây dựng Module 6 (Progress Tracking & Weekly Reports - 5 endpoints):**
@@ -185,6 +190,7 @@ flowchart TD
 ---
 
 #### Sprint 5: Module 8 (Reviewer), Module 9 (Councils) & Module 10 (Evaluation & Rubrics)
+
 - **Mục tiêu:** Phân công phản biện, thành lập hội đồng bảo vệ, lập lịch phòng/ca thi và chấm điểm hội đồng trực tiếp theo Rubrics.
 - **Chi tiết Tasks Backend:**
   - [ ] **Xây dựng Module 8 (Reviewer Assignment & Pre-defense Review - 4 endpoints):**
@@ -204,6 +210,7 @@ flowchart TD
 ---
 
 #### Sprint 6: Module 11 (Appeals), Module 12 (Archive), Module 13 (Statistics) & Module 14 (Audit)
+
 - **Mục tiêu:** Xử lý phúc khảo điểm, khóa điểm học kỳ, lưu trữ kho đồ án, xuất báo cáo thống kê Excel/PDF và ghi vết kiểm toán.
 - **Chi tiết Tasks Backend:**
   - [ ] **Xây dựng Module 11 (Appeals Management - 5 endpoints):**
@@ -223,6 +230,7 @@ flowchart TD
 ---
 
 #### Sprint 7: Backend Unit/Integration Testing, Load Test & Security Audit
+
 - **Mục tiêu:** Kiểm thử toàn diện chất lượng Backend, tối ưu hóa CSDL và rà soát an ninh trước khi chuyển sang làm Frontend.
 - **Tasks Chi tiết:**
   - [ ] Viết Unit Test cho toàn bộ 14 Services nghiệp vụ (Jest, mock Prisma & Redis) $\rightarrow$ Đạt coverage $\ge 80\%$.
@@ -236,6 +244,7 @@ flowchart TD
 ### PHẦN 2: TOÀN DIỆN FRONTEND NEXT.JS (Sprint 8 $\rightarrow$ Sprint 9)
 
 #### Sprint 8: Next.js Auth, Master Layouts, Student & Lecturer Spaces
+
 - **Mục tiêu:** Xây dựng khung ứng dụng Next.js 15, tích hợp Auth Token, và hoàn thiện 2 phân hệ Sinh viên & Giảng viên.
 - **Tasks Chi tiết:**
   - [ ] Tích hợp Next.js App Router, Tailwind CSS, Shadcn/UI, React Hook Form, Zod, React Query & Zustand.
@@ -246,6 +255,7 @@ flowchart TD
 ---
 
 #### Sprint 9: Department, Academic Affairs, Dean & Admin Portals
+
 - **Mục tiêu:** Hoàn thiện 4 phân hệ quản trị còn lại trên giao diện Frontend.
 - **Tasks Chi tiết:**
   - [ ] **Department Space (`/department/*`):** Phân công GVHD, Thẩm định đề tài (Cấp 1), Phân công GVPB, Đề xuất nhân sự Hội đồng.
@@ -259,6 +269,7 @@ flowchart TD
 ### PHẦN 3: TÍCH HỢP E2E & DEPLOYMENT (Sprint 10)
 
 #### Sprint 10: E2E Integration Testing, Docker Multi-stage & Production Release
+
 - **Mục tiêu:** Kiểm thử liên thông trọn vẹn toàn bộ hệ thống từ Frontend tới Backend và đóng gói phát hành Production.
 - **Tasks Chi tiết:**
   - [ ] Viết E2E Test tự động mô phỏng toàn bộ hành trình tốt nghiệp (Sinh viên đăng ký $\rightarrow$ GV duyệt $\rightarrow$ Nộp bài $\rightarrow$ Chấm hội đồng $\rightarrow$ Khóa sổ).
@@ -273,27 +284,28 @@ flowchart TD
 
 ## 4. Ma trận Kiểm tra Ràng buộc Nghiệp vụ (Business Rules Checklist)
 
-| Mã BR | Quy tắc Nghiệp vụ (SRS) | Module Backend phụ trách | Vị trí Thực thi (Enforcement) | Sprint Hoàn thành |
-| :---: | :--- | :---: | :---: | :---: |
-| **BR-01** | Sinh viên chỉ được làm tối đa **1 đề tài** trong cùng 1 học kỳ/đợt đồ án. | Module 4 & 5 | `UniqueConstraint` DB + Service Validation | Sprint 3 |
-| **BR-02** | Sinh viên chỉ được đăng ký/sửa nguyện vọng trong khung thời gian đợt mở. | Module 4 | `AdvisorService` (Check `DefenseTerm.timeline`) | Sprint 3 |
-| **BR-03** | Giảng viên không được nhận vượt quá **Quota tối đa** (GS/PGS $\le 7$, TS $\le 5$, ThS $\le 3$). | Module 4 | `AdvisorService.assignAdvisor()` | Sprint 3 |
-| **BR-04** | Mỗi đề tài có tối đa **2 sinh viên** thực hiện (nếu làm theo nhóm). | Module 5 | `TopicService.createTopic()` & DB Check | Sprint 3 |
-| **BR-05** | Đề tài phải qua **2 cấp thẩm định** (Bộ môn duyệt $\rightarrow$ Khoa phê duyệt). | Module 5 | `TopicService.approveByHod()` & `approveByDean()` | Sprint 3 |
-| **BR-06** | Tỷ lệ trùng lặp đạo văn bản toàn văn phải **$\le 25\%$** mới được xét bảo vệ. | Module 7 | `ThesisSubmissionService.verifyPlagiarism()` | Sprint 4 |
-| **BR-07** | Cán bộ phản biện (GVPB) **không được trùng** với Cán bộ hướng dẫn (GVHD). | Module 8 | `ReviewerService.assignReviewer()` | Sprint 5 |
-| **BR-08** | Cấu trúc trọng số điểm bắt buộc: **GVHD 30% - GVPB 20% - Hội đồng 50%**. | Module 10 | `EvaluationService.calculateFinalScore()` | Sprint 5 |
-| **BR-09** | Hội đồng bảo vệ đồ án phải có tối thiểu **3 thành viên** (Chủ tịch, Thư ký, Ủy viên). | Module 9 | `CouncilService.createCouncil()` | Sprint 5 |
-| **BR-10** | GVHD **không được làm Chủ tịch hoặc GVPB** trong hội đồng chấm đề tài của mình. | Module 9 | `CouncilService.assignTopicToCouncil()` | Sprint 5 |
-| **BR-11** | Sinh viên phải có điểm tổng kết **$\ge 4.0/10$** mới được công nhận đạt đồ án. | Module 10 | `EvaluationService.determinePassFail()` | Sprint 5 |
-| **BR-12** | Đơn phúc khảo chỉ được nộp trong vòng **7 ngày** kể từ ngày công bố điểm. | Module 11 | `AppealsService.submitAppeal()` | Sprint 6 |
-| **BR-13** | Sau khi **Khóa điểm học kỳ**, không ai được phép sửa đổi điểm trừ quy trình phúc khảo. | Module 10 & 11 | `EvaluationGuard` & `AuditInterceptor` | Sprint 6 |
+|   Mã BR   | Quy tắc Nghiệp vụ (SRS)                                                                         | Module Backend phụ trách |           Vị trí Thực thi (Enforcement)           | Sprint Hoàn thành |
+| :-------: | :---------------------------------------------------------------------------------------------- | :----------------------: | :-----------------------------------------------: | :---------------: |
+| **BR-01** | Sinh viên chỉ được làm tối đa **1 đề tài** trong cùng 1 học kỳ/đợt đồ án.                       |       Module 4 & 5       |    `UniqueConstraint` DB + Service Validation     |     Sprint 3      |
+| **BR-02** | Sinh viên chỉ được đăng ký/sửa nguyện vọng trong khung thời gian đợt mở.                        |         Module 4         |  `AdvisorService` (Check `DefenseTerm.timeline`)  |     Sprint 3      |
+| **BR-03** | Giảng viên không được nhận vượt quá **Quota tối đa** (GS/PGS $\le 7$, TS $\le 5$, ThS $\le 3$). |         Module 4         |         `AdvisorService.assignAdvisor()`          |     Sprint 3      |
+| **BR-04** | Mỗi đề tài có tối đa **2 sinh viên** thực hiện (nếu làm theo nhóm).                             |         Module 5         |      `TopicService.createTopic()` & DB Check      |     Sprint 3      |
+| **BR-05** | Đề tài phải qua **2 cấp thẩm định** (Bộ môn duyệt $\rightarrow$ Khoa phê duyệt).                |         Module 5         | `TopicService.approveByHod()` & `approveByDean()` |     Sprint 3      |
+| **BR-06** | Tỷ lệ trùng lặp đạo văn bản toàn văn phải **$\le 25\%$** mới được xét bảo vệ.                   |         Module 7         |   `ThesisSubmissionService.verifyPlagiarism()`    |     Sprint 4      |
+| **BR-07** | Cán bộ phản biện (GVPB) **không được trùng** với Cán bộ hướng dẫn (GVHD).                       |         Module 8         |        `ReviewerService.assignReviewer()`         |     Sprint 5      |
+| **BR-08** | Cấu trúc trọng số điểm bắt buộc: **GVHD 30% - GVPB 20% - Hội đồng 50%**.                        |        Module 10         |     `EvaluationService.calculateFinalScore()`     |     Sprint 5      |
+| **BR-09** | Hội đồng bảo vệ đồ án phải có tối thiểu **3 thành viên** (Chủ tịch, Thư ký, Ủy viên).           |         Module 9         |         `CouncilService.createCouncil()`          |     Sprint 5      |
+| **BR-10** | GVHD **không được làm Chủ tịch hoặc GVPB** trong hội đồng chấm đề tài của mình.                 |         Module 9         |      `CouncilService.assignTopicToCouncil()`      |     Sprint 5      |
+| **BR-11** | Sinh viên phải có điểm tổng kết **$\ge 4.0/10$** mới được công nhận đạt đồ án.                  |        Module 10         |      `EvaluationService.determinePassFail()`      |     Sprint 5      |
+| **BR-12** | Đơn phúc khảo chỉ được nộp trong vòng **7 ngày** kể từ ngày công bố điểm.                       |        Module 11         |          `AppealsService.submitAppeal()`          |     Sprint 6      |
+| **BR-13** | Sau khi **Khóa điểm học kỳ**, không ai được phép sửa đổi điểm trừ quy trình phúc khảo.          |      Module 10 & 11      |      `EvaluationGuard` & `AuditInterceptor`       |     Sprint 6      |
 
 ---
 
 ## 5. Tiêu chuẩn Hoàn thành (Definition of Done - DoD)
 
 Mỗi tính năng/module chỉ được coi là hoàn thành khi đáp ứng trọn vẹn 6 tiêu chí kỹ thuật:
+
 1. **Mã nguồn Chuẩn mực:** Tuân thủ kiến trúc phân tầng (Controller $\rightarrow$ Service $\rightarrow$ Repository), áp dụng nguyên tắc Single Responsibility (SRP).
 2. **Kiểm tra Dữ liệu Chặt chẽ:** DTO đầy đủ decorators `class-validator`, mọi biến môi trường được đọc bằng `getOrThrow()`.
 3. **Phân quyền 3 Lớp:** Đặt đầy đủ `@UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)` và `@RequirePermissions()`.
@@ -305,9 +317,9 @@ Mỗi tính năng/module chỉ được coi là hoàn thành khi đáp ứng tr�
 
 ## 6. Quản trị Rủi ro & Giải pháp (Risk Management)
 
-| Rủi ro Kỹ thuật / Nghiệp vụ | Mức độ | Biện pháp Phòng ngừa & Xử lý |
-| :--- | :---: | :--- |
-| **Xung đột lịch bảo vệ (Trùng phòng, trùng ca của GV)** | Cao | Sử dụng giao dịch cơ sở dữ liệu (Database Transaction + Serializable Lock) và thuật toán quét chồng chéo thời gian trước khi lưu lịch. |
-| **Nghẽn tải khi hàng loạt sinh viên nộp báo cáo tuần/cuối kỳ** | Trung bình | Tải file trực tiếp lên MinIO/S3 thông qua Presigned Upload URL; xử lý nén/quét file ngầm qua BullMQ worker. |
-| **Gian lận sửa đổi điểm số sau khi chấm** | Rất cao | Áp dụng khóa điểm cứng (State Machine `LOCKED`), lưu vết toàn bộ thay đổi vào bảng `audit_logs` kèm IP và User ID thực hiện. |
-| **Thay đổi cấu trúc Schema Prisma khi phát triển** | Trung bình | Sử dụng Prisma Multi-file schema độc lập theo domain, chạy `npx prisma migrate dev` kèm tên migration có ý nghĩa rõ ràng. |
+| Rủi ro Kỹ thuật / Nghiệp vụ                                    |   Mức độ   | Biện pháp Phòng ngừa & Xử lý                                                                                                           |
+| :------------------------------------------------------------- | :--------: | :------------------------------------------------------------------------------------------------------------------------------------- |
+| **Xung đột lịch bảo vệ (Trùng phòng, trùng ca của GV)**        |    Cao     | Sử dụng giao dịch cơ sở dữ liệu (Database Transaction + Serializable Lock) và thuật toán quét chồng chéo thời gian trước khi lưu lịch. |
+| **Nghẽn tải khi hàng loạt sinh viên nộp báo cáo tuần/cuối kỳ** | Trung bình | Tải file trực tiếp lên MinIO/S3 thông qua Presigned Upload URL; xử lý nén/quét file ngầm qua BullMQ worker.                            |
+| **Gian lận sửa đổi điểm số sau khi chấm**                      |  Rất cao   | Áp dụng khóa điểm cứng (State Machine `LOCKED`), lưu vết toàn bộ thay đổi vào bảng `audit_logs` kèm IP và User ID thực hiện.           |
+| **Thay đổi cấu trúc Schema Prisma khi phát triển**             | Trung bình | Sử dụng Prisma Multi-file schema độc lập theo domain, chạy `npx prisma migrate dev` kèm tên migration có ý nghĩa rõ ràng.              |
