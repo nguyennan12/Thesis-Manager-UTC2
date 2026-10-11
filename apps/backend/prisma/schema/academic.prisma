@@ -72,6 +72,7 @@ model Lecturer {
   councilMemberships  CouncilMember[]
   progressReviews     ProgressReport[]
   detailedScores      DetailedScore[]
+  semesterQuotas      LecturerSemesterQuota[]
   account             Account?
 
   @@index([departmentId])
@@ -128,6 +129,8 @@ model Semester {
   endDate                DateTime  @map("end_date") @db.Date
   topicRegistrationStart DateTime? @map("topic_registration_start") @db.Timestamptz()
   topicRegistrationEnd   DateTime? @map("topic_registration_end") @db.Timestamptz()
+  executionStart         DateTime? @map("execution_start") @db.Timestamptz()
+  executionEnd           DateTime? @map("execution_end") @db.Timestamptz()
   thesisSubmissionEnd    DateTime? @map("thesis_submission_end") @db.Timestamptz()
   defenseStart           DateTime? @map("defense_start") @db.Timestamptz()
   defenseEnd             DateTime? @map("defense_end") @db.Timestamptz()
@@ -135,9 +138,27 @@ model Semester {
   createdAt              DateTime  @default(now()) @map("created_at") @db.Timestamptz()
   updatedAt              DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
 
-  topics        Topic[]
-  registrations Registration[]
-  councils      Council[]
+  topics         Topic[]
+  registrations  Registration[]
+  councils       Council[]
+  lecturerQuotas LecturerSemesterQuota[]
 
   @@map("semesters")
 }
+
+model LecturerSemesterQuota {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lecturerId String   @map("lecturer_id") @db.Uuid
+  semesterId String   @map("semester_id") @db.Uuid
+  maxQuota   Int      @default(5) @map("max_quota")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt  DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  lecturer Lecturer @relation(fields: [lecturerId], references: [id], onDelete: Cascade)
+  semester Semester @relation(fields: [semesterId], references: [id], onDelete: Cascade)
+
+  @@unique([lecturerId, semesterId])
+  @@index([semesterId])
+  @@map("lecturer_semester_quotas")
+}
+

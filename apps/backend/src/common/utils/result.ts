@@ -71,4 +71,8 @@ export class Result<T, E = AppError> {
   public static fail<T, E = AppError>(error: E): Result<T, E> {
     return new Result<T, E>(false, undefined, error);
   }
+
+  public static err<T, E = AppError>(error: E): Result<T, E> {
+    return Result.fail<T, E>(error);
+  }
 }

@@ -56,6 +56,8 @@ Quy ước: `<module>:<action>`
 * `roles:manage`: Quản lý danh mục vai trò & gán quyền.
 * `users:read`: Xem danh sách tài khoản.
 * `users:manage`: Tạo/khóa tài khoản, gán chức danh & phạm vi quản lý.
+* `profiles:read`: Xem hồ sơ học thuật sinh viên, giảng viên theo phạm vi.
+* `profiles:manage`: Quản lý hồ sơ SV, GV và import dữ liệu hàng loạt.
 * `audit_logs:read`: Xem nhật ký hệ thống ghi vết CUD.
 * `settings:manage`: Cấu hình tham số động (ngưỡng đạo văn, công thức điểm).
 
@@ -63,6 +65,7 @@ Quy ước: `<module>:<action>`
 * `academic:read`: Tra cứu Khoa, Ngành, Bộ môn, Lớp, Học kỳ.
 * `academic:manage`: Thêm/sửa/xóa Khoa, Ngành, Bộ môn, Lớp.
 * `semesters:manage`: Cấu hình học kỳ, mốc hạn đăng ký, nộp bài, bảo vệ.
+* `quotas:manage`: Quản lý chỉ tiêu định mức hướng dẫn đồ án theo học kỳ.
 
 ### Nhóm 3: Phân hệ 1.0 – Quản lý Đề tài
 * `topics:read_approved`: Tra cứu danh sách đề tài đã duyệt (Công khai).
@@ -132,10 +135,13 @@ Quy ước: `<module>:<action>`
 | | | **Sinh viên** | **Giảng viên (GVHD/HĐ)** | **Trưởng Bộ Môn (`HEAD_OF_DEPT`)** | **Ban Chủ Nhiệm (`FACULTY_DEAN`)** | **Giáo Vụ Khoa (`ACADEMIC_AFFAIRS`)** | **Phòng Đào Tạo / BGĐ** | **Quản Trị Hệ Thống** |
 | **Quản trị hệ thống** | `users:manage` | - | - | - | - | - | - | **✓ (All)** |
 | | `roles:manage` | - | - | - | - | - | - | **✓ (All)** |
+| | `profiles:read` | - | - | **✓ (Dept)** | **✓ (All)** | **✓ (All)** | **✓ (All)** | **✓ (All)** |
+| | `profiles:manage` | - | - | - | - | **✓ (All)** | **✓ (All)** | **✓ (All)** |
 | | `audit_logs:read` | - | - | - | - | - | - | **✓ (All)** |
 | | `settings:manage` | - | - | - | - | - | - | **✓ (All)** |
-| **Danh mục học thuật** | `academic:manage` | - | - | - | - | - | - | **✓ (All)** |
+| **Danh mục học thuật** | `academic:manage` | - | - | - | - | - | **✓ (All)** | **✓ (All)** |
 | | `semesters:manage` | - | - | - | - | **✓ (All)** | **✓ (All)** | **✓ (All)** |
+| | `quotas:manage` | - | - | **✓ (Dept)** | **✓ (All)** | **✓ (All)** | - | **✓ (All)** |
 | **Quản lý đề tài (1.0)** | `topics:read_approved` | **✓** | **✓** | **✓** | **✓** | **✓** | **✓** | **✓** |
 | | `topics:propose` | - | **✓ (Own)** | **✓ (Own)** | **✓ (Own)** | - | - | - |
 | | `topics:update_draft` | - | **✓ (Own)** | **✓ (Own)** | **✓ (Own)** | - | - | - |

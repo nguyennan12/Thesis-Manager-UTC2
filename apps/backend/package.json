@@ -15,7 +15,8 @@
     "prisma:migrate": "prisma migrate dev --name init_schema",
     "prisma:studio": "prisma studio",
     "prisma:seed": "tsx prisma/seed.ts",
-    "prisma:deploy": "prisma migrate deploy"
+    "prisma:deploy": "prisma migrate deploy",
+    "test:unit": "vitest run src"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -32,7 +33,9 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "cookie-parser": "^1.4.7",
+    "csv-parse": "^7.0.3",
     "dotenv": "^18.0.0",
+    "exceljs": "^4.4.0",
     "ioredis": "^6.0.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
@@ -48,6 +51,7 @@
     "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.0",
     "@types/ioredis": "^5.0.0",
+    "@types/multer": "^2.3.0",
     "@types/node": "^22.0.0",
     "@types/passport-jwt": "^4.0.1",
     "@types/pg": "^8.23.1",
@@ -55,6 +59,7 @@
     "rimraf": "^6.0.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "vitest": "^5.0.3"
   }
 }

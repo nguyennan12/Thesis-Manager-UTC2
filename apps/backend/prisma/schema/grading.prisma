@@ -10,9 +10,13 @@ model RubricSet {
   academicYear String    @map("academic_year") @db.VarChar(20)
   totalWeight  Decimal   @default(100.00) @map("total_weight") @db.Decimal(5, 2)
   isActive     Boolean   @default(false) @map("is_active")
+  version      Int       @default(1)
+  parentId     String?   @map("parent_id") @db.Uuid
   createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz()
   updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
 
+  parent   RubricSet?  @relation("RubricVersions", fields: [parentId], references: [id], onDelete: SetNull)
+  children RubricSet[] @relation("RubricVersions")
   criteria EvaluationCriterion[]
 
   @@map("rubric_sets")

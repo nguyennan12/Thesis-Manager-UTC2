@@ -24,6 +24,13 @@ export class AuditLogsService {
   }
 
   /**
+   * Alias cho logEvent
+   */
+  record(data: CreateAuditLogData): void {
+    this.logEvent(data);
+  }
+
+  /**
    * Lấy danh sách Audit Logs cho Quản trị viên
    */
   async getAuditLogs(params: {

@@ -10,6 +10,7 @@ model Account {
   studentId        String?     @unique @map("student_id") @db.Uuid
   lecturerId       String?     @unique @map("lecturer_id") @db.Uuid
   isActive         Boolean     @default(true) @map("is_active")
+  mustChangePassword Boolean   @default(false) @map("must_change_password")
   lastLoginAt      DateTime?   @map("last_login_at") @db.Timestamptz()
   refreshTokenHash String?     @map("refresh_token_hash") @db.VarChar(255)
   createdAt        DateTime    @default(now()) @map("created_at") @db.Timestamptz()

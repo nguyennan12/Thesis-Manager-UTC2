@@ -15,13 +15,16 @@ export const PERMISSIONS = {
   ROLES_MANAGE: 'roles:manage',
   USERS_READ: 'users:read',
   USERS_MANAGE: 'users:manage',
+  PROFILES_READ: 'profiles:read',
+  PROFILES_MANAGE: 'profiles:manage',
   AUDIT_LOGS_READ: 'audit_logs:read',
   SETTINGS_MANAGE: 'settings:manage',
 
-  // 2. Module Danh mục Học thuật (academic, semesters)
+  // 2. Module Danh mục Học thuật (academic, semesters, quotas)
   ACADEMIC_READ: 'academic:read',
   ACADEMIC_MANAGE: 'academic:manage',
   SEMESTERS_MANAGE: 'semesters:manage',
+  QUOTAS_MANAGE: 'quotas:manage',
 
   // 3. Phân hệ 1.0 – Quản lý Đề tài (topics)
   TOPICS_READ_APPROVED: 'topics:read_approved',
@@ -121,6 +124,18 @@ export const PERMISSIONS_METADATA: PermissionDefinition[] = [
     description: 'Tạo, khóa/mở khóa tài khoản và gán vai trò/chức danh.',
   },
   {
+    code: PERMISSIONS.PROFILES_READ,
+    name: 'Xem hồ sơ sinh viên / giảng viên',
+    module: 'profiles',
+    description: 'Tra cứu hồ sơ học thuật của sinh viên và giảng viên theo phạm vi phân quyền.',
+  },
+  {
+    code: PERMISSIONS.PROFILES_MANAGE,
+    name: 'Quản lý hồ sơ & Import dữ liệu',
+    module: 'profiles',
+    description: 'Thêm, cập nhật hồ sơ sinh viên, giảng viên và import dữ liệu hàng loạt từ file.',
+  },
+  {
     code: PERMISSIONS.AUDIT_LOGS_READ,
     name: 'Xem nhật ký hệ thống',
     module: 'audit-logs',
@@ -151,6 +166,12 @@ export const PERMISSIONS_METADATA: PermissionDefinition[] = [
     name: 'Quản lý học kỳ & mốc thời gian',
     module: 'academic',
     description: 'Cấu hình học kỳ và các mốc hạn đăng ký, nộp bài, bảo vệ.',
+  },
+  {
+    code: PERMISSIONS.QUOTAS_MANAGE,
+    name: 'Quản lý định mức hướng dẫn (Quota)',
+    module: 'academic',
+    description: 'Xem và thiết lập chỉ tiêu số lượng đồ án tối đa cho giảng viên theo học kỳ.',
   },
 
   // 3. Phân hệ 1.0 – Đề tài
@@ -460,6 +481,8 @@ export const ROLE_DEFAULT_PERMISSIONS: Record<string, PermissionCode[]> = {
     PERMISSIONS.SCORES_LOCK,
     PERMISSIONS.SCORES_UNLOCK,           // Khi có position FACULTY_DEAN
     PERMISSIONS.COMPLAINTS_RESOLVE,      // Khi có position FACULTY_DEAN
+    PERMISSIONS.PROFILES_READ,           // Khi có position HEAD_OF_DEPARTMENT hoặc FACULTY_DEAN
+    PERMISSIONS.QUOTAS_MANAGE,           // Khi có position FACULTY_DEAN
     PERMISSIONS.STATISTICS_VIEW,
   ],
 
@@ -467,7 +490,11 @@ export const ROLE_DEFAULT_PERMISSIONS: Record<string, PermissionCode[]> = {
     PERMISSIONS.AUTH_LOGIN,
     PERMISSIONS.AUTH_CHANGE_PASSWORD,
     PERMISSIONS.ACADEMIC_READ,
+    PERMISSIONS.ACADEMIC_MANAGE,
     PERMISSIONS.SEMESTERS_MANAGE,
+    PERMISSIONS.QUOTAS_MANAGE,
+    PERMISSIONS.PROFILES_READ,
+    PERMISSIONS.PROFILES_MANAGE,
     PERMISSIONS.TOPICS_READ_APPROVED,
     PERMISSIONS.TOPICS_READ_ALL,
     PERMISSIONS.TOPICS_EXPORT,
