@@ -24,7 +24,7 @@ import { CreateProgressReportDto, ReviewProgressReportDto } from '../dto/progres
 @ApiTags('Progress - Báo cáo Tiến độ')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Controller('api/v1/progress')
+@Controller('progress')
 export class ProgressController {
   constructor(private readonly progressService: ProgressService) {}
 

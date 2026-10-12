@@ -89,6 +89,26 @@ export class CouncilsRepository {
         orderBy: [{ defenseDate: 'desc' }, { startTime: 'asc' }],
         include: {
           department: { select: { id: true, code: true, name: true } },
+          members: {
+            include: {
+              lecturer: {
+                select: { id: true, code: true, fullName: true, degree: true, email: true },
+              },
+            },
+          },
+          registrations: {
+            include: {
+              student: {
+                select: { id: true, code: true, fullName: true, class: { select: { code: true } } },
+              },
+              topic: {
+                select: { id: true, code: true, titleVi: true },
+              },
+              advisorLecturer: {
+                select: { id: true, code: true, fullName: true },
+              },
+            },
+          },
           _count: {
             select: { members: true, registrations: true },
           },

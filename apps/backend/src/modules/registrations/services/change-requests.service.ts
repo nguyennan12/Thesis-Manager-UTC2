@@ -127,6 +127,43 @@ export class ChangeRequestsService {
     return Result.ok(reviewed);
   }
 
+  async findMyRequests(user: AuthenticatedUser): Promise<Result<any[]>> {
+    const student = await this.resolveStudent(user);
+    const whereClause: any = {};
+    if (student) {
+      whereClause.registration = { studentId: student.id };
+    }
+
+    const requests = await this.prisma.changeRequest.findMany({
+      where: whereClause,
+      include: {
+        registration: {
+          include: {
+            student: true,
+            topic: true,
+          },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    const items = requests.map((cr) => ({
+      id: cr.id,
+      type: cr.requestType,
+      reason: cr.reason,
+      status: cr.status,
+      rejectionReason: cr.rejectionReason,
+      createdAt: cr.createdAt,
+      studentName: cr.registration?.student?.fullName,
+      studentCode: cr.registration?.student?.code,
+      topicCode: cr.registration?.topic?.code,
+      topicTitle: cr.registration?.topic?.titleVi,
+      requestedData: cr.requestedData,
+    }));
+
+    return Result.ok(items);
+  }
+
   private async resolveStudent(user: AuthenticatedUser) {
     if (user.studentId) {
       return this.prisma.student.findUnique({ where: { id: user.studentId } });

@@ -106,8 +106,8 @@ export async function seedAccounts(
   });
   await assignAccountRole(prisma, hodCnpmAccount.id, lecturerRoleId, ROLE_SCOPES.DEPARTMENT, cnpmDeptId);
 
-  // 5. Trưởng Bộ môn HTTT (HOD - GV003)
-  console.log('[Seed] Seeding HOD HTTT Account (hod_httt / Utc2@123456)...');
+  // 5. Trưởng Bộ môn HTTT (HOD - GV003) & KHMT (HOD - GV006)
+  console.log('[Seed] Seeding HOD Accounts (hod_httt, hod_khmt / Utc2@123456)...');
   const gv003Id = lecturerMap.get('GV003')!;
   const hodHtttAccount = await prisma.account.upsert({
     where: { username: 'hod_httt' },
@@ -127,8 +127,30 @@ export async function seedAccounts(
   });
   await assignAccountRole(prisma, hodHtttAccount.id, lecturerRoleId, ROLE_SCOPES.DEPARTMENT, htttDeptId);
 
-  // 6. Giảng viên thường (GV004, GV005)
-  console.log('[Seed] Seeding Lecturer Accounts (gv_mienpt, gv_emhv / Utc2@123456)...');
+  const khmtDeptId = departmentMap.get('BM_KHMT');
+  const gv006Id = lecturerMap.get('GV006');
+  if (khmtDeptId && gv006Id) {
+    const hodKhmtAccount = await prisma.account.upsert({
+      where: { username: 'hod_khmt' },
+      update: {
+        passwordHash: userPasswordHash,
+        email: 'trong.vuduc@utc2.edu.vn',
+        lecturerId: gv006Id,
+        isActive: true,
+      },
+      create: {
+        username: 'hod_khmt',
+        passwordHash: userPasswordHash,
+        email: 'trong.vuduc@utc2.edu.vn',
+        lecturerId: gv006Id,
+        isActive: true,
+      },
+    });
+    await assignAccountRole(prisma, hodKhmtAccount.id, lecturerRoleId, ROLE_SCOPES.DEPARTMENT, khmtDeptId);
+  }
+
+  // 6. Giảng viên (Đảm bảo có tài khoản gv_mienpt, gv_emhv, gv_binhtv và tất cả GV001->GV018)
+  console.log('[Seed] Seeding Lecturer Accounts (gv_mienpt, gv_binhtv, and gv_001 -> gv_018)...');
   const gv004Id = lecturerMap.get('GV004')!;
   const gv004Account = await prisma.account.upsert({
     where: { username: 'gv_mienpt' },
@@ -148,30 +170,83 @@ export async function seedAccounts(
   });
   await assignAccountRole(prisma, gv004Account.id, lecturerRoleId, ROLE_SCOPES.OWNER, undefined);
 
-  const gv005Id = lecturerMap.get('GV005')!;
-  const gv005Account = await prisma.account.upsert({
-    where: { username: 'gv_emhv' },
-    update: {
-      passwordHash: userPasswordHash,
-      email: 'em.hoangvan@utc2.edu.vn',
-      lecturerId: gv005Id,
-      isActive: true,
-    },
-    create: {
-      username: 'gv_emhv',
-      passwordHash: userPasswordHash,
-      email: 'em.hoangvan@utc2.edu.vn',
-      lecturerId: gv005Id,
-      isActive: true,
-    },
-  });
-  await assignAccountRole(prisma, gv005Account.id, lecturerRoleId, ROLE_SCOPES.OWNER, undefined);
+  const gv018Id = lecturerMap.get('GV018');
+  if (gv018Id) {
+    const gv018Account = await prisma.account.upsert({
+      where: { username: 'gv_binhtv' },
+      update: {
+        passwordHash: userPasswordHash,
+        email: 'binh.trinhvinh@utc2.edu.vn',
+        lecturerId: gv018Id,
+        isActive: true,
+      },
+      create: {
+        username: 'gv_binhtv',
+        passwordHash: userPasswordHash,
+        email: 'binh.trinhvinh@utc2.edu.vn',
+        lecturerId: gv018Id,
+        isActive: true,
+      },
+    });
+    await assignAccountRole(prisma, gv018Account.id, lecturerRoleId, ROLE_SCOPES.OWNER, undefined);
+  }
 
-  // 7. Sinh viên làm đồ án (SV001 -> SV004)
-  console.log('[Seed] Seeding Student Accounts (sv_6551071001 -> 1004 / Utc2@123456)...');
-  const studentCodes = ['6551071001', '6551071002', '6551071003', '6551071004'];
-  for (const code of studentCodes) {
-    const studentId = studentMap.get(code)!;
+  // Các giảng viên đã có tài khoản đặc thù (dean, hod, gv_mienpt, gv_binhtv)
+  const seededLecturerIds = new Set<string>();
+  if (gv001Id) seededLecturerIds.add(gv001Id);
+  if (gv002Id) seededLecturerIds.add(gv002Id);
+  if (gv003Id) seededLecturerIds.add(gv003Id);
+  if (gv004Id) seededLecturerIds.add(gv004Id);
+  if (gv006Id) seededLecturerIds.add(gv006Id);
+  if (gv018Id) seededLecturerIds.add(gv018Id);
+
+  // Tạo tài khoản cho các giảng viên còn lại
+  for (const [code, lecturerId] of lecturerMap.entries()) {
+    if (seededLecturerIds.has(lecturerId)) continue;
+
+    const existing = await prisma.account.findUnique({
+      where: { lecturerId },
+    });
+
+    if (existing) {
+      await assignAccountRole(prisma, existing.id, lecturerRoleId, ROLE_SCOPES.OWNER, undefined);
+      continue;
+    }
+
+    const username = `gv_${code.toLowerCase()}`;
+    const email = `${code.toLowerCase()}@utc2.edu.vn`;
+
+    const lecturerAccount = await prisma.account.upsert({
+      where: { username },
+      update: {
+        passwordHash: userPasswordHash,
+        email,
+        lecturerId,
+        isActive: true,
+      },
+      create: {
+        username,
+        passwordHash: userPasswordHash,
+        email,
+        lecturerId,
+        isActive: true,
+      },
+    });
+    await assignAccountRole(prisma, lecturerAccount.id, lecturerRoleId, ROLE_SCOPES.OWNER, undefined);
+  }
+
+  // 7. Sinh viên làm đồ án (Tạo tài khoản cho toàn bộ 100 sinh viên)
+  console.log(`[Seed] Seeding 100 Student Accounts (sv_6551071001 -> sv_6551071100)...`);
+  for (const [code, studentId] of studentMap.entries()) {
+    const existing = await prisma.account.findUnique({
+      where: { studentId },
+    });
+
+    if (existing) {
+      await assignAccountRole(prisma, existing.id, studentRoleId, ROLE_SCOPES.OWNER, undefined);
+      continue;
+    }
+
     const username = `sv_${code}`;
     const email = `${code}@sv.utc2.edu.vn`;
 
@@ -194,7 +269,7 @@ export async function seedAccounts(
     await assignAccountRole(prisma, studentAccount.id, studentRoleId, ROLE_SCOPES.OWNER, undefined);
   }
 
-  console.log('[Seed] Successfully seeded all User Accounts & Scoped Roles.');
+  console.log('[Seed] Successfully seeded all User Accounts & Scoped Roles for 18 Lecturers & 100 Students.');
 }
 
 /**

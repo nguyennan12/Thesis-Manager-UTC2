@@ -21,10 +21,26 @@ export class CreateProgressReportDto {
   @IsString({ message: 'Nội dung công việc hoàn thành phải là chuỗi ký tự.' })
   tasksCompleted?: string;
 
+  @IsOptional()
+  @IsString()
+  completedTasks?: string;
+
   @ApiPropertyOptional({ example: 'Xây dựng API xác thực và giao diện đăng nhập', description: 'Kế hoạch công việc tuần tiếp theo' })
   @IsOptional()
   @IsString({ message: 'Kế hoạch tuần tới phải là chuỗi ký tự.' })
   nextWeekPlan?: string;
+
+  @IsOptional()
+  @IsString()
+  plannedTasks?: string;
+
+  @IsOptional()
+  @IsString()
+  difficulties?: string;
+
+  @IsOptional()
+  @IsString()
+  registrationId?: string;
 
   @ApiPropertyOptional({ example: 'https://storage.utc2.edu.vn/reports/week1.pdf', description: 'Đường dẫn tệp báo cáo hoặc tài liệu đính kèm' })
   @IsOptional()

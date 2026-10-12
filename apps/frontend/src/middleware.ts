@@ -2,20 +2,30 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
   const token = req.cookies.get('access_token')?.value;
-  const pathname = req.nextUrl.pathname;
 
-  // 1. Chưa đăng nhập mà vào dashboard -> redirect về login
-  if (!token && pathname.startsWith('/(dashboard)')) {
+  // 1. Nếu đã đăng nhập mà truy cập trang /login -> chuyển hướng về /dashboard
+  if (pathname === '/login') {
+    if (token) {
+      return NextResponse.redirect(new URL('/dashboard', req.url));
+    }
+    return NextResponse.next();
+  }
+
+  // 2. Nếu chưa đăng nhập mà truy cập root / hoặc các trang nghiệp vụ -> chuyển hướng về /login
+  if (!token) {
     return NextResponse.redirect(new URL('/login', req.url));
   }
 
-  // 2. Chặn quyền theo Route Groups
-  // (Trong thực tế sẽ decode JWT payload để lấy role & positions)
+  // 3. Nếu là root / mà đã đăng nhập -> chuyển hướng về /dashboard
+  if (pathname === '/') {
+    return NextResponse.redirect(new URL('/dashboard', req.url));
+  }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|images|favicon.ico).*)'],
 };

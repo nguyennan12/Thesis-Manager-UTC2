@@ -97,4 +97,51 @@ export class ReviewersService {
 
     return Result.ok(updated);
   }
+
+  async getMyAssignments(user: AuthenticatedUser): Promise<Result<any[]>> {
+    if (!user.lecturerId && !user.roles?.includes(ROLES.ADMIN)) {
+      return Result.ok([]);
+    }
+
+    const whereClause: Prisma.RegistrationWhereInput = user.roles?.includes(ROLES.ADMIN)
+      ? { topic: { reviewerLecturerId: { not: null } } }
+      : { topic: { reviewerLecturerId: user.lecturerId } };
+
+    const registrations = await this.prisma.registration.findMany({
+      where: whereClause,
+      include: {
+        student: true,
+        topic: {
+          include: {
+            proposerLecturer: true,
+            department: true,
+          },
+        },
+        targetPlagiarisms: {
+          orderBy: { createdAt: 'desc' },
+          take: 1,
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    const items = registrations.map((r) => ({
+      id: r.id,
+      registrationId: r.id,
+      topicId: r.topicId,
+      topicCode: r.topic.code,
+      topicTitle: r.topic.titleVi,
+      studentCode: r.student.code,
+      studentName: r.student.fullName,
+      proposerName: r.topic.proposerLecturer?.fullName || 'GV Hướng dẫn',
+      departmentName: r.topic.department?.name || 'Bộ môn',
+      reportUrl: r.reportSubmissionUrl,
+      plagiarismRate: r.targetPlagiarisms[0] ? Number(r.targetPlagiarisms[0].similarityPercentage) : 0,
+      score: r.scoreReviewer ? Number(r.scoreReviewer) : null,
+      comment: r.advisorFeedback,
+      status: r.scoreReviewer !== null ? 'GRADED' : 'PENDING',
+    }));
+
+    return Result.ok(items);
+  }
 }

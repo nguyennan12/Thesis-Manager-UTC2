@@ -23,7 +23,7 @@ import { CreateCouncilDto, QueryCouncilDto, AssignStudentsToCouncilDto } from '.
 @ApiTags('Councils - Hội đồng Bảo vệ')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Controller('api/v1/councils')
+@Controller('councils')
 export class CouncilsController {
   constructor(private readonly councilsService: CouncilsService) {}
 

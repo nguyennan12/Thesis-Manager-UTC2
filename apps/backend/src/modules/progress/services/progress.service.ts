@@ -42,15 +42,12 @@ export class ProgressService {
       },
     });
 
-    if (!reg || reg.status === RegistrationStatus.CANCELLED) {
+    if (!reg) {
       return Result.err(AppError.notFound('Bạn chưa có hồ sơ đăng ký đề tài nào trong học kỳ này để nộp báo cáo.'));
     }
 
-    if (
-      reg.status !== RegistrationStatus.REGISTERED &&
-      reg.status !== RegistrationStatus.IN_PROGRESS
-    ) {
-      return Result.err(AppError.badRequest('Hồ sơ đồ án không ở trạng thái đang thực hiện (IN_PROGRESS) để nộp báo cáo.'));
+    if (reg.status === RegistrationStatus.DISQUALIFIED || reg.status === RegistrationStatus.FAILED) {
+      return Result.err(AppError.badRequest('Hồ sơ đồ án không đủ điều kiện hoặc đã dừng, không thể nộp báo cáo.'));
     }
 
     // Kiểm tra trùng tuần báo cáo
@@ -62,8 +59,8 @@ export class ProgressService {
     const report = await this.progressRepo.createReport({
       registration: { connect: { id: reg.id } },
       weekNumber: dto.weekNumber,
-      tasksCompleted: dto.tasksCompleted,
-      nextWeekPlan: dto.nextWeekPlan,
+      tasksCompleted: dto.tasksCompleted || dto.completedTasks || '',
+      nextWeekPlan: dto.nextWeekPlan || dto.plannedTasks || '',
       attachmentUrl: dto.attachmentUrl,
       status: ProgressStatus.PENDING,
       reviewerLecturer: { connect: { id: reg.advisorLecturerId } },

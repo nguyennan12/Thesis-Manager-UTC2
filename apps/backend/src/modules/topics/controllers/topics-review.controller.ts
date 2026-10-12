@@ -21,7 +21,7 @@ import { ReviewTopicDto } from '../dto/review-topic.dto';
 @ApiTags('Topics - Thẩm định Đề tài')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Controller('api/v1/topics')
+@Controller('topics')
 export class TopicsReviewController {
   constructor(private readonly reviewService: TopicsReviewService) {}
 

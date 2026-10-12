@@ -10,6 +10,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseUUIDPipe,
   Post,
   Query,
   UseGuards,
@@ -28,7 +29,7 @@ import { QueryRegistrationDto } from '../dto/query-registration.dto';
 @ApiTags('Registrations - Đăng ký Đồ án')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Controller('api/v1/registrations')
+@Controller('registrations')
 export class RegistrationsController {
   constructor(
     private readonly regService: RegistrationsService,
@@ -56,7 +57,7 @@ export class RegistrationsController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Xem chi tiết một hồ sơ đăng ký đề tài đồ án' })
-  async findById(@Param('id') id: string) {
+  async findById(@Param('id', ParseUUIDPipe) id: string) {
     const result = await this.adminService.findById(id);
     return result.unwrap();
   }

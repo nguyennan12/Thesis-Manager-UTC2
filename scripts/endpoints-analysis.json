@@ -1,0 +1,954 @@
+{
+  "beEndpoints": [
+    {
+      "controller": "classes.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\classes.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/academic/classes"
+    },
+    {
+      "controller": "classes.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\classes.controller.ts",
+      "method": "GET",
+      "subPath": ":id",
+      "fnName": "RequirePermissions",
+      "fullPath": "/academic/classes/:id"
+    },
+    {
+      "controller": "classes.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\classes.controller.ts",
+      "method": "PUT",
+      "subPath": ":id",
+      "fnName": "Roles",
+      "fullPath": "/academic/classes/:id"
+    },
+    {
+      "controller": "departments.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\departments.admin.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/academic/departments"
+    },
+    {
+      "controller": "departments.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\departments.admin.controller.ts",
+      "method": "GET",
+      "subPath": ":id",
+      "fnName": "RequirePermissions",
+      "fullPath": "/academic/departments/:id"
+    },
+    {
+      "controller": "departments.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\departments.admin.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "Roles",
+      "fullPath": "/academic/departments"
+    },
+    {
+      "controller": "departments.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\departments.admin.controller.ts",
+      "method": "PUT",
+      "subPath": ":id",
+      "fnName": "Roles",
+      "fullPath": "/academic/departments/:id"
+    },
+    {
+      "controller": "faculties.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\faculties.admin.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/academic/faculties"
+    },
+    {
+      "controller": "faculties.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\faculties.admin.controller.ts",
+      "method": "GET",
+      "subPath": ":id",
+      "fnName": "RequirePermissions",
+      "fullPath": "/academic/faculties/:id"
+    },
+    {
+      "controller": "faculties.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\faculties.admin.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "Roles",
+      "fullPath": "/academic/faculties"
+    },
+    {
+      "controller": "faculties.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\faculties.admin.controller.ts",
+      "method": "PUT",
+      "subPath": ":id",
+      "fnName": "Roles",
+      "fullPath": "/academic/faculties/:id"
+    },
+    {
+      "controller": "majors.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\majors.admin.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/academic/majors"
+    },
+    {
+      "controller": "majors.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\majors.admin.controller.ts",
+      "method": "GET",
+      "subPath": ":id",
+      "fnName": "RequirePermissions",
+      "fullPath": "/academic/majors/:id"
+    },
+    {
+      "controller": "majors.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\majors.admin.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "Roles",
+      "fullPath": "/academic/majors"
+    },
+    {
+      "controller": "majors.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\majors.admin.controller.ts",
+      "method": "PUT",
+      "subPath": ":id",
+      "fnName": "Roles",
+      "fullPath": "/academic/majors/:id"
+    },
+    {
+      "controller": "quotas.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\quotas.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "Roles",
+      "fullPath": "/academic/semesters/:id/lecturer-quotas"
+    },
+    {
+      "controller": "quotas.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\quotas.controller.ts",
+      "method": "PUT",
+      "subPath": ":lecturerId",
+      "fnName": "Roles",
+      "fullPath": "/academic/semesters/:id/lecturer-quotas/:lecturerId"
+    },
+    {
+      "controller": "semesters.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\semesters.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/academic/semesters"
+    },
+    {
+      "controller": "semesters.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\semesters.controller.ts",
+      "method": "GET",
+      "subPath": "current",
+      "fnName": "RequirePermissions",
+      "fullPath": "/academic/semesters/current"
+    },
+    {
+      "controller": "semesters.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\semesters.controller.ts",
+      "method": "GET",
+      "subPath": ":id",
+      "fnName": "RequirePermissions",
+      "fullPath": "/academic/semesters/:id"
+    },
+    {
+      "controller": "semesters.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\semesters.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "Roles",
+      "fullPath": "/academic/semesters"
+    },
+    {
+      "controller": "semesters.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\semesters.controller.ts",
+      "method": "PUT",
+      "subPath": ":id",
+      "fnName": "Roles",
+      "fullPath": "/academic/semesters/:id"
+    },
+    {
+      "controller": "semesters.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\semesters.controller.ts",
+      "method": "PATCH",
+      "subPath": ":id/set-current",
+      "fnName": "Roles",
+      "fullPath": "/academic/semesters/:id/set-current"
+    },
+    {
+      "controller": "auth.controller.ts",
+      "file": "apps\\backend\\src\\modules\\auth\\controllers\\auth.controller.ts",
+      "method": "POST",
+      "subPath": "login",
+      "fnName": "HttpCode",
+      "fullPath": "/auth/login"
+    },
+    {
+      "controller": "auth.controller.ts",
+      "file": "apps\\backend\\src\\modules\\auth\\controllers\\auth.controller.ts",
+      "method": "POST",
+      "subPath": "refresh",
+      "fnName": "HttpCode",
+      "fullPath": "/auth/refresh"
+    },
+    {
+      "controller": "auth.controller.ts",
+      "file": "apps\\backend\\src\\modules\\auth\\controllers\\auth.controller.ts",
+      "method": "POST",
+      "subPath": "logout",
+      "fnName": "HttpCode",
+      "fullPath": "/auth/logout"
+    },
+    {
+      "controller": "auth.controller.ts",
+      "file": "apps\\backend\\src\\modules\\auth\\controllers\\auth.controller.ts",
+      "method": "GET",
+      "subPath": "me",
+      "fnName": "getProfile",
+      "fullPath": "/auth/me"
+    },
+    {
+      "controller": "auth.controller.ts",
+      "file": "apps\\backend\\src\\modules\\auth\\controllers\\auth.controller.ts",
+      "method": "PATCH",
+      "subPath": "change-password",
+      "fnName": "HttpCode",
+      "fullPath": "/auth/change-password"
+    },
+    {
+      "controller": "auth.controller.ts",
+      "file": "apps\\backend\\src\\modules\\auth\\controllers\\auth.controller.ts",
+      "method": "POST",
+      "subPath": "forgot-password",
+      "fnName": "HttpCode",
+      "fullPath": "/auth/forgot-password"
+    },
+    {
+      "controller": "auth.controller.ts",
+      "file": "apps\\backend\\src\\modules\\auth\\controllers\\auth.controller.ts",
+      "method": "POST",
+      "subPath": "reset-password",
+      "fnName": "HttpCode",
+      "fullPath": "/auth/reset-password"
+    },
+    {
+      "controller": "permissions.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\auth\\controllers\\permissions.admin.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "findAllPermissions",
+      "fullPath": "/permissions"
+    },
+    {
+      "controller": "roles.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\auth\\controllers\\roles.admin.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "findAllRoles",
+      "fullPath": "/roles"
+    },
+    {
+      "controller": "roles.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\auth\\controllers\\roles.admin.controller.ts",
+      "method": "GET",
+      "subPath": ":id",
+      "fnName": "findRoleById",
+      "fullPath": "/roles/:id"
+    },
+    {
+      "controller": "roles.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\auth\\controllers\\roles.admin.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "createRole",
+      "fullPath": "/roles"
+    },
+    {
+      "controller": "roles.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\auth\\controllers\\roles.admin.controller.ts",
+      "method": "PUT",
+      "subPath": ":id",
+      "fnName": "updateRole",
+      "fullPath": "/roles/:id"
+    },
+    {
+      "controller": "roles.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\auth\\controllers\\roles.admin.controller.ts",
+      "method": "POST",
+      "subPath": ":id/permissions",
+      "fnName": "assignPermissionsToRole",
+      "fullPath": "/roles/:id/permissions"
+    },
+    {
+      "controller": "roles.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\auth\\controllers\\roles.admin.controller.ts",
+      "method": "POST",
+      "subPath": "accounts/:accountId/assign",
+      "fnName": "assignRoleToAccount",
+      "fullPath": "/roles/accounts/:accountId/assign"
+    },
+    {
+      "controller": "councils.controller.ts",
+      "file": "apps\\backend\\src\\modules\\councils\\controllers\\councils.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/councils"
+    },
+    {
+      "controller": "councils.controller.ts",
+      "file": "apps\\backend\\src\\modules\\councils\\controllers\\councils.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/councils"
+    },
+    {
+      "controller": "councils.controller.ts",
+      "file": "apps\\backend\\src\\modules\\councils\\controllers\\councils.controller.ts",
+      "method": "GET",
+      "subPath": ":id",
+      "fnName": "RequirePermissions",
+      "fullPath": "/councils/:id"
+    },
+    {
+      "controller": "councils.controller.ts",
+      "file": "apps\\backend\\src\\modules\\councils\\controllers\\councils.controller.ts",
+      "method": "POST",
+      "subPath": ":id/assign-students",
+      "fnName": "RequirePermissions",
+      "fullPath": "/councils/:id/assign-students"
+    },
+    {
+      "controller": "evaluation.controller.ts",
+      "file": "apps\\backend\\src\\modules\\councils\\controllers\\evaluation.controller.ts",
+      "method": "POST",
+      "subPath": "scores",
+      "fnName": "RequirePermissions",
+      "fullPath": "/evaluation/scores"
+    },
+    {
+      "controller": "evaluation.controller.ts",
+      "file": "apps\\backend\\src\\modules\\councils\\controllers\\evaluation.controller.ts",
+      "method": "POST",
+      "subPath": ":regId/calculate-final",
+      "fnName": "RequirePermissions",
+      "fullPath": "/evaluation/:regId/calculate-final"
+    },
+    {
+      "controller": "reviewers.controller.ts",
+      "file": "apps\\backend\\src\\modules\\councils\\controllers\\reviewers.controller.ts",
+      "method": "POST",
+      "subPath": "assign",
+      "fnName": "RequirePermissions",
+      "fullPath": "/reviewers/assign"
+    },
+    {
+      "controller": "reviewers.controller.ts",
+      "file": "apps\\backend\\src\\modules\\councils\\controllers\\reviewers.controller.ts",
+      "method": "GET",
+      "subPath": "my-assignments",
+      "fnName": "ApiOperation",
+      "fullPath": "/reviewers/my-assignments"
+    },
+    {
+      "controller": "reviewers.controller.ts",
+      "file": "apps\\backend\\src\\modules\\councils\\controllers\\reviewers.controller.ts",
+      "method": "PATCH",
+      "subPath": ":regId/score",
+      "fnName": "RequirePermissions",
+      "fullPath": "/reviewers/:regId/score"
+    },
+    {
+      "controller": "data-import.controller.ts",
+      "file": "apps\\backend\\src\\modules\\data-import\\controllers\\data-import.controller.ts",
+      "method": "GET",
+      "subPath": "templates/:type",
+      "fnName": "RequirePermissions",
+      "fullPath": "/import/templates/:type"
+    },
+    {
+      "controller": "data-import.controller.ts",
+      "file": "apps\\backend\\src\\modules\\data-import\\controllers\\data-import.controller.ts",
+      "method": "POST",
+      "subPath": ":type/preview",
+      "fnName": "RequirePermissions",
+      "fullPath": "/import/:type/preview"
+    },
+    {
+      "controller": "data-import.controller.ts",
+      "file": "apps\\backend\\src\\modules\\data-import\\controllers\\data-import.controller.ts",
+      "method": "POST",
+      "subPath": "confirm",
+      "fnName": "HttpCode",
+      "fullPath": "/import/confirm"
+    },
+    {
+      "controller": "rubrics.controller.ts",
+      "file": "apps\\backend\\src\\modules\\grading\\controllers\\rubrics.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/grading/rubrics"
+    },
+    {
+      "controller": "rubrics.controller.ts",
+      "file": "apps\\backend\\src\\modules\\grading\\controllers\\rubrics.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "ApiOperation",
+      "fullPath": "/grading/rubrics"
+    },
+    {
+      "controller": "rubrics.controller.ts",
+      "file": "apps\\backend\\src\\modules\\grading\\controllers\\rubrics.controller.ts",
+      "method": "GET",
+      "subPath": "active",
+      "fnName": "ApiOperation",
+      "fullPath": "/grading/rubrics/active"
+    },
+    {
+      "controller": "rubrics.controller.ts",
+      "file": "apps\\backend\\src\\modules\\grading\\controllers\\rubrics.controller.ts",
+      "method": "GET",
+      "subPath": ":id",
+      "fnName": "ApiOperation",
+      "fullPath": "/grading/rubrics/:id"
+    },
+    {
+      "controller": "rubrics.controller.ts",
+      "file": "apps\\backend\\src\\modules\\grading\\controllers\\rubrics.controller.ts",
+      "method": "PATCH",
+      "subPath": ":id",
+      "fnName": "RequirePermissions",
+      "fullPath": "/grading/rubrics/:id"
+    },
+    {
+      "controller": "rubrics.controller.ts",
+      "file": "apps\\backend\\src\\modules\\grading\\controllers\\rubrics.controller.ts",
+      "method": "POST",
+      "subPath": ":id/activate",
+      "fnName": "HttpCode",
+      "fullPath": "/grading/rubrics/:id/activate"
+    },
+    {
+      "controller": "rubrics.controller.ts",
+      "file": "apps\\backend\\src\\modules\\grading\\controllers\\rubrics.controller.ts",
+      "method": "PUT",
+      "subPath": ":id/criteria",
+      "fnName": "RequirePermissions",
+      "fullPath": "/grading/rubrics/:id/criteria"
+    },
+    {
+      "controller": "positions.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\positions\\controllers\\positions.admin.controller.ts",
+      "method": "POST",
+      "subPath": "users/:id/positions",
+      "fnName": "RequirePermissions",
+      "fullPath": "/users/:id/positions"
+    },
+    {
+      "controller": "positions.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\positions\\controllers\\positions.admin.controller.ts",
+      "method": "DELETE",
+      "subPath": "users/:id/positions/:assignmentId",
+      "fnName": "RequirePermissions",
+      "fullPath": "/users/:id/positions/:assignmentId"
+    },
+    {
+      "controller": "positions.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\positions\\controllers\\positions.admin.controller.ts",
+      "method": "PUT",
+      "subPath": "academic/departments/:id/head",
+      "fnName": "RequirePermissions",
+      "fullPath": "/academic/departments/:id/head"
+    },
+    {
+      "controller": "progress.controller.ts",
+      "file": "apps\\backend\\src\\modules\\progress\\controllers\\progress.controller.ts",
+      "method": "POST",
+      "subPath": "reports",
+      "fnName": "RequirePermissions",
+      "fullPath": "/progress/reports"
+    },
+    {
+      "controller": "progress.controller.ts",
+      "file": "apps\\backend\\src\\modules\\progress\\controllers\\progress.controller.ts",
+      "method": "GET",
+      "subPath": "registrations/:regId/reports",
+      "fnName": "RequirePermissions",
+      "fullPath": "/progress/registrations/:regId/reports"
+    },
+    {
+      "controller": "progress.controller.ts",
+      "file": "apps\\backend\\src\\modules\\progress\\controllers\\progress.controller.ts",
+      "method": "PATCH",
+      "subPath": "reports/:id/review",
+      "fnName": "RequirePermissions",
+      "fullPath": "/progress/reports/:id/review"
+    },
+    {
+      "controller": "progress.controller.ts",
+      "file": "apps\\backend\\src\\modules\\progress\\controllers\\progress.controller.ts",
+      "method": "GET",
+      "subPath": "warnings",
+      "fnName": "RequirePermissions",
+      "fullPath": "/progress/warnings"
+    },
+    {
+      "controller": "submissions.controller.ts",
+      "file": "apps\\backend\\src\\modules\\progress\\controllers\\submissions.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/submissions"
+    },
+    {
+      "controller": "submissions.controller.ts",
+      "file": "apps\\backend\\src\\modules\\progress\\controllers\\submissions.controller.ts",
+      "method": "GET",
+      "subPath": ":regId/plagiarism",
+      "fnName": "RequirePermissions",
+      "fullPath": "/submissions/:regId/plagiarism"
+    },
+    {
+      "controller": "submissions.controller.ts",
+      "file": "apps\\backend\\src\\modules\\progress\\controllers\\submissions.controller.ts",
+      "method": "PATCH",
+      "subPath": ":regId/qualify",
+      "fnName": "RequirePermissions",
+      "fullPath": "/submissions/:regId/qualify"
+    },
+    {
+      "controller": "change-requests.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\change-requests.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "ApiOperation",
+      "fullPath": "/registrations/change-requests"
+    },
+    {
+      "controller": "change-requests.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\change-requests.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/registrations/change-requests"
+    },
+    {
+      "controller": "change-requests.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\change-requests.controller.ts",
+      "method": "PATCH",
+      "subPath": ":id/review",
+      "fnName": "RequirePermissions",
+      "fullPath": "/registrations/change-requests/:id/review"
+    },
+    {
+      "controller": "registrations.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\registrations.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/registrations"
+    },
+    {
+      "controller": "registrations.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\registrations.controller.ts",
+      "method": "GET",
+      "subPath": "my-registration",
+      "fnName": "RequirePermissions",
+      "fullPath": "/registrations/my-registration"
+    },
+    {
+      "controller": "registrations.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\registrations.controller.ts",
+      "method": "GET",
+      "subPath": ":id",
+      "fnName": "ApiOperation",
+      "fullPath": "/registrations/:id"
+    },
+    {
+      "controller": "registrations.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\registrations.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/registrations"
+    },
+    {
+      "controller": "registrations.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\registrations.controller.ts",
+      "method": "DELETE",
+      "subPath": ":id/cancel",
+      "fnName": "HttpCode",
+      "fullPath": "/registrations/:id/cancel"
+    },
+    {
+      "controller": "registrations.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\registrations.controller.ts",
+      "method": "POST",
+      "subPath": "assign",
+      "fnName": "RequirePermissions",
+      "fullPath": "/registrations/assign"
+    },
+    {
+      "controller": "topics-review.controller.ts",
+      "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics-review.controller.ts",
+      "method": "PATCH",
+      "subPath": ":id/review",
+      "fnName": "RequirePermissions",
+      "fullPath": "/topics/:id/review"
+    },
+    {
+      "controller": "topics.controller.ts",
+      "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/topics"
+    },
+    {
+      "controller": "topics.controller.ts",
+      "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "ApiOperation",
+      "fullPath": "/topics"
+    },
+    {
+      "controller": "topics.controller.ts",
+      "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+      "method": "GET",
+      "subPath": ":id",
+      "fnName": "ApiOperation",
+      "fullPath": "/topics/:id"
+    },
+    {
+      "controller": "topics.controller.ts",
+      "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+      "method": "PUT",
+      "subPath": ":id",
+      "fnName": "RequirePermissions",
+      "fullPath": "/topics/:id"
+    },
+    {
+      "controller": "topics.controller.ts",
+      "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+      "method": "DELETE",
+      "subPath": ":id",
+      "fnName": "HttpCode",
+      "fullPath": "/topics/:id"
+    },
+    {
+      "controller": "topics.controller.ts",
+      "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+      "method": "PATCH",
+      "subPath": ":id/submit",
+      "fnName": "RequirePermissions",
+      "fullPath": "/topics/:id/submit"
+    },
+    {
+      "controller": "lecturers.controller.ts",
+      "file": "apps\\backend\\src\\modules\\users\\controllers\\lecturers.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "findAll",
+      "fullPath": "/lecturers"
+    },
+    {
+      "controller": "lecturers.controller.ts",
+      "file": "apps\\backend\\src\\modules\\users\\controllers\\lecturers.controller.ts",
+      "method": "GET",
+      "subPath": ":id",
+      "fnName": "findOne",
+      "fullPath": "/lecturers/:id"
+    },
+    {
+      "controller": "lecturers.controller.ts",
+      "file": "apps\\backend\\src\\modules\\users\\controllers\\lecturers.controller.ts",
+      "method": "PUT",
+      "subPath": ":id",
+      "fnName": "Roles",
+      "fullPath": "/lecturers/:id"
+    },
+    {
+      "controller": "students.controller.ts",
+      "file": "apps\\backend\\src\\modules\\users\\controllers\\students.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "Roles",
+      "fullPath": "/students"
+    },
+    {
+      "controller": "students.controller.ts",
+      "file": "apps\\backend\\src\\modules\\users\\controllers\\students.controller.ts",
+      "method": "GET",
+      "subPath": ":id",
+      "fnName": "findOne",
+      "fullPath": "/students/:id"
+    },
+    {
+      "controller": "students.controller.ts",
+      "file": "apps\\backend\\src\\modules\\users\\controllers\\students.controller.ts",
+      "method": "PUT",
+      "subPath": ":id",
+      "fnName": "Roles",
+      "fullPath": "/students/:id"
+    },
+    {
+      "controller": "users.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\users\\controllers\\users.admin.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/users"
+    },
+    {
+      "controller": "users.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\users\\controllers\\users.admin.controller.ts",
+      "method": "GET",
+      "subPath": ":id",
+      "fnName": "RequirePermissions",
+      "fullPath": "/users/:id"
+    },
+    {
+      "controller": "users.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\users\\controllers\\users.admin.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/users"
+    },
+    {
+      "controller": "users.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\users\\controllers\\users.admin.controller.ts",
+      "method": "PATCH",
+      "subPath": ":id/status",
+      "fnName": "RequirePermissions",
+      "fullPath": "/users/:id/status"
+    },
+    {
+      "controller": "users.admin.controller.ts",
+      "file": "apps\\backend\\src\\modules\\users\\controllers\\users.admin.controller.ts",
+      "method": "POST",
+      "subPath": ":id/reset-password",
+      "fnName": "RequirePermissions",
+      "fullPath": "/users/:id/reset-password"
+    }
+  ],
+  "feCalls": [
+    {
+      "file": "apps\\frontend\\src\\lib\\api-client.ts",
+      "caller": "axios",
+      "method": "POST",
+      "urlRaw": "${baseURL}/auth/refresh"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\academic.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/academic/semesters/current"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\auth.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/auth/login"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\auth.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/auth/me"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\auth.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/auth/logout"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\change-request.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/registrations/change-requests"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\change-request.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/registrations/change-requests"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\change-request.service.ts",
+      "caller": "apiClient",
+      "method": "PATCH",
+      "urlRaw": "/registrations/change-requests/${id}/review"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\council.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/councils"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\council.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/reviewers/my-assignments"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\council.service.ts",
+      "caller": "apiClient",
+      "method": "PATCH",
+      "urlRaw": "/reviewers/${regId}/score"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\council.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/reviewers/assign"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\council.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/councils"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\council.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/councils/${councilId}/assign-students"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\council.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/lecturers"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\dashboard.service.ts",
+      "caller": "apiClient",
+      "method": "PATCH",
+      "urlRaw": "/topics/${topicId}/department-review"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\dashboard.service.ts",
+      "caller": "apiClient",
+      "method": "PATCH",
+      "urlRaw": "/topics/${topicId}/department-review"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\evaluation.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/evaluation/scores"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\evaluation.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/evaluation/${regId}/calculate-final"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\evaluation.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/grading/rubrics/active"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\progress.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/progress/registrations/${regId}/reports"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\progress.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/progress/reports"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\progress.service.ts",
+      "caller": "apiClient",
+      "method": "PATCH",
+      "urlRaw": "/progress/reports/${reportId}/review"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\registration.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/registrations/my-registration"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\registration.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/registrations"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\registration.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/registrations"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\submission.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/submissions"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\submission.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/submissions/${regId}/plagiarism"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\submission.service.ts",
+      "caller": "apiClient",
+      "method": "PATCH",
+      "urlRaw": "/submissions/${regId}/qualify"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\submission.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/registrations"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\topic.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/topics"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\topic.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/topics/${id}"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\topic.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/topics"
+    },
+    {
+      "file": "apps\\frontend\\src\\services\\topic.service.ts",
+      "caller": "apiClient",
+      "method": "PATCH",
+      "urlRaw": "/topics/${id}/review"
+    }
+  ]
+}

@@ -59,7 +59,124 @@ export async function seedLecturers(
       phone: '0905678901',
       degree: 'Thạc sĩ',
       departmentId: htttDeptId,
-      maxAdvisingQuota: 3,
+      maxAdvisingQuota: 4,
+    },
+    {
+      code: 'GV006',
+      fullName: 'TS. Vũ Đức Trọng',
+      email: 'trong.vuduc@utc2.edu.vn',
+      phone: '0906789012',
+      degree: 'Tiến sĩ',
+      departmentId: khmtDeptId,
+      maxAdvisingQuota: 6,
+    },
+    {
+      code: 'GV007',
+      fullName: 'ThS. Đặng Thị Ánh',
+      email: 'anh.dangthi@utc2.edu.vn',
+      phone: '0907890123',
+      degree: 'Thạc sĩ',
+      departmentId: cnpmDeptId,
+      maxAdvisingQuota: 5,
+    },
+    {
+      code: 'GV008',
+      fullName: 'PGS.TS. Trịnh Quốc Bảo',
+      email: 'bao.trinhquoc@utc2.edu.vn',
+      phone: '0908901234',
+      degree: 'Phó Giáo sư, Tiến sĩ',
+      departmentId: khmtDeptId,
+      maxAdvisingQuota: 7,
+    },
+    {
+      code: 'GV009',
+      fullName: 'TS. Ngô Thành Long',
+      email: 'long.ngothanh@utc2.edu.vn',
+      phone: '0909012345',
+      degree: 'Tiến sĩ',
+      departmentId: cnpmDeptId,
+      maxAdvisingQuota: 5,
+    },
+    {
+      code: 'GV010',
+      fullName: 'ThS. Bùi Đình Thắng',
+      email: 'thang.buidinh@utc2.edu.vn',
+      phone: '0910123456',
+      degree: 'Thạc sĩ',
+      departmentId: htttDeptId,
+      maxAdvisingQuota: 4,
+    },
+    {
+      code: 'GV011',
+      fullName: 'ThS. Đỗ Phương Nam',
+      email: 'nam.dophuong@utc2.edu.vn',
+      phone: '0911234567',
+      degree: 'Thạc sĩ',
+      departmentId: khmtDeptId,
+      maxAdvisingQuota: 4,
+    },
+    {
+      code: 'GV012',
+      fullName: 'TS. Lâm Hoài Thương',
+      email: 'thuong.lamhoai@utc2.edu.vn',
+      phone: '0912345670',
+      degree: 'Tiến sĩ',
+      departmentId: cnpmDeptId,
+      maxAdvisingQuota: 5,
+    },
+    {
+      code: 'GV013',
+      fullName: 'ThS. Võ Minh Trí',
+      email: 'tri.vominh@utc2.edu.vn',
+      phone: '0913456781',
+      degree: 'Thạc sĩ',
+      departmentId: htttDeptId,
+      maxAdvisingQuota: 4,
+    },
+    {
+      code: 'GV014',
+      fullName: 'TS. Phan Bá Đạt',
+      email: 'dat.phanba@utc2.edu.vn',
+      phone: '0914567892',
+      degree: 'Tiến sĩ',
+      departmentId: khmtDeptId,
+      maxAdvisingQuota: 5,
+    },
+    {
+      code: 'GV015',
+      fullName: 'ThS. Huỳnh Gia Bảo',
+      email: 'bao.huynhgia@utc2.edu.vn',
+      phone: '0915678903',
+      degree: 'Thạc sĩ',
+      departmentId: cnpmDeptId,
+      maxAdvisingQuota: 4,
+    },
+    {
+      code: 'GV016',
+      fullName: 'TS. Mai Thanh Tùng',
+      email: 'tung.maithanh@utc2.edu.vn',
+      phone: '0916789014',
+      degree: 'Tiến sĩ',
+      departmentId: htttDeptId,
+      maxAdvisingQuota: 5,
+    },
+    {
+      code: 'GV017',
+      fullName: 'ThS. Lê Hoàng Yến',
+      email: 'yen.lehoang@utc2.edu.vn',
+      phone: '0917890125',
+      degree: 'Thạc sĩ',
+      departmentId: cnpmDeptId,
+      maxAdvisingQuota: 4,
+    },
+    {
+      code: 'GV018',
+      fullName: 'TS. Trịnh Vĩnh Bình',
+      email: 'binh.trinhvinh@utc2.edu.vn',
+      phone: '0918901236',
+      degree: 'Tiến sĩ',
+      departmentId: cnpmDeptId,
+      maxAdvisingQuota: 6,
     },
   ];
 
@@ -94,6 +211,7 @@ export async function seedLecturers(
   console.log('[Seed] Assigning Department Heads (Truong bo mon)...');
   const gv002Id = lecturerMap.get('GV002')!;
   const gv003Id = lecturerMap.get('GV003')!;
+  const gv006Id = lecturerMap.get('GV006')!;
 
   await prisma.department.update({
     where: { code: 'BM_CNPM' },
@@ -105,7 +223,12 @@ export async function seedLecturers(
     data: { headLecturerId: gv003Id },
   });
 
-  console.log('[Seed] Assigned HODs to BM_CNPM and BM_HTTT_MANG.');
+  await prisma.department.update({
+    where: { code: 'BM_KHMT' },
+    data: { headLecturerId: gv006Id },
+  });
+
+  console.log('[Seed] Assigned HODs to BM_CNPM, BM_HTTT_MANG and BM_KHMT.');
 
   return { lecturerMap };
 }

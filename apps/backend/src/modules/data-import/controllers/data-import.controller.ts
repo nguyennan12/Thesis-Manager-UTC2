@@ -39,7 +39,7 @@ import { ConfirmImportDto } from '../dto/confirm-import.dto';
 @ApiTags('Data Import')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Controller('api/v1/import')
+@Controller('import')
 export class DataImportController {
   constructor(
     private readonly previewService: ImportPreviewService,

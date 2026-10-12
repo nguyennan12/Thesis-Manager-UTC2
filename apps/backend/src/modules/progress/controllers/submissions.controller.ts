@@ -23,7 +23,7 @@ import { SubmitThesisDto, QualifyDefenseDto } from '../dto/submission.dto';
 @ApiTags('Submissions - Nộp Toàn văn & Xét điều kiện')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Controller('api/v1/submissions')
+@Controller('submissions')
 export class SubmissionsController {
   constructor(private readonly submissionsService: SubmissionsService) {}
 

@@ -1,11 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
-  --primary: 221.2 83.2% 53.3%;
-  --primary-foreground: 210 40% 98%;
-  --radius: 0.5rem;
+  --font-sans: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --utc2-primary: #0f62fe;
+  --utc2-dark: #0043ce;
+  --utc2-accent: #4589ff;
+  --utc2-surface: #f4f4f4;
+  --utc2-card: #ffffff;
+  --utc2-text-main: #161616;
+  --utc2-text-muted: #525252;
+  --utc2-border: #e0e0e0;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: #161616;
+  background-color: #f4f4f4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar đồng bộ phong cách tinh gọn */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c6c6c6;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8d8d8d;
 }

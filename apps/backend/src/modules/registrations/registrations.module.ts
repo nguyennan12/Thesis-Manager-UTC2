@@ -8,7 +8,7 @@ import { RegistrationsAdminService } from './services/registrations-admin.servic
 import { ChangeRequestsService } from './services/change-requests.service';
 
 @Module({
-  controllers: [RegistrationsController, ChangeRequestsController],
+  controllers: [ChangeRequestsController, RegistrationsController],
   providers: [
     RegistrationsRepository,
     ChangeRequestsRepository,

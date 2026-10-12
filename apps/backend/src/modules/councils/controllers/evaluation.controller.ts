@@ -21,7 +21,7 @@ import { SubmitDetailedScoreDto } from '../dto/evaluation.dto';
 @ApiTags('Councils - Chấm điểm & Đánh giá')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Controller('api/v1/evaluation')
+@Controller('evaluation')
 export class EvaluationController {
   constructor(private readonly evaluationService: EvaluationService) {}
 

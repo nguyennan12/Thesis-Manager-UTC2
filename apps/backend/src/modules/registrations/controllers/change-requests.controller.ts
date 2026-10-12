@@ -5,6 +5,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   Patch,
   Post,
@@ -22,9 +23,16 @@ import { CreateChangeRequestDto, ReviewChangeRequestDto } from '../dto/change-re
 @ApiTags('Registrations - Đơn xin Đổi Đề tài')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Controller('api/v1/registrations/change-requests')
+@Controller('registrations/change-requests')
 export class ChangeRequestsController {
   constructor(private readonly changeReqService: ChangeRequestsService) {}
+
+  @Get()
+  @ApiOperation({ summary: 'Xem danh sách các đơn đề nghị thay đổi đề tài' })
+  async findMyRequests(@CurrentUser() user: AuthenticatedUser) {
+    const result = await this.changeReqService.findMyRequests(user);
+    return result.unwrap();
+  }
 
   @Post()
   @RequirePermissions('registrations:request_change')

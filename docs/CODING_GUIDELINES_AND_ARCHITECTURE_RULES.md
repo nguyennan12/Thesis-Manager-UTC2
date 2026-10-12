@@ -1,7 +1,9 @@
 # QUY TẮC PHÁT TRIỂN PHẦN MỀM & TIÊU CHUẨN KIẾN TRÚC CODE (CODING GUIDELINES)
 ## HỆ THỐNG WEB QUẢN LÝ ĐỒ ÁN TỐT NGHIỆP UTC2 (UTC2-DAMS)
 
-> **Tài liệu này là bộ quy tắc kiến trúc bắt buộc (Mandatory Architecture Rules)** áp dụng cho toàn bộ quá trình phát triển mã nguồn Frontend, Backend, Database và Tích hợp hệ thống. Mọi Pull Request / Commit đều phải tuân thủ nghiêm ngặt các nguyên tắc dưới đây.
+> **Tài liệu này là bộ quy tắc kiến trúc bắt buộc (Mandatory Architecture Rules)** áp dụng cho toàn bộ quá trình phát triển mã nguồn Frontend, Backend, Database và Tích hợp hệ thống. Mọi Pull Request / Commit đều phải tuân thủ nghiêm ngặt các nguyên tắc dưới đây.  
+> 
+> 🔗 **Tài liệu liên quan:** Xem chi tiết quy chuẩn Frontend tại [FRONTEND_CODING_GUIDELINES.md](FRONTEND_CODING_GUIDELINES.md).
 
 ---
 

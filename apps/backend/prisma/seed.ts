@@ -50,20 +50,30 @@ async function main() {
   const { faculty, majorMap, departmentMap } = await seedFacultiesAndDepartments(prisma);
 
   // 3. Seed Semester & Timelines
-  console.log('\n[Seed] Step 3/6: Seeding Semesters & Defense Timelines...');
-  await seedSemesters(prisma);
+  console.log('\n[Seed] Step 3/7: Seeding Semesters & Defense Timelines...');
+  const { semester } = await seedSemesters(prisma);
 
   // 4. Seed Lecturers & Assign HODs
-  console.log('\n[Seed] Step 4/6: Seeding Lecturers & Department Heads...');
+  console.log('\n[Seed] Step 4/7: Seeding Lecturers & Department Heads...');
   const { lecturerMap } = await seedLecturers(prisma, departmentMap);
 
   // 5. Seed Classes & Students
-  console.log('\n[Seed] Step 5/6: Seeding Classes & Student Profiles...');
+  console.log('\n[Seed] Step 5/7: Seeding Classes & Student Profiles...');
   const { studentMap } = await seedClassesAndStudents(prisma, majorMap, lecturerMap);
 
   // 6. Seed Accounts & AccountRoles
-  console.log('\n[Seed] Step 6/6: Seeding User Accounts & Scoped Roles...');
+  console.log('\n[Seed] Step 6/7: Seeding User Accounts & Scoped Roles...');
   await seedAccounts(prisma, roleMap, faculty.id, departmentMap, lecturerMap, studentMap);
+
+  // 7. Seed Rubrics & Criteria
+  console.log('\n[Seed] Step 7/8: Seeding Rubric Sets & Evaluation Criteria...');
+  const { seedRubrics } = await import('./seeds/rubrics.seed');
+  await seedRubrics(prisma);
+
+  // 8. Seed Topics, Registrations, Progress & Councils
+  console.log('\n[Seed] Step 8/8: Seeding Topics, Registrations, Progress & Councils...');
+  const { seedTopicsAndRegistrations } = await import('./seeds/topics-registrations.seed');
+  await seedTopicsAndRegistrations(prisma, departmentMap, majorMap, lecturerMap, studentMap, semester.id);
 
   const duration = ((Date.now() - startTime) / 1000).toFixed(2);
   console.log('\n====================================================================');

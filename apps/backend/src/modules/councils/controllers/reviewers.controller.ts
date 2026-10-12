@@ -5,6 +5,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   Patch,
   Post,
@@ -22,7 +23,7 @@ import { AssignReviewerDto, ScoreReviewerDto } from '../dto/reviewer.dto';
 @ApiTags('Councils - Giảng viên Phản biện')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Controller('api/v1/reviewers')
+@Controller('reviewers')
 export class ReviewersController {
   constructor(private readonly reviewersService: ReviewersService) {}
 
@@ -35,6 +36,13 @@ export class ReviewersController {
     @CurrentUser() user: AuthenticatedUser,
   ) {
     const result = await this.reviewersService.assignReviewer(dto, user);
+    return result.unwrap();
+  }
+
+  @Get('my-assignments')
+  @ApiOperation({ summary: 'Lấy danh sách các đề tài được phân công phản biện cho Giảng viên' })
+  async getMyAssignments(@CurrentUser() user: AuthenticatedUser) {
+    const result = await this.reviewersService.getMyAssignments(user);
     return result.unwrap();
   }
 

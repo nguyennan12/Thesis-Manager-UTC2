@@ -32,7 +32,7 @@ import { TopicType } from '@prisma/client';
 @ApiTags('Grading - Rubrics')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Controller('api/v1/grading/rubrics')
+@Controller('grading/rubrics')
 export class RubricsController {
   constructor(
     private readonly rubricsService: RubricsService,
@@ -49,7 +49,6 @@ export class RubricsController {
   }
 
   @Get()
-  @RequirePermissions('rubrics:read')
   @ApiOperation({ summary: 'Lấy danh sách các bộ tiêu chí (có phân trang và bộ lọc)' })
   async findAll(@Query() query: QueryRubricSetDto) {
     const result = await this.rubricsService.findAll(query);
@@ -57,7 +56,6 @@ export class RubricsController {
   }
 
   @Get('active')
-  @RequirePermissions('rubrics:read')
   @ApiOperation({ summary: 'Tra cứu bộ tiêu chí đang áp dụng (Active) theo loại đề tài và năm học' })
   @ApiQuery({ name: 'topicType', enum: TopicType, required: true })
   @ApiQuery({ name: 'academicYear', type: String, required: true })
@@ -70,7 +68,6 @@ export class RubricsController {
   }
 
   @Get(':id')
-  @RequirePermissions('rubrics:read')
   @ApiOperation({ summary: 'Xem chi tiết bộ tiêu chí và danh sách tiêu chí con' })
   async findById(@Param('id') id: string) {
     const result = await this.rubricsService.findById(id);

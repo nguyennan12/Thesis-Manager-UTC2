@@ -1,0 +1,787 @@
+--------------------------------------------------
+ANALYZING FRONTEND API CALLS AGAINST BACKEND
+--------------------------------------------------
+[
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\lib\\api-client.ts",
+      "caller": "axios",
+      "method": "POST",
+      "urlRaw": "${baseURL}/auth/refresh"
+    },
+    "normalizedFe": ":param/auth/refresh",
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\academic.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/academic/semesters/current"
+    },
+    "normalizedFe": "/academic/semesters/current",
+    "exactMethodMatch": {
+      "controller": "semesters.controller.ts",
+      "file": "apps\\backend\\src\\modules\\academic\\controllers\\semesters.controller.ts",
+      "method": "GET",
+      "subPath": "current",
+      "fnName": "RequirePermissions",
+      "fullPath": "/academic/semesters/current"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\auth.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/auth/login"
+    },
+    "normalizedFe": "/auth/login",
+    "exactMethodMatch": {
+      "controller": "auth.controller.ts",
+      "file": "apps\\backend\\src\\modules\\auth\\controllers\\auth.controller.ts",
+      "method": "POST",
+      "subPath": "login",
+      "fnName": "HttpCode",
+      "fullPath": "/auth/login"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\auth.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/auth/me"
+    },
+    "normalizedFe": "/auth/me",
+    "exactMethodMatch": {
+      "controller": "auth.controller.ts",
+      "file": "apps\\backend\\src\\modules\\auth\\controllers\\auth.controller.ts",
+      "method": "GET",
+      "subPath": "me",
+      "fnName": "getProfile",
+      "fullPath": "/auth/me"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\auth.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/auth/logout"
+    },
+    "normalizedFe": "/auth/logout",
+    "exactMethodMatch": {
+      "controller": "auth.controller.ts",
+      "file": "apps\\backend\\src\\modules\\auth\\controllers\\auth.controller.ts",
+      "method": "POST",
+      "subPath": "logout",
+      "fnName": "HttpCode",
+      "fullPath": "/auth/logout"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\change-request.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/registrations/change-requests"
+    },
+    "normalizedFe": "/registrations/change-requests",
+    "exactMethodMatch": {
+      "controller": "change-requests.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\change-requests.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/registrations/change-requests"
+    },
+    "diffMethodMatch": {
+      "controller": "change-requests.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\change-requests.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "ApiOperation",
+      "fullPath": "/registrations/change-requests"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\change-request.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/registrations/change-requests"
+    },
+    "normalizedFe": "/registrations/change-requests",
+    "exactMethodMatch": {
+      "controller": "change-requests.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\change-requests.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "ApiOperation",
+      "fullPath": "/registrations/change-requests"
+    },
+    "diffMethodMatch": {
+      "controller": "change-requests.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\change-requests.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/registrations/change-requests"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\change-request.service.ts",
+      "caller": "apiClient",
+      "method": "PATCH",
+      "urlRaw": "/registrations/change-requests/${id}/review"
+    },
+    "normalizedFe": "/registrations/change-requests/:param/review",
+    "exactMethodMatch": {
+      "controller": "change-requests.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\change-requests.controller.ts",
+      "method": "PATCH",
+      "subPath": ":id/review",
+      "fnName": "RequirePermissions",
+      "fullPath": "/registrations/change-requests/:id/review"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\council.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/councils"
+    },
+    "normalizedFe": "/councils",
+    "exactMethodMatch": {
+      "controller": "councils.controller.ts",
+      "file": "apps\\backend\\src\\modules\\councils\\controllers\\councils.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/councils"
+    },
+    "diffMethodMatch": {
+      "controller": "councils.controller.ts",
+      "file": "apps\\backend\\src\\modules\\councils\\controllers\\councils.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/councils"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\council.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/reviewers/my-assignments"
+    },
+    "normalizedFe": "/reviewers/my-assignments",
+    "exactMethodMatch": {
+      "controller": "reviewers.controller.ts",
+      "file": "apps\\backend\\src\\modules\\councils\\controllers\\reviewers.controller.ts",
+      "method": "GET",
+      "subPath": "my-assignments",
+      "fnName": "ApiOperation",
+      "fullPath": "/reviewers/my-assignments"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\council.service.ts",
+      "caller": "apiClient",
+      "method": "PATCH",
+      "urlRaw": "/reviewers/${regId}/score"
+    },
+    "normalizedFe": "/reviewers/:param/score",
+    "exactMethodMatch": {
+      "controller": "reviewers.controller.ts",
+      "file": "apps\\backend\\src\\modules\\councils\\controllers\\reviewers.controller.ts",
+      "method": "PATCH",
+      "subPath": ":regId/score",
+      "fnName": "RequirePermissions",
+      "fullPath": "/reviewers/:regId/score"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\council.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/reviewers/assign"
+    },
+    "normalizedFe": "/reviewers/assign",
+    "exactMethodMatch": {
+      "controller": "reviewers.controller.ts",
+      "file": "apps\\backend\\src\\modules\\councils\\controllers\\reviewers.controller.ts",
+      "method": "POST",
+      "subPath": "assign",
+      "fnName": "RequirePermissions",
+      "fullPath": "/reviewers/assign"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\council.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/councils"
+    },
+    "normalizedFe": "/councils",
+    "exactMethodMatch": {
+      "controller": "councils.controller.ts",
+      "file": "apps\\backend\\src\\modules\\councils\\controllers\\councils.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/councils"
+    },
+    "diffMethodMatch": {
+      "controller": "councils.controller.ts",
+      "file": "apps\\backend\\src\\modules\\councils\\controllers\\councils.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/councils"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\council.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/councils/${councilId}/assign-students"
+    },
+    "normalizedFe": "/councils/:param/assign-students",
+    "exactMethodMatch": {
+      "controller": "councils.controller.ts",
+      "file": "apps\\backend\\src\\modules\\councils\\controllers\\councils.controller.ts",
+      "method": "POST",
+      "subPath": ":id/assign-students",
+      "fnName": "RequirePermissions",
+      "fullPath": "/councils/:id/assign-students"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\council.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/lecturers"
+    },
+    "normalizedFe": "/lecturers",
+    "exactMethodMatch": {
+      "controller": "lecturers.controller.ts",
+      "file": "apps\\backend\\src\\modules\\users\\controllers\\lecturers.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "findAll",
+      "fullPath": "/lecturers"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\dashboard.service.ts",
+      "caller": "apiClient",
+      "method": "PATCH",
+      "urlRaw": "/topics/${topicId}/department-review"
+    },
+    "normalizedFe": "/topics/:param/department-review",
+    "potentialMatches": [
+      {
+        "controller": "topics-review.controller.ts",
+        "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics-review.controller.ts",
+        "method": "PATCH",
+        "subPath": ":id/review",
+        "fnName": "RequirePermissions",
+        "fullPath": "/topics/:id/review"
+      },
+      {
+        "controller": "topics.controller.ts",
+        "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+        "method": "POST",
+        "subPath": "",
+        "fnName": "RequirePermissions",
+        "fullPath": "/topics"
+      },
+      {
+        "controller": "topics.controller.ts",
+        "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+        "method": "GET",
+        "subPath": "",
+        "fnName": "ApiOperation",
+        "fullPath": "/topics"
+      },
+      {
+        "controller": "topics.controller.ts",
+        "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+        "method": "GET",
+        "subPath": ":id",
+        "fnName": "ApiOperation",
+        "fullPath": "/topics/:id"
+      },
+      {
+        "controller": "topics.controller.ts",
+        "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+        "method": "PUT",
+        "subPath": ":id",
+        "fnName": "RequirePermissions",
+        "fullPath": "/topics/:id"
+      },
+      {
+        "controller": "topics.controller.ts",
+        "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+        "method": "DELETE",
+        "subPath": ":id",
+        "fnName": "HttpCode",
+        "fullPath": "/topics/:id"
+      },
+      {
+        "controller": "topics.controller.ts",
+        "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+        "method": "PATCH",
+        "subPath": ":id/submit",
+        "fnName": "RequirePermissions",
+        "fullPath": "/topics/:id/submit"
+      }
+    ]
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\dashboard.service.ts",
+      "caller": "apiClient",
+      "method": "PATCH",
+      "urlRaw": "/topics/${topicId}/department-review"
+    },
+    "normalizedFe": "/topics/:param/department-review",
+    "potentialMatches": [
+      {
+        "controller": "topics-review.controller.ts",
+        "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics-review.controller.ts",
+        "method": "PATCH",
+        "subPath": ":id/review",
+        "fnName": "RequirePermissions",
+        "fullPath": "/topics/:id/review"
+      },
+      {
+        "controller": "topics.controller.ts",
+        "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+        "method": "POST",
+        "subPath": "",
+        "fnName": "RequirePermissions",
+        "fullPath": "/topics"
+      },
+      {
+        "controller": "topics.controller.ts",
+        "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+        "method": "GET",
+        "subPath": "",
+        "fnName": "ApiOperation",
+        "fullPath": "/topics"
+      },
+      {
+        "controller": "topics.controller.ts",
+        "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+        "method": "GET",
+        "subPath": ":id",
+        "fnName": "ApiOperation",
+        "fullPath": "/topics/:id"
+      },
+      {
+        "controller": "topics.controller.ts",
+        "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+        "method": "PUT",
+        "subPath": ":id",
+        "fnName": "RequirePermissions",
+        "fullPath": "/topics/:id"
+      },
+      {
+        "controller": "topics.controller.ts",
+        "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+        "method": "DELETE",
+        "subPath": ":id",
+        "fnName": "HttpCode",
+        "fullPath": "/topics/:id"
+      },
+      {
+        "controller": "topics.controller.ts",
+        "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+        "method": "PATCH",
+        "subPath": ":id/submit",
+        "fnName": "RequirePermissions",
+        "fullPath": "/topics/:id/submit"
+      }
+    ]
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\evaluation.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/evaluation/scores"
+    },
+    "normalizedFe": "/evaluation/scores",
+    "exactMethodMatch": {
+      "controller": "evaluation.controller.ts",
+      "file": "apps\\backend\\src\\modules\\councils\\controllers\\evaluation.controller.ts",
+      "method": "POST",
+      "subPath": "scores",
+      "fnName": "RequirePermissions",
+      "fullPath": "/evaluation/scores"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\evaluation.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/evaluation/${regId}/calculate-final"
+    },
+    "normalizedFe": "/evaluation/:param/calculate-final",
+    "exactMethodMatch": {
+      "controller": "evaluation.controller.ts",
+      "file": "apps\\backend\\src\\modules\\councils\\controllers\\evaluation.controller.ts",
+      "method": "POST",
+      "subPath": ":regId/calculate-final",
+      "fnName": "RequirePermissions",
+      "fullPath": "/evaluation/:regId/calculate-final"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\evaluation.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/grading/rubrics/active"
+    },
+    "normalizedFe": "/grading/rubrics/active",
+    "exactMethodMatch": {
+      "controller": "rubrics.controller.ts",
+      "file": "apps\\backend\\src\\modules\\grading\\controllers\\rubrics.controller.ts",
+      "method": "GET",
+      "subPath": "active",
+      "fnName": "ApiOperation",
+      "fullPath": "/grading/rubrics/active"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\progress.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/progress/registrations/${regId}/reports"
+    },
+    "normalizedFe": "/progress/registrations/:param/reports",
+    "exactMethodMatch": {
+      "controller": "progress.controller.ts",
+      "file": "apps\\backend\\src\\modules\\progress\\controllers\\progress.controller.ts",
+      "method": "GET",
+      "subPath": "registrations/:regId/reports",
+      "fnName": "RequirePermissions",
+      "fullPath": "/progress/registrations/:regId/reports"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\progress.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/progress/reports"
+    },
+    "normalizedFe": "/progress/reports",
+    "exactMethodMatch": {
+      "controller": "progress.controller.ts",
+      "file": "apps\\backend\\src\\modules\\progress\\controllers\\progress.controller.ts",
+      "method": "POST",
+      "subPath": "reports",
+      "fnName": "RequirePermissions",
+      "fullPath": "/progress/reports"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\progress.service.ts",
+      "caller": "apiClient",
+      "method": "PATCH",
+      "urlRaw": "/progress/reports/${reportId}/review"
+    },
+    "normalizedFe": "/progress/reports/:param/review",
+    "exactMethodMatch": {
+      "controller": "progress.controller.ts",
+      "file": "apps\\backend\\src\\modules\\progress\\controllers\\progress.controller.ts",
+      "method": "PATCH",
+      "subPath": "reports/:id/review",
+      "fnName": "RequirePermissions",
+      "fullPath": "/progress/reports/:id/review"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\registration.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/registrations/my-registration"
+    },
+    "normalizedFe": "/registrations/my-registration",
+    "exactMethodMatch": {
+      "controller": "registrations.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\registrations.controller.ts",
+      "method": "GET",
+      "subPath": "my-registration",
+      "fnName": "RequirePermissions",
+      "fullPath": "/registrations/my-registration"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\registration.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/registrations"
+    },
+    "normalizedFe": "/registrations",
+    "exactMethodMatch": {
+      "controller": "registrations.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\registrations.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/registrations"
+    },
+    "diffMethodMatch": {
+      "controller": "registrations.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\registrations.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/registrations"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\registration.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/registrations"
+    },
+    "normalizedFe": "/registrations",
+    "exactMethodMatch": {
+      "controller": "registrations.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\registrations.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/registrations"
+    },
+    "diffMethodMatch": {
+      "controller": "registrations.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\registrations.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/registrations"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\submission.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/submissions"
+    },
+    "normalizedFe": "/submissions",
+    "exactMethodMatch": {
+      "controller": "submissions.controller.ts",
+      "file": "apps\\backend\\src\\modules\\progress\\controllers\\submissions.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/submissions"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\submission.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/submissions/${regId}/plagiarism"
+    },
+    "normalizedFe": "/submissions/:param/plagiarism",
+    "exactMethodMatch": {
+      "controller": "submissions.controller.ts",
+      "file": "apps\\backend\\src\\modules\\progress\\controllers\\submissions.controller.ts",
+      "method": "GET",
+      "subPath": ":regId/plagiarism",
+      "fnName": "RequirePermissions",
+      "fullPath": "/submissions/:regId/plagiarism"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\submission.service.ts",
+      "caller": "apiClient",
+      "method": "PATCH",
+      "urlRaw": "/submissions/${regId}/qualify"
+    },
+    "normalizedFe": "/submissions/:param/qualify",
+    "exactMethodMatch": {
+      "controller": "submissions.controller.ts",
+      "file": "apps\\backend\\src\\modules\\progress\\controllers\\submissions.controller.ts",
+      "method": "PATCH",
+      "subPath": ":regId/qualify",
+      "fnName": "RequirePermissions",
+      "fullPath": "/submissions/:regId/qualify"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\submission.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/registrations"
+    },
+    "normalizedFe": "/registrations",
+    "exactMethodMatch": {
+      "controller": "registrations.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\registrations.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/registrations"
+    },
+    "diffMethodMatch": {
+      "controller": "registrations.controller.ts",
+      "file": "apps\\backend\\src\\modules\\registrations\\controllers\\registrations.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/registrations"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\topic.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/topics"
+    },
+    "normalizedFe": "/topics",
+    "exactMethodMatch": {
+      "controller": "topics.controller.ts",
+      "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "ApiOperation",
+      "fullPath": "/topics"
+    },
+    "diffMethodMatch": {
+      "controller": "topics.controller.ts",
+      "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/topics"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\topic.service.ts",
+      "caller": "apiClient",
+      "method": "GET",
+      "urlRaw": "/topics/${id}"
+    },
+    "normalizedFe": "/topics/:param",
+    "exactMethodMatch": {
+      "controller": "topics.controller.ts",
+      "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+      "method": "GET",
+      "subPath": ":id",
+      "fnName": "ApiOperation",
+      "fullPath": "/topics/:id"
+    },
+    "diffMethodMatch": {
+      "controller": "topics.controller.ts",
+      "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+      "method": "PUT",
+      "subPath": ":id",
+      "fnName": "RequirePermissions",
+      "fullPath": "/topics/:id"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\topic.service.ts",
+      "caller": "apiClient",
+      "method": "POST",
+      "urlRaw": "/topics"
+    },
+    "normalizedFe": "/topics",
+    "exactMethodMatch": {
+      "controller": "topics.controller.ts",
+      "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+      "method": "POST",
+      "subPath": "",
+      "fnName": "RequirePermissions",
+      "fullPath": "/topics"
+    },
+    "diffMethodMatch": {
+      "controller": "topics.controller.ts",
+      "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics.controller.ts",
+      "method": "GET",
+      "subPath": "",
+      "fnName": "ApiOperation",
+      "fullPath": "/topics"
+    },
+    "potentialMatches": []
+  },
+  {
+    "feCall": {
+      "file": "apps\\frontend\\src\\services\\topic.service.ts",
+      "caller": "apiClient",
+      "method": "PATCH",
+      "urlRaw": "/topics/${id}/review"
+    },
+    "normalizedFe": "/topics/:param/review",
+    "exactMethodMatch": {
+      "controller": "topics-review.controller.ts",
+      "file": "apps\\backend\\src\\modules\\topics\\controllers\\topics-review.controller.ts",
+      "method": "PATCH",
+      "subPath": ":id/review",
+      "fnName": "RequirePermissions",
+      "fullPath": "/topics/:id/review"
+    },
+    "potentialMatches": []
+  }
+]

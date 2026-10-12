@@ -29,7 +29,7 @@ import { QueryTopicDto } from '../dto/query-topic.dto';
 @ApiTags('Topics - Quản lý Đề tài')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Controller('api/v1/topics')
+@Controller('topics')
 export class TopicsController {
   constructor(private readonly topicsService: TopicsService) {}
 
