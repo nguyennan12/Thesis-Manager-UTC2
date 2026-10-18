@@ -57,8 +57,8 @@ export class RegistrationsController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Xem chi tiết một hồ sơ đăng ký đề tài đồ án' })
-  async findById(@Param('id', ParseUUIDPipe) id: string) {
-    const result = await this.adminService.findById(id);
+  async findById(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: AuthenticatedUser) {
+    const result = await this.adminService.findById(id, user);
     return result.unwrap();
   }
 

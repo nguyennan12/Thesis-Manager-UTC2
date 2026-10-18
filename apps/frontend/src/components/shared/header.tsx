@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { Logo } from './logo';
-import { RoleSwitcher } from './role-switcher';
 import { useAuthStore } from '@/stores/use-auth-store';
 import { authService } from '@/services/auth.service';
 
@@ -35,10 +34,16 @@ export const Header: React.FC<HeaderProps> = ({
       storeUser?.lecturer?.code ||
       storeUser?.username ||
       '6551071001',
-    roleName: storeUser?.roles?.includes('LECTURER')
-      ? 'Giảng viên'
-      : storeUser?.roles?.includes('ADMIN')
+    roleName: storeUser?.roles?.includes('ADMIN')
       ? 'Quản trị viên'
+      : storeUser?.positions?.includes('HEAD_OF_DEPARTMENT')
+      ? 'Trưởng Bộ môn'
+      : storeUser?.positions?.includes('ACADEMIC_AFFAIRS')
+      ? 'Giáo vụ Khoa'
+      : storeUser?.roles?.includes('STAFF')
+      ? 'Nhân viên quản lý'
+      : storeUser?.roles?.includes('LECTURER')
+      ? 'Giảng viên'
       : 'Sinh viên',
   };
 
@@ -72,9 +77,6 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="hidden lg:inline-block text-xs font-medium text-[#0043ce] bg-blue-50/70 border border-blue-200/60 px-2.5 py-1 rounded">
           {currentSemesterName}
         </div>
-
-        {/* Bộ chuyển nhanh vai trò 1-Click */}
-        <RoleSwitcher />
 
         {/* Thông tin người dùng */}
         <div className="text-right hidden sm:block">

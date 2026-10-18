@@ -23,6 +23,9 @@ export class CouncilsService {
   ) {}
 
   async createCouncil(dto: CreateCouncilDto, user: AuthenticatedUser): Promise<Result<Council>> {
+    if (!this.canManageCouncils(user)) {
+      return Result.err(AppError.forbidden('Chỉ Giáo vụ Khoa hoặc Quản trị viên được phân công hội đồng.'));
+    }
     // 1. Kiểm tra trùng mã hội đồng
     const existingCode = await this.councilsRepo.findCouncilByCode(dto.code);
     if (existingCode) {
@@ -118,6 +121,9 @@ export class CouncilsService {
     dto: AssignStudentsToCouncilDto,
     user: AuthenticatedUser,
   ): Promise<Result<any>> {
+    if (!this.canManageCouncils(user)) {
+      return Result.err(AppError.forbidden('Chỉ Giáo vụ Khoa hoặc Quản trị viên được phân công sinh viên vào hội đồng.'));
+    }
     const council = await this.councilsRepo.findCouncilById(councilId);
     if (!council) {
       return Result.err(AppError.notFound(`Không tìm thấy hội đồng với ID '${councilId}'.`));
@@ -158,5 +164,11 @@ export class CouncilsService {
     });
 
     return Result.ok({ success: true, assignedCount: dto.registrationIds.length });
+  }
+
+  private canManageCouncils(user: AuthenticatedUser): boolean {
+    return user.roles?.includes('ADMIN') ||
+      (user.roles?.includes('STAFF') &&
+        (user.positions?.includes('ACADEMIC_AFFAIRS') || user.positions?.includes('TRAINING_DEPT')));
   }
 }

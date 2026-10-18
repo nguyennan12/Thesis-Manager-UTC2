@@ -30,7 +30,7 @@ export class RegistrationsAdminService {
     const where: Prisma.RegistrationWhereInput = {};
 
     // Phân quyền dữ liệu theo vai trò (Data Scoping):
-    if (user.roles?.includes(ROLES.ADMIN) || user.positions?.includes('ACADEMIC_AFFAIRS')) {
+    if (user.roles?.includes(ROLES.ADMIN) || user.positions?.includes('ACADEMIC_AFFAIRS') || user.positions?.includes('TRAINING_DEPT')) {
       // Admin / Giáo vụ Khoa: xem toàn bộ
     } else if (user.positions?.includes('HEAD_OF_DEPARTMENT') && user.departmentId) {
       // Trưởng bộ môn: xem sinh viên đăng ký đề tài thuộc bộ môn
@@ -38,16 +38,26 @@ export class RegistrationsAdminService {
     } else if (user.lecturerId) {
       // Giảng viên hướng dẫn: chỉ xem sinh viên do chính mình hướng dẫn
       where.advisorLecturerId = user.lecturerId;
+    } else {
+      return Result.err(AppError.forbidden('Bạn không có phạm vi được phép xem danh sách đăng ký.'));
     }
 
     const result = await this.regRepo.findAll(query, where);
     return Result.ok(result);
   }
 
-  async findById(id: string): Promise<Result<any>> {
+  async findById(id: string, user: AuthenticatedUser): Promise<Result<any>> {
     const reg = await this.regRepo.findById(id);
     if (!reg) {
       return Result.err(AppError.notFound(`Không tìm thấy hồ sơ đăng ký với ID '${id}'.`));
+    }
+    const canRead = user.roles?.includes(ROLES.ADMIN) ||
+      (user.roles?.includes(ROLES.STUDENT) && reg.studentId === user.studentId) ||
+      user.positions?.includes('ACADEMIC_AFFAIRS') || user.positions?.includes('TRAINING_DEPT') ||
+      (user.positions?.includes('HEAD_OF_DEPARTMENT') && reg.topic.departmentId === user.departmentId) ||
+      (!!user.lecturerId && reg.advisorLecturerId === user.lecturerId);
+    if (!canRead) {
+      return Result.err(AppError.forbidden('Bạn không có quyền xem hồ sơ đăng ký này.'));
     }
     return Result.ok(reg);
   }

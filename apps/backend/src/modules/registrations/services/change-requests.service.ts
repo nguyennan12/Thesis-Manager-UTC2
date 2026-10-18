@@ -67,6 +67,13 @@ export class ChangeRequestsService {
   }
 
   async review(id: string, dto: ReviewChangeRequestDto, user: AuthenticatedUser): Promise<Result<ChangeRequest>> {
+    const canReview = user.roles?.includes('ADMIN') ||
+      user.positions?.includes('FACULTY_DEAN') ||
+      user.positions?.includes('BAN_CHU_NHIEM') ||
+      user.positions?.includes('ACADEMIC_AFFAIRS');
+    if (!canReview) {
+      return Result.err(AppError.forbidden('Chỉ Ban chủ nhiệm Khoa hoặc Giáo vụ Khoa được duyệt yêu cầu thay đổi.'));
+    }
     const changeReq = await this.changeReqRepo.findById(id);
     if (!changeReq) {
       return Result.err(AppError.notFound(`Không tìm thấy yêu cầu thay đổi với ID '${id}'.`));
@@ -129,6 +136,13 @@ export class ChangeRequestsService {
 
   async findMyRequests(user: AuthenticatedUser): Promise<Result<any[]>> {
     const student = await this.resolveStudent(user);
+    const isReviewer = user.roles?.includes('ADMIN') ||
+      user.positions?.includes('FACULTY_DEAN') ||
+      user.positions?.includes('BAN_CHU_NHIEM') ||
+      user.positions?.includes('ACADEMIC_AFFAIRS');
+    if (!student && !isReviewer) {
+      return Result.err(AppError.forbidden('Bạn không có quyền xem danh sách yêu cầu thay đổi.'));
+    }
     const whereClause: any = {};
     if (student) {
       whereClause.registration = { studentId: student.id };

@@ -40,6 +40,7 @@ export class RegistrationsRepository {
             description: true,
             maxStudents: true,
             status: true,
+            departmentId: true,
           },
         },
         advisorLecturer: {

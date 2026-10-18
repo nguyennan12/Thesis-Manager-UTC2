@@ -57,8 +57,8 @@ export class TopicsController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Xem chi tiết đề tài tốt nghiệp' })
-  async findById(@Param('id') id: string) {
-    const result = await this.topicsService.findById(id);
+  async findById(@Param('id') id: string, @CurrentUser() user: AuthenticatedUser) {
+    const result = await this.topicsService.findById(id, user);
     return result.unwrap();
   }
 

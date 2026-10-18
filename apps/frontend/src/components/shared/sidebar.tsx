@@ -34,9 +34,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ role: propRole, isHOD: propIsH
     propIsHOD !== undefined
       ? propIsHOD
       : storeUser?.positions?.includes('HEAD_OF_DEPARTMENT') ||
-        storeUser?.positions?.includes('FACULTY_DEAN') ||
         storeUser?.positions?.includes('TRUONG_BO_MON') ||
-        storeUser?.positions?.includes('BAN_CHU_NHIEM') ||
         false;
 
   const commonItems: NavItem[] = [
@@ -59,21 +57,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ role: propRole, isHOD: propIsH
     { label: 'Phiếu điểm hội đồng', href: '/lecturer/councils/evaluate' },
   ];
 
-  const managementItems: NavItem[] = [
-    { label: 'Thẩm định & Phân công GVPB', href: '/management/topics' },
-    { label: 'Phân công Hội đồng bảo vệ', href: '/management/councils' },
-  ];
-
   let menuItems = [...commonItems];
   if (role === 'STUDENT') {
     menuItems = [...menuItems, ...studentItems];
   } else if (role === 'LECTURER') {
     menuItems = [...menuItems, ...lecturerItems];
     if (isHOD) {
-      menuItems = [...menuItems, ...managementItems];
+      menuItems.push({ label: 'Thẩm định đề tài', href: '/management/topics' });
     }
   } else if (role === 'ADMIN' || role === 'STAFF') {
-    menuItems = [...menuItems, ...managementItems];
+    if (role === 'ADMIN' || storeUser?.positions?.includes('ACADEMIC_AFFAIRS')) {
+      menuItems.push({ label: 'Phân công Hội đồng bảo vệ', href: '/management/councils' });
+    }
+    if (role === 'ADMIN') {
+      menuItems.push({ label: 'Thẩm định đề tài', href: '/management/topics' });
+    }
   }
 
   return (

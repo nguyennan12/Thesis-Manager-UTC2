@@ -111,10 +111,23 @@ export class TopicsService {
     return Result.ok(result);
   }
 
-  async findById(id: string): Promise<Result<any>> {
+  async findById(id: string, user: AuthenticatedUser): Promise<Result<any>> {
     const topic = await this.topicRepo.findById(id);
     if (!topic) {
       return Result.err(AppError.notFound(`Không tìm thấy đề tài tốt nghiệp với ID '${id}'.`));
+    }
+    const isAdmin = user.roles?.includes(ROLES.ADMIN);
+    const isStudent = user.roles?.includes(ROLES.STUDENT);
+    const isAcademicAffairs = user.positions?.includes('ACADEMIC_AFFAIRS') || user.positions?.includes('TRAINING_DEPT');
+    const isHod = user.positions?.includes('HEAD_OF_DEPARTMENT');
+    const isLecturerOwner = !!user.lecturerId && topic.proposerLecturerId === user.lecturerId;
+    const canRead = isAdmin || isAcademicAffairs ||
+      (isStudent && topic.status === TopicStatus.APPROVED) ||
+      (isHod && (topic.status === TopicStatus.APPROVED || topic.departmentId === user.departmentId)) ||
+      (user.roles?.includes(ROLES.LECTURER) &&
+        (topic.status === TopicStatus.APPROVED || isLecturerOwner));
+    if (!canRead) {
+      return Result.err(AppError.forbidden('Bạn không có quyền xem đề tài này.'));
     }
     return Result.ok(topic);
   }
