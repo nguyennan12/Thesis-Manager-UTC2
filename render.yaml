@@ -1,11 +1,4 @@
 services:
-  - type: keyvalue
-    name: utc2-dams-redis
-    region: singapore
-    plan: free
-    ipAllowList: []
-    maxmemoryPolicy: allkeys-lru
-
   - type: web
     name: utc2-dams-api
     runtime: docker
@@ -40,7 +33,4 @@ services:
       - key: DEFAULT_INITIAL_PASSWORD
         generateValue: true
       - key: REDIS_URL
-        fromService:
-          type: keyvalue
-          name: utc2-dams-redis
-          property: connectionString
+        sync: false
