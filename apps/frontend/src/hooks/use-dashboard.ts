@@ -5,6 +5,7 @@ import { authService } from '@/services/auth.service';
 import { academicService } from '@/services/academic.service';
 import { dashboardService } from '@/services/dashboard.service';
 import { useAuthStore } from '@/stores/use-auth-store';
+import { safeStorage } from '@/lib/storage';
 import { UserWorkspaceRole } from '@/types/dashboard';
 
 export function useDashboard() {
@@ -22,7 +23,7 @@ export function useDashboard() {
       try {
         const u = await authService.getMe();
         if (u) {
-          const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') || '' : '';
+          const token = safeStorage.getItem('access_token') || '';
           setAuth(u, token);
         }
         return u;

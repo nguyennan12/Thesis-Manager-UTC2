@@ -16,8 +16,14 @@ export async function seedAccounts(
   studentMap: Map<string, string>,
 ) {
   console.log('[Seed] Generating Bcrypt password hashes (Salt 10)...');
-  const adminPasswordHash = await bcrypt.hash('Admin@123456', 10);
-  const userPasswordHash = await bcrypt.hash('Utc2@123456', 10);
+  const adminPasswordHash = await bcrypt.hash(
+    getSeedPassword('DEMO_ADMIN_PASSWORD', 'Admin@123456'),
+    10,
+  );
+  const userPasswordHash = await bcrypt.hash(
+    getSeedPassword('DEMO_ACCOUNT_PASSWORD', 'Utc2@123456'),
+    10,
+  );
 
   const adminRoleId = roleMap.get(ROLES.ADMIN)!;
   const staffRoleId = roleMap.get(ROLES.STAFF)!;
@@ -47,7 +53,7 @@ export async function seedAccounts(
   await assignAccountRole(prisma, adminAccount.id, adminRoleId, ROLE_SCOPES.GLOBAL, undefined);
 
   // 2. Giáo vụ Khoa (Academic Affairs Staff)
-  console.log('[Seed] Seeding Academic Affairs Staff Account (gvk_cntt / Utc2@123456)...');
+  console.log('[Seed] Seeding Academic Affairs Staff Account (gvk_cntt)...');
   const staffAccount = await prisma.account.upsert({
     where: { username: 'gvk_cntt' },
     update: {
@@ -65,7 +71,7 @@ export async function seedAccounts(
   await assignAccountRole(prisma, staffAccount.id, staffRoleId, ROLE_SCOPES.FACULTY, facultyId);
 
   // 3. Ban Chủ nhiệm Khoa (Dean - GV001)
-  console.log('[Seed] Seeding Faculty Dean Account (dean_cntt / Utc2@123456)...');
+  console.log('[Seed] Seeding Faculty Dean Account (dean_cntt)...');
   const gv001Id = lecturerMap.get('GV001')!;
   const deanAccount = await prisma.account.upsert({
     where: { username: 'dean_cntt' },
@@ -86,7 +92,7 @@ export async function seedAccounts(
   await assignAccountRole(prisma, deanAccount.id, lecturerRoleId, ROLE_SCOPES.FACULTY, facultyId);
 
   // 4. Trưởng Bộ môn CNPM (HOD - GV002)
-  console.log('[Seed] Seeding HOD CNPM Account (hod_cnpm / Utc2@123456)...');
+  console.log('[Seed] Seeding HOD CNPM Account (hod_cnpm)...');
   const gv002Id = lecturerMap.get('GV002')!;
   const hodCnpmAccount = await prisma.account.upsert({
     where: { username: 'hod_cnpm' },
@@ -107,7 +113,7 @@ export async function seedAccounts(
   await assignAccountRole(prisma, hodCnpmAccount.id, lecturerRoleId, ROLE_SCOPES.DEPARTMENT, cnpmDeptId);
 
   // 5. Trưởng Bộ môn HTTT (HOD - GV003) & KHMT (HOD - GV006)
-  console.log('[Seed] Seeding HOD Accounts (hod_httt, hod_khmt / Utc2@123456)...');
+  console.log('[Seed] Seeding HOD Accounts (hod_httt, hod_khmt)...');
   const gv003Id = lecturerMap.get('GV003')!;
   const hodHtttAccount = await prisma.account.upsert({
     where: { username: 'hod_httt' },
@@ -309,4 +315,15 @@ async function assignAccountRole(
       },
     });
   }
+}
+
+function getSeedPassword(name: string, localFallback: string): string {
+  const configuredPassword = process.env[name];
+  if (configuredPassword) return configuredPassword;
+
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(`${name} must be configured when seeding production accounts.`);
+  }
+
+  return localFallback;
 }

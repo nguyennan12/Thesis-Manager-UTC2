@@ -4,8 +4,11 @@
   "private": true,
   "description": "UTC2 Thesis Management System - Monorepo",
   "scripts": {
-    "dev:backend": "pnpm --filter backend start:dev",
+    "dev": "pnpm -r --parallel run dev",
+    "dev:backend": "pnpm --filter backend run dev",
     "dev:frontend": "pnpm --filter frontend dev",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
     "build": "pnpm -r build",
     "prisma:generate": "pnpm --filter backend prisma:generate",
     "prisma:migrate": "pnpm --filter backend prisma:migrate",

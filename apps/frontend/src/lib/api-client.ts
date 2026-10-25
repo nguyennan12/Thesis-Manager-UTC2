@@ -1,4 +1,5 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import { safeStorage, safeSetCookie } from './storage';
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
 
@@ -14,11 +15,10 @@ export const apiClient = axios.create({
 // Request Interceptor: Attach bearer token if available
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('access_token');
-      if (token && config.headers) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
+    console.log(`[apiClient] ${config.method?.toUpperCase()} ${config.baseURL || ''}${config.url}`);
+    const token = safeStorage.getItem('access_token');
+    if (token && config.headers) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -34,13 +34,13 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        const refreshToken = typeof window !== 'undefined' ? localStorage.getItem('refresh_token') : null;
+        const refreshToken = safeStorage.getItem('refresh_token');
         if (refreshToken) {
           const { data } = await axios.post(`${baseURL}/auth/refresh`, { refreshToken }, { withCredentials: true });
           const newAccessToken = data?.data?.accessToken || data?.accessToken;
-          if (newAccessToken && typeof window !== 'undefined') {
-            localStorage.setItem('access_token', newAccessToken);
-            document.cookie = `access_token=${newAccessToken}; path=/; max-age=86400; SameSite=Lax`;
+          if (newAccessToken) {
+            safeStorage.setItem('access_token', newAccessToken);
+            safeSetCookie(`access_token=${newAccessToken}; path=/; max-age=86400; SameSite=Lax`);
             if (originalRequest.headers) {
               originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
             }
@@ -52,10 +52,10 @@ apiClient.interceptors.response.use(
       }
 
       if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; max-age=0; SameSite=Lax';
-        document.cookie = 'refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; max-age=0; SameSite=Lax';
+        safeStorage.removeItem('access_token');
+        safeStorage.removeItem('refresh_token');
+        safeSetCookie('access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; max-age=0; SameSite=Lax');
+        safeSetCookie('refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; max-age=0; SameSite=Lax');
         window.location.href = '/login';
       }
     }

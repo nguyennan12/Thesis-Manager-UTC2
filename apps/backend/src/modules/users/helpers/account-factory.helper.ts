@@ -14,6 +14,9 @@ export interface GeneratedAccountData {
 
 export class AccountFactoryHelper {
   static getDefaultInitialPassword(): string {
+    if (process.env.NODE_ENV === 'production' && !process.env.DEFAULT_INITIAL_PASSWORD) {
+      throw new Error('DEFAULT_INITIAL_PASSWORD must be configured in production.');
+    }
     return process.env.DEFAULT_INITIAL_PASSWORD || 'Utc2@123456';
   }
 

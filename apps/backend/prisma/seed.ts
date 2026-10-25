@@ -79,13 +79,7 @@ async function main() {
   console.log('\n====================================================================');
   console.log(`[Seed] DATABASE SEEDING COMPLETED SUCCESSFULLY IN ${duration}s!`);
   console.log('====================================================================');
-  console.log('DEMO CREDENTIALS:');
-  console.log('   - Admin:      username: admin        | password: Admin@123456');
-  console.log('   - Giao vu:    username: gvk_cntt     | password: Utc2@123456');
-  console.log('   - BCN Khoa:   username: dean_cntt    | password: Utc2@123456');
-  console.log('   - Truong BM:  username: hod_cnpm     | password: Utc2@123456');
-  console.log('   - Giang vien: username: gv_mienpt    | password: Utc2@123456');
-  console.log('   - Sinh vien:  username: sv_6551071001| password: Utc2@123456');
+  console.log('Demo accounts were seeded. Passwords are not written to deployment logs.');
   console.log('====================================================================\n');
 }
 

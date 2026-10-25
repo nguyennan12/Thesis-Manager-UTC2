@@ -3,6 +3,13 @@ import { writeFile } from 'fs/promises';
 import { join } from 'path';
 
 export async function POST(req: NextRequest) {
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json(
+      { error: 'Tải tệp đang tạm khóa trên bản demo cloud; vui lòng không gửi hồ sơ thật.' },
+      { status: 503 },
+    );
+  }
+
   try {
     const formData = await req.formData();
     const file = formData.get('file') as File | null;

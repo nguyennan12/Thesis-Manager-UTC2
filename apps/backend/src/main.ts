@@ -23,8 +23,27 @@ async function bootstrap() {
   app.use(cookieParser());
 
   // 3. CORS Configuration
+  const allowedOrigins = [
+    appUrl,
+    ...(process.env.NODE_ENV === 'production'
+      ? []
+      : ['http://localhost:3000', 'http://127.0.0.1:3000']),
+  ].filter(Boolean);
+
   app.enableCors({
-    origin: appUrl,
+    origin: (origin, callback) => {
+      if (
+        !origin ||
+        allowedOrigins.includes(origin) ||
+        (process.env.NODE_ENV !== 'production' &&
+          (origin.startsWith('http://localhost:') ||
+            origin.startsWith('http://127.0.0.1:')))
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
+      }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],

@@ -25,8 +25,7 @@ COPY tsconfig.json ./
 COPY apps/backend ./apps/backend
 
 # Sinh mã Prisma Client từ Multi-file schema
-ENV DATABASE_URL="postgresql://postgres:root_password@global_postgres:5432/utc2_thesis_db?schema=public"
-RUN pnpm --filter backend prisma:generate
+RUN DATABASE_URL="postgresql://unused:unused@localhost:5432/unused?schema=public" pnpm --filter backend prisma:generate
 
 # Build ứng dụng NestJS
 RUN pnpm --filter backend build

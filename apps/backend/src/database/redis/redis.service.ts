@@ -20,14 +20,8 @@ export class RedisService implements OnModuleInit, OnApplicationShutdown {
   constructor(private readonly configService: ConfigService) {}
 
   async onModuleInit() {
-    const host = this.configService.getOrThrow<string>('redis.host');
-    const port = this.configService.getOrThrow<number>('redis.port');
-    const password = this.configService.get<string>('redis.password');
-
-    this.client = new Redis({
-      host,
-      port,
-      password: password || undefined,
+    const redisUrl = this.configService.get<string>('redis.url');
+    const options = {
       maxRetriesPerRequest: 3,
       enableReadyCheck: true,
       retryStrategy: (times) => {
@@ -35,11 +29,25 @@ export class RedisService implements OnModuleInit, OnApplicationShutdown {
         return delay;
       },
       lazyConnect: true,
-    });
+    };
+
+    if (redisUrl) {
+      this.client = new Redis(redisUrl, options);
+    } else {
+      const host = this.configService.getOrThrow<string>('redis.host');
+      const port = this.configService.getOrThrow<number>('redis.port');
+      const password = this.configService.get<string>('redis.password');
+      this.client = new Redis({
+        ...options,
+        host,
+        port,
+        password: password || undefined,
+      });
+    }
 
     this.client.on('connect', () => {
       this.isConnected = true;
-      this.logger.log(`Connected to Redis server at ${host}:${port}`);
+      this.logger.log(redisUrl ? 'Connected to Redis server using REDIS_URL' : 'Connected to Redis server');
     });
 
     this.client.on('ready', () => {

@@ -13,8 +13,9 @@ export default () => ({
     refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN!,
   },
   redis: {
-    host: process.env.REDIS_HOST!,
-    port: parseInt(process.env.REDIS_PORT!, 10),
+    url: process.env.REDIS_URL,
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT, 10) : undefined,
     password: process.env.REDIS_PASSWORD || undefined,
   },
   minio: {

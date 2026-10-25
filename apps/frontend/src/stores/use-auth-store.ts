@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { UserProfile } from '@/types/auth';
+import { safeStorage, safeSetCookie } from '@/lib/storage';
 
 interface AuthState {
   user: UserProfile | null;
@@ -17,11 +18,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isAuthenticated: false,
 
   setAuth: (user, token) => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('access_token', token);
-      // Also set document cookie for middleware check
-      document.cookie = `access_token=${token}; path=/; max-age=86400; SameSite=Lax`;
-    }
+    safeStorage.setItem('access_token', token);
+    // Also set document cookie for middleware check
+    safeSetCookie(`access_token=${token}; path=/; max-age=86400; SameSite=Lax`);
     set({
       user,
       accessToken: token,
@@ -30,13 +29,17 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   clearAuth: () => {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      sessionStorage.clear();
-      document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; max-age=0; SameSite=Lax';
-      document.cookie = 'refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; max-age=0; SameSite=Lax';
+    safeStorage.removeItem('access_token');
+    safeStorage.removeItem('refresh_token');
+    try {
+      if (typeof window !== 'undefined') {
+        sessionStorage.clear();
+      }
+    } catch {
+      // Ignore sessionStorage block
     }
+    safeSetCookie('access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; max-age=0; SameSite=Lax');
+    safeSetCookie('refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; max-age=0; SameSite=Lax');
     set({
       user: null,
       accessToken: null,
