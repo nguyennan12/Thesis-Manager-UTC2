@@ -32,5 +32,5 @@ RUN pnpm --filter backend build
 
 EXPOSE 8000
 
-# Apply production migrations before starting the API server.
-CMD ["sh", "-c", "pnpm --filter backend prisma:deploy && exec pnpm --filter backend start:prod"]
+# Apply production migrations, optionally seed the demo dataset once, then start the API.
+CMD ["sh", "-c", "pnpm --filter backend prisma:deploy && if [ \"$SEED_DEMO_DATA\" = \"true\" ]; then pnpm --filter backend prisma:seed; fi && exec pnpm --filter backend start:prod"]

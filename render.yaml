@@ -33,3 +33,5 @@ services:
         generateValue: true
       - key: REDIS_URL
         sync: false
+      - key: SEED_DEMO_DATA
+        sync: false
