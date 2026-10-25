@@ -3,6 +3,7 @@ services:
     name: utc2-dams-redis
     region: singapore
     plan: free
+    ipAllowList: []
     maxmemoryPolicy: allkeys-lru
 
   - type: web
