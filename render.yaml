@@ -6,7 +6,6 @@ services:
     plan: free
     dockerfilePath: ./Dockerfile
     dockerContext: .
-    dockerCommand: sh -c 'pnpm --filter backend prisma:deploy && pnpm --filter backend start:prod'
     healthCheckPath: /api/docs
     initialDeployHook: pnpm --filter backend prisma:seed
     envVars:

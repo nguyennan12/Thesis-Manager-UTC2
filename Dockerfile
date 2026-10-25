@@ -32,5 +32,5 @@ RUN pnpm --filter backend build
 
 EXPOSE 8000
 
-# Khởi chạy Backend ở chế độ development với hot-reload
-CMD ["pnpm", "--filter", "backend", "start:dev"]
+# Apply production migrations before starting the API server.
+CMD ["sh", "-c", "pnpm --filter backend prisma:deploy && exec pnpm --filter backend start:prod"]
