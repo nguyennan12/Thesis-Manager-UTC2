@@ -21,7 +21,11 @@ export function useDashboard() {
     storeUser?.positions?.includes('HEAD_OF_DEPARTMENT') ||
       storeUser?.positions?.includes('TRUONG_BO_MON'),
   );
-  const approvalStage = isDean ? 'DEAN' : isHod || storeUser?.roles?.includes('ADMIN') ? 'HOD' : 'NONE';
+  const approvalStage: 'HOD' | 'DEAN' | 'NONE' = isDean
+    ? 'DEAN'
+    : isHod || storeUser?.roles?.includes('ADMIN')
+      ? 'HOD'
+      : 'NONE';
 
   // 1. Fetch thông tin tài khoản người dùng hiện tại
   const {
