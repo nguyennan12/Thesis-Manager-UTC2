@@ -244,8 +244,7 @@ export default function LoginPage() {
               </Button>
             </form>
 
-            {/* Chỉ cung cấp tài khoản mẫu trong môi trường phát triển local. */}
-            {process.env.NODE_ENV !== 'production' && (
+            {/* Demo account shortcuts are enabled for the public demo deployment. */}
             <div className="mt-7 pt-5 border-t border-dashed border-slate-200 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
@@ -345,7 +344,6 @@ export default function LoginPage() {
                 </div>
               </div>
             </div>
-            )}
           </div>
 
           {/* Footer thông tin hỗ trợ */}
