@@ -9,7 +9,7 @@ export interface TopicItem {
   requiredSkills?: string;
   maxStudents: number;
   currentStudents?: number;
-  status: 'DRAFT' | 'PENDING_HOD' | 'PENDING_REVIEW' | 'APPROVED' | 'REJECTED' | 'ASSIGNED';
+  status: 'DRAFT' | 'PENDING_HOD' | 'PENDING_REVIEW' | 'PENDING_DEAN' | 'APPROVED' | 'REJECTED' | 'ASSIGNED';
   rejectionReason?: string;
   departmentId?: string;
   departmentName?: string;

@@ -88,12 +88,17 @@ export class TopicsService {
       user.positions?.includes('ACADEMIC_AFFAIRS')
     ) {
       // Admin / Phòng Đào tạo / Giáo vụ: xem toàn bộ
+    } else if (
+      (user.positions?.includes('FACULTY_DEAN') ||
+        user.positions?.includes('BAN_CHU_NHIEM') ||
+        user.positions?.includes('DEAN')) &&
+      user.facultyId
+    ) {
+      // Trưởng khoa: xem và phê duyệt cấp 2 đề tài trong phạm vi khoa.
+      where.department = { facultyId: user.facultyId };
     } else if (user.positions?.includes('HEAD_OF_DEPARTMENT') && user.departmentId) {
-      // Trưởng bộ môn: xem đề tài đã duyệt HOẶC toàn bộ đề tài của bộ môn mình
-      where.OR = [
-        { status: TopicStatus.APPROVED },
-        { departmentId: user.departmentId },
-      ];
+      // Trưởng bộ môn chỉ xem/duyệt danh mục của bộ môn mình phụ trách.
+      where.departmentId = user.departmentId;
     } else {
       // Giảng viên thông thường: xem đề tài đã duyệt HOẶC đề tài do chính mình đề xuất
       const lecturerId = user.lecturerId;
@@ -120,10 +125,16 @@ export class TopicsService {
     const isStudent = user.roles?.includes(ROLES.STUDENT);
     const isAcademicAffairs = user.positions?.includes('ACADEMIC_AFFAIRS') || user.positions?.includes('TRAINING_DEPT');
     const isHod = user.positions?.includes('HEAD_OF_DEPARTMENT');
+    const isDean =
+      user.positions?.includes('FACULTY_DEAN') ||
+      user.positions?.includes('BAN_CHU_NHIEM') ||
+      user.positions?.includes('DEAN');
     const isLecturerOwner = !!user.lecturerId && topic.proposerLecturerId === user.lecturerId;
+    const belongsToFaculty = isDean && !!user.facultyId && topic.department.facultyId === user.facultyId;
     const canRead = isAdmin || isAcademicAffairs ||
       (isStudent && topic.status === TopicStatus.APPROVED) ||
-      (isHod && (topic.status === TopicStatus.APPROVED || topic.departmentId === user.departmentId)) ||
+      (isDean && belongsToFaculty) ||
+      (isHod && topic.departmentId === user.departmentId) ||
       (user.roles?.includes(ROLES.LECTURER) &&
         (topic.status === TopicStatus.APPROVED || isLecturerOwner));
     if (!canRead) {

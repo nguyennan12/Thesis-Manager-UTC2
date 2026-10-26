@@ -37,4 +37,17 @@ export class TopicsReviewController {
     const result = await this.reviewService.review(id, dto, user);
     return result.unwrap();
   }
+
+  @Patch(':id/dean-approval')
+  @RequirePermissions('topics:approve_dean')
+  @ApiOperation({ summary: 'Ban Chủ nhiệm Khoa phê duyệt hoặc từ chối đề tài cấp 2' })
+  @ApiResponse({ status: 200, description: 'Cập nhật quyết định phê duyệt cấp khoa thành công' })
+  async approveByDean(
+    @Param('id') id: string,
+    @Body() dto: ReviewTopicDto,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
+    const result = await this.reviewService.approveByDean(id, dto, user);
+    return result.unwrap();
+  }
 }

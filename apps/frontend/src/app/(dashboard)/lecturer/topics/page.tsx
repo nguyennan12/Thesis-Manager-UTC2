@@ -109,7 +109,7 @@ export default function LecturerTopicsPage() {
               <TableBody>
                 {topics.map((t) => {
                   const isApproved = t.status === 'APPROVED';
-                  const isPending = t.status === 'PENDING_HOD';
+                  const isPending = ['PENDING_HOD', 'PENDING_REVIEW', 'PENDING_DEAN'].includes(t.status);
                   const isRejected = t.status === 'REJECTED';
 
                   return (
@@ -148,7 +148,7 @@ export default function LecturerTopicsPage() {
                           {isApproved
                             ? 'Đã duyệt'
                             : isPending
-                            ? 'Chờ TBM duyệt'
+                            ? t.status === 'PENDING_DEAN' ? 'Chờ BCN Khoa duyệt' : 'Chờ TBM duyệt'
                             : 'Cần chỉnh sửa'}
                         </span>
                       </TableCell>

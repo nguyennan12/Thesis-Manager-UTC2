@@ -12,6 +12,16 @@ export function useDashboard() {
   const queryClient = useQueryClient();
   const storeUser = useAuthStore((s) => s.user);
   const setAuth = useAuthStore((s) => s.setAuth);
+  const isDean = Boolean(
+    storeUser?.positions?.includes('FACULTY_DEAN') ||
+      storeUser?.positions?.includes('BAN_CHU_NHIEM') ||
+      storeUser?.positions?.includes('DEAN'),
+  );
+  const isHod = Boolean(
+    storeUser?.positions?.includes('HEAD_OF_DEPARTMENT') ||
+      storeUser?.positions?.includes('TRUONG_BO_MON'),
+  );
+  const approvalStage = isDean ? 'DEAN' : isHod || storeUser?.roles?.includes('ADMIN') ? 'HOD' : 'NONE';
 
   // 1. Fetch thông tin tài khoản người dùng hiện tại
   const {
@@ -41,7 +51,9 @@ export function useDashboard() {
     user?.positions?.includes('TRUONG_BO_MON') ||
     user?.positions?.includes('HEAD_OF_DEPARTMENT') ||
     user?.positions?.includes('BAN_CHU_NHIEM') ||
+    user?.positions?.includes('FACULTY_DEAN') ||
     user?.positions?.includes('DEAN') ||
+    user?.positions?.includes('ACADEMIC_AFFAIRS') ||
     user?.roles?.includes('ADMIN') ||
     user?.roles?.includes('ACADEMIC_AFFAIRS') ||
     user?.roles?.includes('STAFF')
@@ -81,13 +93,15 @@ export function useDashboard() {
     isLoading: isManagementLoading,
   } = useQuery({
     queryKey: ['management-workspace', currentSemester?.id],
-    queryFn: () => dashboardService.getManagementWorkspace(currentSemester?.id),
+    queryFn: () => dashboardService.getManagementWorkspace(currentSemester?.id, approvalStage),
     enabled: roleType === 'MANAGEMENT',
   });
 
-  // 5. Mutation phê duyệt đề tài cho Ban bộ môn / BCN Khoa
+  // 5. Mutation thẩm định theo bước tương ứng với chức danh hiện tại.
   const approveMutation = useMutation({
-    mutationFn: (topicId: string) => dashboardService.approveTopic(topicId),
+    mutationFn: (topicId: string) => isDean
+      ? dashboardService.approveDeanTopic(topicId)
+      : dashboardService.approveTopic(topicId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['management-workspace'] });
     },
@@ -95,7 +109,9 @@ export function useDashboard() {
 
   const rejectMutation = useMutation({
     mutationFn: ({ topicId, reason }: { topicId: string; reason: string }) =>
-      dashboardService.rejectTopic(topicId, reason),
+      isDean
+        ? dashboardService.rejectDeanTopic(topicId, reason)
+        : dashboardService.rejectTopic(topicId, reason),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['management-workspace'] });
     },
@@ -119,5 +135,6 @@ export function useDashboard() {
     handleApproveTopic: async (id: string) => approveMutation.mutateAsync(id),
     handleRejectTopic: async (id: string, reason: string) =>
       rejectMutation.mutateAsync({ topicId: id, reason }),
+    approvalStage,
   };
 }

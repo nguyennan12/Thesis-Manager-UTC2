@@ -196,7 +196,7 @@ Vòng đời của một đồ án gồm 7 giai đoạn nối tiếp. Bảng dư
 
 | GĐ | Tên giai đoạn | Diễn biến chính | Kết quả đầu ra |
 | --- | --- | --- | --- |
-| 1 | Đề xuất và xét duyệt đề tài | GV đề xuất đề tài (tên, mô tả, yêu cầu, ngành phù hợp, số SV tối đa) → “Mới tạo”; gửi → “Chờ duyệt”; TBM xem xét tính khoa học, khả thi, trùng lặp → “Đã duyệt” hoặc “Từ chối” kèm lý do | Danh sách đề tài đã duyệt |
+| 1 | Đề xuất và xét duyệt đề tài | GV đề xuất đề tài → “Mới tạo”; gửi → TBM thẩm định cấp 1 tính khoa học, khả thi, trùng lặp → “Chờ BCN Khoa” hoặc “Từ chối” kèm lý do; BCN Khoa phê duyệt cấp 2 → “Đã duyệt” để sinh viên đăng ký | Danh sách đề tài đã được BCN Khoa ban hành |
 | 2 | Tra cứu, đăng ký, chốt danh sách | SV tra cứu đề tài đã duyệt, gửi đăng ký; hệ thống kiểm tra chỉ tiêu, chuyên ngành, trùng đăng ký; GV xác nhận; hết hạn đăng ký Giáo vụ chốt và công bố; BCN ra quyết định phân công GVHD | Danh sách đăng ký chính thức |
 | 3 | Theo dõi tiến độ theo tuần | SV nộp báo cáo tuần (đã làm, kết quả, kế hoạch tuần sau); GVHD đánh giá và nhận xét; TBM/Giáo vụ theo dõi số liệu tổng hợp | Lịch sử tiến độ, cảnh báo nhóm chậm |
 | 4 | Nộp báo cáo toàn văn, kiểm tra đạo văn | SV nộp báo cáo + sản phẩm; hệ thống tính tỷ lệ trùng lặp; GVHD xác nhận đủ điều kiện bảo vệ hay không | Danh sách SV đủ điều kiện bảo vệ |
@@ -1200,7 +1200,7 @@ Ví dụ minh họa (số liệu giả định): tiêu chí Nội dung 50%, Trì
 | 1 | Đồ án làm theo cá nhân hay nhóm? Báo cáo gốc vừa có “số nhóm tối đa” ở đề tài, vừa mô hình mỗi đăng ký gắn một sinh viên. | Tạm hiểu: đồ án cá nhân, một đề tài nhận nhiều sinh viên đến mức chỉ tiêu; nếu làm nhóm cần thêm thực thể Nhóm và điểm cá nhân trong nhóm. |
 | 2 | Công thức điểm tổng kết (tỷ lệ điểm GVHD/điểm Hội đồng), thang quy đổi và xếp loại, quy tắc làm tròn. | Cần quy chế; hệ thống cấu hình được (FR-CD-06). |
 | 3 | Ngưỡng tỷ lệ trùng lặp cho phép và phạm vi đối chiếu (chỉ nội bộ hay có nguồn Internet). | Giai đoạn 1: đối chiếu nội bộ; ngưỡng cấu hình. |
-| 4 | Người duyệt đề tài là Trưởng bộ môn (theo mô tả nghiệp vụ) nhưng ERD ghi “giảng viên duyệt”. Phê duyệt cuối cùng thuộc TBM hay BCN Khoa? | Tạm hiểu: TBM thẩm định và duyệt; BCN Khoa phê duyệt/giám sát và xử lý ngoại lệ. |
+| 4 | Người duyệt đề tài là Trưởng bộ môn (theo mô tả nghiệp vụ) nhưng ERD ghi “giảng viên duyệt”. Phê duyệt cuối cùng thuộc TBM hay BCN Khoa? | Luồng BR-04 được áp dụng: TBM thẩm định cấp 1; BCN Khoa phê duyệt ban hành cấp 2 và xử lý ngoại lệ. Giáo vụ điều phối, không duyệt nội dung đề tài. |
 | 5 | Ai là người phân công GVHD: sinh viên tự chọn GV qua đề tài (đang mô hình hóa) hay BCN gán sau khi cân đối? | Tạm hiểu: GVHD là giảng viên đề xuất đề tài; BCN ra quyết định chính thức sau khi chốt. |
 | 6 | Sinh viên có được tự đề xuất đề tài không (FR-DT-10)? | Ưu tiên thấp. |
 | 7 | Có quy định GVHD không được là thành viên/Chủ tịch Hội đồng chấm sinh viên mình hướng dẫn không (BR-12)? | Cần xác nhận. |

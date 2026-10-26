@@ -20,7 +20,27 @@ export const DashboardView: React.FC = () => {
     isLoading,
     handleApproveTopic,
     handleRejectTopic,
+    approvalStage,
   } = useDashboard();
+
+  const canReviewTopics = Boolean(
+    user?.roles?.includes('ADMIN') ||
+      user?.positions?.includes('HEAD_OF_DEPARTMENT') ||
+      user?.positions?.includes('TRUONG_BO_MON') ||
+      user?.positions?.includes('FACULTY_DEAN') ||
+      user?.positions?.includes('BAN_CHU_NHIEM'),
+  );
+  const isAcademicAffairs = Boolean(
+    user?.positions?.includes('ACADEMIC_AFFAIRS') || user?.roles?.includes('STAFF'),
+  );
+  const isFacultyDean = Boolean(
+    user?.positions?.includes('FACULTY_DEAN') || user?.positions?.includes('BAN_CHU_NHIEM'),
+  );
+  const roleNotice = isAcademicAffairs
+    ? 'Giáo vụ không duyệt nội dung đề tài. Nhiệm vụ chính là điều phối đăng ký, thành lập hội đồng, xếp lịch bảo vệ và tổng hợp/công bố kết quả.'
+    : isFacultyDean
+    ? 'Trưởng Khoa theo dõi và điều phối công việc ở phạm vi toàn khoa, xử lý quyết định cấp khoa và ngoại lệ. Trưởng Bộ môn chịu trách nhiệm thẩm định chuyên môn đề tài của bộ môn.'
+    : undefined;
 
   if (isLoading) {
     return <DashboardSkeleton />;
@@ -39,6 +59,9 @@ export const DashboardView: React.FC = () => {
       ) : roleType === 'MANAGEMENT' && managementData ? (
         <ManagementWorkspace
           data={managementData}
+          canReviewTopics={canReviewTopics}
+          approvalStage={approvalStage}
+          roleNotice={roleNotice}
           onApproveTopic={handleApproveTopic}
           onRejectTopic={handleRejectTopic}
         />

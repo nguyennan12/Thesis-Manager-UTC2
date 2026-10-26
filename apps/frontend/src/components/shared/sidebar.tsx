@@ -20,6 +20,7 @@ import {
   Compass,
   FileEdit,
   ShieldCheck,
+  UserCheck,
 } from 'lucide-react';
 
 export interface NavItem {
@@ -53,6 +54,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ role: propRole, isHOD: propIsH
       : storeUser?.positions?.includes('HEAD_OF_DEPARTMENT') ||
         storeUser?.positions?.includes('TRUONG_BO_MON') ||
         false;
+  const isDean =
+    storeUser?.positions?.includes('FACULTY_DEAN') ||
+    storeUser?.positions?.includes('BAN_CHU_NHIEM') ||
+    storeUser?.positions?.includes('DEAN') ||
+    false;
 
   const commonItems: NavItem[] = [
     { label: 'Tổng quan không gian', href: '/dashboard', icon: LayoutDashboard },
@@ -81,6 +87,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ role: propRole, isHOD: propIsH
     menuItems = [...menuItems, ...lecturerItems];
     if (isHOD) {
       menuItems.push({ label: 'Thẩm định đề tài', href: '/management/topics', icon: Compass });
+    } else if (isDean) {
+      menuItems.push({ label: 'Phê duyệt đề tài cấp 2', href: '/management/topics', icon: CheckCircle2 });
     }
   } else if (role === 'ADMIN' || role === 'STAFF') {
     if (role === 'ADMIN' || storeUser?.positions?.includes('ACADEMIC_AFFAIRS')) {
@@ -96,6 +104,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ role: propRole, isHOD: propIsH
       ? { label: 'Ban Quản trị', color: 'bg-red-50 text-red-700 border-red-200', icon: ShieldCheck }
       : role === 'STAFF'
       ? { label: 'Giáo vụ Khoa', color: 'bg-purple-50 text-purple-700 border-purple-200', icon: Building2 }
+      : isDean
+      ? { label: 'Trưởng Khoa CNTT', color: 'bg-blue-50 text-blue-700 border-blue-200', icon: UserCheck }
+      : role === 'LECTURER' && isHOD
+      ? {
+          label: `Trưởng BM${storeUser?.lecturer?.departmentName ? ` ${storeUser.lecturer.departmentName}` : ''}`,
+          color: 'bg-teal-50 text-teal-700 border-teal-200',
+          icon: Compass,
+        }
       : role === 'LECTURER'
       ? { label: 'Giảng viên', color: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: Building2 }
       : { label: 'Sinh viên K65', color: 'bg-blue-50 text-blue-700 border-blue-200', icon: GraduationCap };

@@ -14,7 +14,10 @@ export interface DepartmentLecturer {
   departmentName?: string;
 }
 
-export function useManagementTopics() {
+export function useManagementTopics(
+  approvalStage: 'HOD' | 'DEAN' | 'ADMIN',
+  enabled = true,
+) {
   const queryClient = useQueryClient();
   const [filterStatus, setFilterStatus] = useState<string>('ALL');
   const [processingId, setProcessingId] = useState<string | null>(null);
@@ -29,18 +32,26 @@ export function useManagementTopics() {
   const { data: departmentLecturers = [] } = useQuery<DepartmentLecturer[]>({
     queryKey: ['department-lecturers'],
     queryFn: () => councilService.getLecturers(),
+    enabled,
   });
 
   // 1. Fetch toàn bộ đề tài từ Backend
   const { data: topics = [], isLoading } = useQuery<TopicItem[]>({
     queryKey: ['management-topics'],
     queryFn: () => topicService.getTopics(),
+    enabled,
   });
 
   // 2. Mutation Thẩm định Phê duyệt Đề tài
   const reviewMutation = useMutation({
-    mutationFn: ({ topicId, status, rejectionReason }: { topicId: string; status: 'APPROVED' | 'REJECTED'; rejectionReason?: string }) =>
-      topicService.reviewTopic(topicId, { status, rejectionReason }),
+    mutationFn: ({ topicId, status, rejectionReason, currentStatus }: {
+      topicId: string;
+      status: 'APPROVED' | 'REJECTED';
+      rejectionReason?: string;
+      currentStatus: string;
+    }) => currentStatus === 'PENDING_DEAN'
+      ? topicService.approveByDean(topicId, { status, rejectionReason })
+      : topicService.reviewTopic(topicId, { status, rejectionReason }),
     onSuccess: (_, vars) => {
       setMessage(`Đã ${vars.status === 'APPROVED' ? 'phê duyệt' : 'từ chối'} đề tài thành công!`);
       queryClient.invalidateQueries({ queryKey: ['management-topics'] });
@@ -70,18 +81,18 @@ export function useManagementTopics() {
     },
   });
 
-  const handleApprove = (topicId: string) => {
+  const handleApprove = (topicId: string, currentStatus: string) => {
     if (window.confirm('Bạn có chắc chắn muốn phê duyệt đề tài này để công bố cho sinh viên không?')) {
       setProcessingId(topicId);
-      reviewMutation.mutate({ topicId, status: 'APPROVED' });
+      reviewMutation.mutate({ topicId, status: 'APPROVED', currentStatus });
     }
   };
 
-  const handleReject = (topicId: string) => {
+  const handleReject = (topicId: string, currentStatus: string) => {
     const reason = window.prompt('Nhập lý do yêu cầu giảng viên chỉnh sửa lại đề tài:');
     if (!reason) return;
     setProcessingId(topicId);
-    reviewMutation.mutate({ topicId, status: 'REJECTED', rejectionReason: reason });
+    reviewMutation.mutate({ topicId, status: 'REJECTED', rejectionReason: reason, currentStatus });
   };
 
   const handleOpenAssignReviewerModal = (topic: TopicItem) => {
@@ -105,17 +116,30 @@ export function useManagementTopics() {
   };
 
   const filteredTopics = useMemo(() => {
-    if (filterStatus === 'ALL') return topics;
+    const pendingStatus = approvalStage === 'DEAN' ? 'PENDING_DEAN' : 'PENDING_REVIEW';
+    const stageTopics = approvalStage === 'ADMIN'
+      ? topics
+      : topics.filter((t) => t.status === pendingStatus || t.status === 'APPROVED' || t.status === 'ASSIGNED');
+    if (filterStatus === 'ALL') return stageTopics;
     if (filterStatus === 'PENDING_HOD' || filterStatus === 'PENDING_REVIEW') {
-      return topics.filter((t) => t.status === 'PENDING_HOD' || t.status === 'PENDING_REVIEW');
+      return stageTopics.filter((t) =>
+        t.status === pendingStatus ||
+        (approvalStage === 'ADMIN' && (t.status === 'PENDING_REVIEW' || t.status === 'PENDING_DEAN')),
+      );
+    }
+    if (filterStatus === 'PENDING_DEAN') {
+      return stageTopics.filter((t) => t.status === 'PENDING_DEAN');
     }
     if (filterStatus === 'APPROVED') {
       return topics.filter((t) => t.status === 'APPROVED' || t.status === 'ASSIGNED');
     }
     return topics.filter((t) => t.status === filterStatus);
-  }, [topics, filterStatus]);
+  }, [topics, filterStatus, approvalStage]);
 
-  const pendingCount = topics.filter((t) => t.status === 'PENDING_HOD' || t.status === 'PENDING_REVIEW').length;
+  const pendingStatus = approvalStage === 'DEAN' ? 'PENDING_DEAN' : 'PENDING_REVIEW';
+  const pendingCount = topics.filter((t) =>
+    t.status === pendingStatus || (approvalStage === 'ADMIN' && t.status === 'PENDING_DEAN'),
+  ).length;
   const approvedCount = topics.filter((t) => t.status === 'APPROVED' || t.status === 'ASSIGNED').length;
 
   return {
@@ -138,6 +162,8 @@ export function useManagementTopics() {
     departmentLecturers,
     handleApprove,
     handleReject,
+    approvalStage,
+    canAssignReviewer: approvalStage !== 'DEAN',
     handleOpenAssignReviewerModal,
     handleAssignReviewerSubmit,
   };

@@ -76,6 +76,16 @@ export const topicService = {
   },
 
   reviewTopic: async (id: string, input: ReviewTopicInput): Promise<void> => {
-    await apiClient.patch(`/topics/${id}/review`, input);
+    await apiClient.patch(`/topics/${id}/review`, {
+      isApproved: input.status === 'APPROVED',
+      rejectionReason: input.rejectionReason,
+    });
+  },
+
+  approveByDean: async (id: string, input: ReviewTopicInput): Promise<void> => {
+    await apiClient.patch(`/topics/${id}/dean-approval`, {
+      isApproved: input.status === 'APPROVED',
+      rejectionReason: input.rejectionReason,
+    });
   },
 };

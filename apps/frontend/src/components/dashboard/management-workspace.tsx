@@ -24,12 +24,18 @@ import {
 
 export interface ManagementWorkspaceProps {
   data: ManagementWorkspaceData;
+  canReviewTopics?: boolean;
+  approvalStage?: 'HOD' | 'DEAN' | 'NONE';
+  roleNotice?: string;
   onApproveTopic?: (id: string) => Promise<void>;
   onRejectTopic?: (id: string, reason: string) => Promise<void>;
 }
 
 export const ManagementWorkspace: React.FC<ManagementWorkspaceProps> = ({
   data,
+  canReviewTopics = false,
+  approvalStage = 'NONE',
+  roleNotice,
   onApproveTopic,
   onRejectTopic,
 }) => {
@@ -92,7 +98,7 @@ export const ManagementWorkspace: React.FC<ManagementWorkspaceProps> = ({
         <div className="relative overflow-hidden rounded-2xl bg-white p-5 border border-slate-200/80 shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 border-t-4 border-t-amber-500">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-              Chờ thẩm định cấp 1
+              {approvalStage === 'DEAN' ? 'Chờ phê duyệt cấp 2' : 'Chờ thẩm định cấp 1'}
             </span>
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
               <Clock className="h-4 w-4" />
@@ -100,7 +106,7 @@ export const ManagementWorkspace: React.FC<ManagementWorkspaceProps> = ({
           </div>
           <div className="mt-3 flex items-baseline justify-between">
             <span className="text-3xl font-extrabold text-slate-800 tracking-tight">
-              {metrics.pendingHODReviewTopics}
+              {approvalStage === 'DEAN' ? metrics.pendingDeanReviewTopics : metrics.pendingHODReviewTopics}
             </span>
             <span className="text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200/80 flex items-center gap-1">
               <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-ping" />
@@ -108,7 +114,9 @@ export const ManagementWorkspace: React.FC<ManagementWorkspaceProps> = ({
             </span>
           </div>
           <p className="mt-2 text-xs text-slate-500 font-medium">
-            Chờ Trưởng bộ môn phê duyệt
+            {approvalStage === 'DEAN'
+              ? 'Đã qua Trưởng bộ môn, chờ Ban Chủ nhiệm Khoa'
+              : 'Chờ Trưởng bộ môn thẩm định'}
           </p>
         </div>
 
@@ -164,8 +172,14 @@ export const ManagementWorkspace: React.FC<ManagementWorkspaceProps> = ({
         </div>
       </div>
 
+      {roleNotice && (
+        <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-xs leading-relaxed text-slate-600">
+          {roleNotice}
+        </div>
+      )}
+
       {/* 2. CẢNH BÁO ĐIỀU PHỐI (OPERATIONAL ALERTS) */}
-      {alerts && alerts.length > 0 && (
+      {canReviewTopics && alerts && alerts.length > 0 && (
         <div className="space-y-2.5">
           {alerts.map((alt) => (
             <div
@@ -194,15 +208,19 @@ export const ManagementWorkspace: React.FC<ManagementWorkspaceProps> = ({
       )}
 
       {/* 3. KHỐI PHÊ DUYỆT NHANH (PENDING APPROVALS) */}
-      <div className="rounded-2xl border border-slate-200/80 bg-white shadow-xs overflow-hidden">
+      {canReviewTopics && <div className="rounded-2xl border border-slate-200/80 bg-white shadow-xs overflow-hidden">
         <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-gradient-to-r from-slate-50/50 to-white">
           <div>
             <h2 className="text-sm font-bold uppercase tracking-wider text-slate-800 flex items-center gap-2">
               <span className="flex h-2 w-2 rounded-full bg-amber-500" />
-              Đề tài chờ Trưởng Bộ Môn thẩm định (Cấp 1)
+              {approvalStage === 'DEAN'
+                ? 'Đề tài chờ Ban Chủ nhiệm Khoa phê duyệt (Cấp 2)'
+                : 'Đề tài chờ Trưởng Bộ môn thẩm định (Cấp 1)'}
             </h2>
             <p className="text-xs text-slate-500 mt-0.5">
-              Phê duyệt hoặc yêu cầu chỉnh sửa đề cương của Giảng viên
+              {approvalStage === 'DEAN'
+                ? 'Phê duyệt ban hành hoặc từ chối đề tài đã qua thẩm định bộ môn'
+                : 'Thẩm định chuyên môn hoặc yêu cầu Giảng viên chỉnh sửa đề cương'}
             </p>
           </div>
 
@@ -271,7 +289,7 @@ export const ManagementWorkspace: React.FC<ManagementWorkspaceProps> = ({
             </TableBody>
           </Table>
         </div>
-      </div>
+      </div>}
     </div>
   );
 };

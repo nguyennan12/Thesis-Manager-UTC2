@@ -90,8 +90,8 @@
 | `PUT` | `/api/v1/topics/:id` | Cập nhật thông tin đề tài (khi DRAFT/PENDING) | `GIANG_VIEN` (Chính chủ) | `UpdateTopicDto` | `200 OK` |
 | `DELETE`| `/api/v1/topics/:id` | Xóa đề tài nháp | `GIANG_VIEN` (Chính chủ) | None | `204 No Content` |
 | `PATCH`| `/api/v1/topics/:id/submit` | Gửi đề tài lên Trưởng bộ môn thẩm định | `GIANG_VIEN` | None | `200 OK` |
-| `PATCH`| `/api/v1/topics/:id/department-review` | Trưởng bộ môn thẩm định & duyệt cấp 1 | `TRUONG_BO_MON` (BR-04) | `ReviewTopicDto` (`isApproved: boolean`, `feedback?`) | `200 OK` |
-| `PATCH`| `/api/v1/topics/:id/dean-approve` | Ban chủ nhiệm Khoa phê duyệt ban hành cấp 2 | `BAN_CHU_NHIEM` (BR-04) | `ApproveTopicDto` (`decision: APPROVED/REJECTED`) | `200 OK` |
+| `PATCH`| `/api/v1/topics/:id/review` | Trưởng bộ môn thẩm định cấp 1; duyệt chuyển sang chờ BCN Khoa | `HEAD_OF_DEPARTMENT` (BR-04) | `ReviewTopicDto` (`isApproved: boolean`, `rejectionReason?`) | `200 OK` |
+| `PATCH`| `/api/v1/topics/:id/dean-approval` | Ban Chủ nhiệm Khoa phê duyệt ban hành cấp 2 | `FACULTY_DEAN` (BR-04) | `ReviewTopicDto` (`isApproved: boolean`, `rejectionReason?`) | `200 OK` |
 | `GET` | `/api/v1/topics/export` | Xuất danh mục đề tài đã duyệt ra Excel/PDF | `GIAO_VU`, `TRUONG_BO_MON`, `BCN` | `TopicExportQueryDto` (`semesterId`, `format`) | `200 OK` |
 
 ---

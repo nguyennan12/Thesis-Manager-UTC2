@@ -86,6 +86,7 @@ export interface LecturerWorkspaceData {
 export interface ManagementMetrics {
   totalProposedTopics: number;
   pendingHODReviewTopics: number;
+  pendingDeanReviewTopics: number;
   registeredStudents: number;
   totalEligibleStudents: number;
   establishedCouncils: number;

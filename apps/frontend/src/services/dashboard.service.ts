@@ -1,4 +1,3 @@
-import { apiClient } from '@/lib/api-client';
 import {
   StudentWorkspaceData,
   StudentMilestone,
@@ -174,8 +173,11 @@ export const dashboardService = {
     };
   },
 
-  // 3. Lấy dữ liệu bàn làm việc cho Trưởng Bộ Môn / Giáo Vụ / BCN Khoa (Động từ Backend)
-  getManagementWorkspace: async (semesterId?: string): Promise<ManagementWorkspaceData> => {
+  // 3. Lấy dashboard theo phạm vi và bước duyệt của từng chức danh.
+  getManagementWorkspace: async (
+    semesterId?: string,
+    approvalStage: 'HOD' | 'DEAN' | 'NONE' = 'NONE',
+  ): Promise<ManagementWorkspaceData> => {
 
     const [allTopics, allRegistrations, allCouncils] = await Promise.all([
       topicService.getTopics({ semesterId }).catch(() => []),
@@ -183,9 +185,15 @@ export const dashboardService = {
       councilService.getCouncils({ semesterId }).catch(() => []),
     ]);
 
-    const pendingReviewTopics = allTopics.filter(
-      (t) => t.status === 'PENDING_HOD' || t.status === 'DRAFT'
+    const pendingHodTopics = allTopics.filter(
+      (t) => t.status === 'PENDING_HOD' || t.status === 'PENDING_REVIEW',
     );
+    const pendingDeanTopics = allTopics.filter((t) => t.status === 'PENDING_DEAN');
+    const pendingReviewTopics = approvalStage === 'HOD'
+      ? pendingHodTopics
+      : approvalStage === 'DEAN'
+      ? pendingDeanTopics
+      : [];
 
     const pendingTopics: ManagementPendingTopic[] = pendingReviewTopics.map((t) => ({
       id: t.id,
@@ -199,17 +207,19 @@ export const dashboardService = {
     if (pendingTopics.length > 0) {
       alerts.push({
         id: 'alt-pending-topics',
-        message: `Có ${pendingTopics.length} đề tài mới đang chờ Trưởng bộ môn phê duyệt.`,
+        message: approvalStage === 'DEAN'
+          ? `Có ${pendingTopics.length} đề tài đã qua Trưởng bộ môn, đang chờ Ban Chủ nhiệm Khoa phê duyệt.`
+          : `Có ${pendingTopics.length} đề tài mới đang chờ Trưởng bộ môn thẩm định.`,
         severity: 'warning',
         actionHref: '/management/topics',
-        actionText: 'Duyệt đề tài ngay',
+        actionText: approvalStage === 'DEAN' ? 'Phê duyệt cấp khoa' : 'Thẩm định đề tài',
       });
     }
 
     const unassignedTopics = allTopics.filter(
       (t: any) => t.status === 'APPROVED' && !t.reviewerLecturer && !t.reviewerLecturerId
     );
-    if (unassignedTopics.length > 0) {
+    if (approvalStage === 'HOD' && unassignedTopics.length > 0) {
       alerts.push({
         id: 'alt-reviewer-assign',
         message: `Có ${unassignedTopics.length} đề tài đã duyệt cần phân công Giảng viên phản biện (GVPB).`,
@@ -222,7 +232,8 @@ export const dashboardService = {
     return {
       metrics: {
         totalProposedTopics: allTopics.length,
-        pendingHODReviewTopics: pendingTopics.length,
+        pendingHODReviewTopics: pendingHodTopics.length,
+        pendingDeanReviewTopics: pendingDeanTopics.length,
         registeredStudents: allRegistrations.length,
         totalEligibleStudents: allRegistrations.length,
         establishedCouncils: allCouncils.length,
@@ -234,10 +245,18 @@ export const dashboardService = {
 
   // Thao tác duyệt/từ chối đề tài
   approveTopic: async (topicId: string): Promise<void> => {
-    await apiClient.patch(`/topics/${topicId}/department-review`, { isApproved: true });
+    await topicService.reviewTopic(topicId, { status: 'APPROVED' });
   },
 
   rejectTopic: async (topicId: string, reason: string): Promise<void> => {
-    await apiClient.patch(`/topics/${topicId}/department-review`, { isApproved: false, feedback: reason });
+    await topicService.reviewTopic(topicId, { status: 'REJECTED', rejectionReason: reason });
+  },
+
+  approveDeanTopic: async (topicId: string): Promise<void> => {
+    await topicService.approveByDean(topicId, { status: 'APPROVED' });
+  },
+
+  rejectDeanTopic: async (topicId: string, reason: string): Promise<void> => {
+    await topicService.approveByDean(topicId, { status: 'REJECTED', rejectionReason: reason });
   },
 };

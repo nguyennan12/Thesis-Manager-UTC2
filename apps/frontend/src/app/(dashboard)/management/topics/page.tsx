@@ -12,8 +12,15 @@ import {
   TableCell,
 } from '@/components/ui/table';
 import { EmptyState } from '@/components/feedback/empty-state';
+import { useAuthStore } from '@/stores/use-auth-store';
 
 export default function ManagementTopicsPage() {
+  const user = useAuthStore((state) => state.user);
+  const isAdmin = Boolean(user?.roles?.includes('ADMIN'));
+  const isDean = Boolean(user?.positions?.includes('FACULTY_DEAN') || user?.positions?.includes('BAN_CHU_NHIEM'));
+  const isHod = Boolean(user?.positions?.includes('HEAD_OF_DEPARTMENT') || user?.positions?.includes('TRUONG_BO_MON'));
+  const canManageTopics = isAdmin || isDean || isHod;
+  const approvalStage: 'HOD' | 'DEAN' | 'ADMIN' = isAdmin ? 'ADMIN' : isDean ? 'DEAN' : 'HOD';
   const {
     filteredTopics,
     filterStatus,
@@ -35,7 +42,17 @@ export default function ManagementTopicsPage() {
     handleReject,
     handleOpenAssignReviewerModal,
     handleAssignReviewerSubmit,
-  } = useManagementTopics();
+    canAssignReviewer,
+  } = useManagementTopics(approvalStage, canManageTopics);
+
+  if (!canManageTopics) {
+    return (
+      <EmptyState
+        title="Bạn không có quyền thẩm định đề tài"
+        description="Giáo vụ không duyệt đề tài. Trưởng bộ môn thẩm định cấp 1 trong phạm vi bộ môn; Trưởng Khoa/BCN Khoa phê duyệt cấp 2 trong phạm vi khoa."
+      />
+    );
+  }
 
   return (
     <div className="space-y-5">
@@ -43,10 +60,18 @@ export default function ManagementTopicsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-lg border border-utc2-border bg-white p-5">
         <div>
           <h1 className="text-xl font-semibold text-utc2-text-main">
-            Thẩm Định Đề Tài &amp; Phân Công Giảng Viên Phản Biện
+            {approvalStage === 'DEAN'
+              ? 'Phê Duyệt Đề Tài Cấp Khoa'
+              : approvalStage === 'HOD'
+              ? 'Thẩm Định Đề Tài Cấp Bộ Môn'
+              : 'Quản Lý Quy Trình Đề Tài'}
           </h1>
           <p className="text-xs text-utc2-text-muted mt-0.5">
-            Dành cho Trưởng bộ môn &amp; Khoa: Phê duyệt đề tài và phân công Giảng viên phản biện (BR-C1)
+            {approvalStage === 'DEAN'
+              ? 'Ban Chủ nhiệm Khoa phê duyệt cấp 2 các đề tài đã được Trưởng bộ môn thẩm định'
+              : approvalStage === 'HOD'
+              ? 'Trưởng bộ môn thẩm định cấp 1 các đề tài thuộc bộ môn phụ trách (BR-C1)'
+              : 'Quản trị viên hỗ trợ theo dõi hai bước thẩm định đề tài'}
           </p>
         </div>
 
@@ -86,14 +111,14 @@ export default function ManagementTopicsPage() {
           Tất cả
         </button>
         <button
-          onClick={() => setFilterStatus('PENDING_HOD')}
+          onClick={() => setFilterStatus(approvalStage === 'DEAN' ? 'PENDING_DEAN' : 'PENDING_HOD')}
           className={`px-3 py-1 rounded transition-colors ${
-            filterStatus === 'PENDING_HOD'
+            (approvalStage === 'DEAN' ? filterStatus === 'PENDING_DEAN' : filterStatus === 'PENDING_HOD')
               ? 'bg-[#0f62fe] text-white font-semibold'
               : 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-50'
           }`}
         >
-          Chờ thẩm định ({pendingCount})
+          {approvalStage === 'DEAN' ? 'Chờ cấp khoa' : 'Chờ thẩm định'} ({pendingCount})
         </button>
         <button
           onClick={() => setFilterStatus('APPROVED')}
@@ -144,7 +169,10 @@ export default function ManagementTopicsPage() {
               </TableHeader>
               <TableBody>
                 {filteredTopics.map((top) => {
-                  const isPending = top.status === 'PENDING_HOD' || top.status === 'PENDING_REVIEW';
+                  const isPending = approvalStage === 'DEAN'
+                    ? top.status === 'PENDING_DEAN'
+                    : top.status === 'PENDING_HOD' || top.status === 'PENDING_REVIEW' ||
+                      (approvalStage === 'ADMIN' && top.status === 'PENDING_DEAN');
                   const isApproved = top.status === 'APPROVED' || top.status === 'ASSIGNED';
                   const isAssigned = top.status === 'ASSIGNED';
 
@@ -184,7 +212,15 @@ export default function ManagementTopicsPage() {
                               : 'text-slate-600 bg-slate-100 border border-slate-200'
                           }`}
                         >
-                          {isAssigned ? 'Đang thực hiện' : isApproved ? 'Đã duyệt' : isPending ? 'Chờ duyệt' : 'Từ chối'}
+                          {isAssigned
+                            ? 'Đang thực hiện'
+                            : isApproved
+                            ? 'Đã duyệt'
+                            : top.status === 'PENDING_DEAN'
+                            ? 'Chờ BCN Khoa'
+                            : isPending
+                            ? 'Chờ Trưởng BM'
+                            : 'Từ chối'}
                         </span>
                       </TableCell>
                       <TableCell className="text-right">
@@ -193,21 +229,23 @@ export default function ManagementTopicsPage() {
                             <button
                               type="button"
                               disabled={processingId === top.id}
-                              onClick={() => handleApprove(top.id)}
+                              onClick={() => handleApprove(top.id, top.status)}
                               className="text-xs font-semibold text-white bg-[#0f62fe] hover:bg-[#0043ce] px-2.5 py-1 rounded transition-colors disabled:opacity-50"
                             >
-                              Phê duyệt
+                              {approvalStage === 'DEAN' || top.status === 'PENDING_DEAN'
+                                ? 'Phê duyệt cấp 2'
+                                : 'Duyệt cấp 1'}
                             </button>
                             <button
                               type="button"
                               disabled={processingId === top.id}
-                              onClick={() => handleReject(top.id)}
+                              onClick={() => handleReject(top.id, top.status)}
                               className="text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 px-2.5 py-1 rounded transition-colors disabled:opacity-50"
                             >
                               Từ chối
                             </button>
                           </div>
-                        ) : isApproved ? (
+                        ) : isApproved && canAssignReviewer ? (
                           <div className="flex items-center justify-end gap-1.5">
                             <button
                               type="button"

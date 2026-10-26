@@ -29,15 +29,30 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
   const isStudent = user?.roles?.includes('STUDENT') || !!user?.student;
   const isLecturer = user?.roles?.includes('LECTURER') || !!user?.lecturer;
   const isHOD = user?.positions?.includes('HEAD_OF_DEPARTMENT') || user?.positions?.includes('TRUONG_BO_MON');
-  const isDean = user?.positions?.includes('BAN_CHU_NHIEM') || user?.positions?.includes('FACULTY_DEAN');
+  const isDean =
+    user?.positions?.includes('BAN_CHU_NHIEM') ||
+    user?.positions?.includes('FACULTY_DEAN') ||
+    user?.positions?.includes('DEAN');
   const isAdmin = user?.roles?.includes('ADMIN');
+  const isAcademicAffairs =
+    user?.positions?.includes('ACADEMIC_AFFAIRS') ||
+    user?.roles?.includes('ACADEMIC_AFFAIRS') ||
+    user?.roles?.includes('STAFF');
 
   let roleLabel = 'Quản trị viên Hệ thống';
   let detailLabel = `Tài khoản: ${user?.username}`;
   let RoleIcon = ShieldCheck;
   let roleBadgeClass = 'bg-red-500/20 text-red-100 border-red-400/30';
 
-  if (isStudent) {
+  if (isAdmin) {
+    roleLabel = 'Quản trị viên Hệ thống';
+    RoleIcon = ShieldCheck;
+    roleBadgeClass = 'bg-red-500/20 text-red-100 border-red-400/30';
+  } else if (isAcademicAffairs) {
+    roleLabel = 'Giáo vụ Khoa CNTT';
+    RoleIcon = Building2;
+    roleBadgeClass = 'bg-violet-400/20 text-violet-100 border-violet-300/30';
+  } else if (isStudent) {
     const rawClass = user?.student?.className || 'CQ.65.CNTT';
     const cleanClass = rawClass.startsWith('Lớp ') ? rawClass : `Lớp ${rawClass}`;
     roleLabel = 'Sinh viên Khóa 65';
@@ -46,9 +61,9 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
     roleBadgeClass = 'bg-sky-400/20 text-sky-100 border-sky-300/30';
   } else if (isLecturer) {
     const title = isDean
-      ? 'Ban Chủ Nhiệm Khoa CNTT'
+      ? 'Trưởng Khoa CNTT'
       : isHOD
-      ? 'Trưởng Bộ Môn Chuyên Môn'
+      ? `Trưởng Bộ môn${user?.lecturer?.departmentName ? ` ${user.lecturer.departmentName}` : ''}`
       : 'Giảng viên Hướng dẫn & Phản biện';
     const degree = user?.lecturer?.degree ? `${user.lecturer.degree} ` : '';
     roleLabel = `${degree}${title}`;

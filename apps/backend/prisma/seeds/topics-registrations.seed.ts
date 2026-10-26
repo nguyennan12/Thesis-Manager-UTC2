@@ -38,7 +38,7 @@ export async function seedTopicsAndRegistrations(
   const gv = (code: string) => lecturerMap.get(code) || lecturerMap.get('GV001')!;
 
   // ==============================================================================
-  // 1. DANH SÁCH 45 ĐỀ TÀI ĐA DẠNG TRẠNG THÁI (APPROVED, PENDING_REVIEW, REJECTED, DRAFT, ASSIGNED)
+  // 1. DANH SÁCH 45 ĐỀ TÀI ĐA DẠNG TRẠNG THÁI (bao gồm chờ TBM và chờ BCN Khoa)
   // ==============================================================================
   const rawTopics = [
     // --- 1. BM Công nghệ phần mềm (CNPM) ---
@@ -183,8 +183,7 @@ export async function seedTopicsAndRegistrations(
       status: TopicStatus.APPROVED,
     },
 
-    // --- ĐỀ TÀI ĐANG CHỜ PHÊ DUYỆT CẤP 1 (PENDING_REVIEW) ---
-    // (Để Trưởng bộ môn CNPM, HTTT, KHMT đăng nhập vào thấy ngay danh sách cần duyệt)
+    // --- ĐỀ TÀI ĐANG CHỜ TRƯỞNG BỘ MÔN THẨM ĐỊNH CẤP 1 ---
     {
       code: 'DT-2026-011',
       titleVi: 'Nghiên cứu giải pháp bảo vệ dữ liệu cá nhân theo Nghị định 13/2023/NĐ-CP trên nền tảng Cloud',
@@ -241,6 +240,7 @@ export async function seedTopicsAndRegistrations(
       reviewerLecturerId: null,
       status: TopicStatus.PENDING_REVIEW,
     },
+    // Trưởng BM đã thẩm định; chờ Ban Chủ nhiệm Khoa phê duyệt cấp 2.
     {
       code: 'DT-2026-015',
       titleVi: 'Hệ thống bản sao số (Digital Twin) mô phỏng mạng lưới cấp nước thông minh',
@@ -253,7 +253,7 @@ export async function seedTopicsAndRegistrations(
       majorId: htttMajorId,
       proposerLecturerId: gv('GV008'),
       reviewerLecturerId: null,
-      status: TopicStatus.PENDING_REVIEW,
+      status: TopicStatus.PENDING_DEAN,
     },
 
     // --- ĐỀ TÀI BỊ TỪ CHỐI THẨM ĐỊNH (REJECTED) ---
