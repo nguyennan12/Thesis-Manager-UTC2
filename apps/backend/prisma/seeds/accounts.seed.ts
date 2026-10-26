@@ -244,17 +244,28 @@ export async function seedAccounts(
   // 7. Sinh viên làm đồ án (Tạo tài khoản cho toàn bộ 100 sinh viên)
   console.log(`[Seed] Seeding 100 Student Accounts (sv_6551071001 -> sv_6551071100)...`);
   for (const [code, studentId] of studentMap.entries()) {
+    const username = `sv_${code}`;
+    const email = `${code}@sv.utc2.edu.vn`;
     const existing = await prisma.account.findUnique({
       where: { studentId },
     });
 
     if (existing) {
+      // Đồng bộ thông tin đăng nhập cho cả tài khoản đã tồn tại. Nếu chỉ gán
+      // role rồi bỏ qua, tài khoản cũ có thể giữ username/mật khẩu khác seed,
+      // khiến các nút đăng nhập nhanh dành cho sinh viên không dùng được.
+      await prisma.account.update({
+        where: { id: existing.id },
+        data: {
+          username,
+          passwordHash: userPasswordHash,
+          email,
+          isActive: true,
+        },
+      });
       await assignAccountRole(prisma, existing.id, studentRoleId, ROLE_SCOPES.OWNER, undefined);
       continue;
     }
-
-    const username = `sv_${code}`;
-    const email = `${code}@sv.utc2.edu.vn`;
 
     const studentAccount = await prisma.account.upsert({
       where: { username },
