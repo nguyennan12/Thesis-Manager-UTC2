@@ -26,12 +26,12 @@ services:
       - key: JWT_REFRESH_EXPIRES_IN
         value: 7d
       - key: DEMO_ADMIN_PASSWORD
-        generateValue: true
+        value: Admin@123456
       - key: DEMO_ACCOUNT_PASSWORD
-        generateValue: true
+        value: Utc2@123456
       - key: DEFAULT_INITIAL_PASSWORD
         generateValue: true
       - key: REDIS_URL
         sync: false
       - key: SEED_DEMO_DATA
-        sync: false
+        value: "true"
